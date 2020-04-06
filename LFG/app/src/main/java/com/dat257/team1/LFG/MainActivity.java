@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.model;
+package com.dat257.team1.LFG;
 
 import androidx.appcompat.app.AppCompatActivity;
 
