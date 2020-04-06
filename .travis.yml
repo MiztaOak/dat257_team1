@@ -25,7 +25,7 @@ licenses:
 - google-gdk-license-.+
 
 before_install:
-- cd KahIT
+- cd LFG
 - chmod +x gradlew
 - sudo apt-get update
 
