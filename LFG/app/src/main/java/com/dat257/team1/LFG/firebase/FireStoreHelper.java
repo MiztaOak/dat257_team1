@@ -1,8 +1,5 @@
 package com.dat257.team1.LFG.firebase;
 
-import android.content.Context;
-import android.util.Log;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
