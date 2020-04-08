@@ -60,6 +60,35 @@ public class FireStoreHelper {
         });
     }
 
+    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location){
+        DocumentReference owner = db.document("users/" + uId);
+        List<DocumentReference> participants = new ArrayList<>();
+        participants.add(owner);
+
+        Map<String, Object> activity = new HashMap<>();
+
+        activity.put("title",title);
+        activity.put("desc",desc);
+        activity.put("time",date);
+        activity.put("creationDate",new Timestamp(new Date()));
+        activity.put("owner",owner);
+        activity.put("location",location);
+        activity.put("participants",participants);
+
+        db.collection("activities").add(activity)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // add some code that handles the success
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // add some code that handles this exception
+            }
+        });
+    }
+
 
     public FirebaseFirestore getDb() {
         return db;
