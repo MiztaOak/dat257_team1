@@ -5,12 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 
 public class MainActivity extends AppCompatActivity {
-
+    private FireStoreHelper fireStoreHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fireStoreHelper = new FireStoreHelper();
+        fireStoreHelper.addActivity("wZCl4ABLmASoWSyy9un7sWFNHG22");
     }
 }
