@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "429334551433",
+    "firebase_url": "https://team1lfg.firebaseio.com",
+    "project_id": "team1lfg",
+    "storage_bucket": "team1lfg.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:429334551433:android:c12a9c95ab3b2ac8965f58",
+        "android_client_info": {
+          "package_name": "com.dat257.team1.LFG"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "429334551433-lqrkdvnrjf5o1a4uk2kdja5p7vuoj0nl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dat257.team1.LFG",
+            "certificate_hash": "e5599c3f5b7a0c92a3306cae899c6b8d41bf888b"
+          }
+        },
+        {
+          "client_id": "429334551433-v5a6cat8iiv399sk182bda73n63klkm7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.dat257.team1.LFG",
+            "certificate_hash": "263c823c4d50ad7dc2578f53e538aeac53264011"
+          }
+        },
+        {
+          "client_id": "429334551433-prprb5u6nfq7rg1noro1meq6bevqieck.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqZ0MpXVpsrdvtxSBkWTwR11SxMyRQi38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "429334551433-prprb5u6nfq7rg1noro1meq6bevqieck.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
