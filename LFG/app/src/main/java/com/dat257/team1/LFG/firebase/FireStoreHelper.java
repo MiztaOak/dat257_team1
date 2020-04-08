@@ -16,6 +16,13 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 
+/**
+ * A helper class that handles the connection to the Firestore database, containing methods that
+ * fetch data or upload it to the database.
+ *
+ * Author: Johan Ek
+ *
+ */
 public class FireStoreHelper {
     private FirebaseFirestore db;
 
@@ -23,6 +30,7 @@ public class FireStoreHelper {
         db = FirebaseFirestore.getInstance();
     }
 
+    //just a dummy method will be removed later
     public void addActivity(String uId){
         Calendar.getInstance().set(2020,4,30,15,30);
         DocumentReference owner = db.document("users/" + uId);
@@ -53,6 +61,16 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Method that creates uploads a new activity to the Firestore database
+     *
+     * Author: Johan Ek
+     * @param uId The user id for the owner of the activity
+     * @param date The date of the activity
+     * @param title The title of the activity
+     * @param desc The description of the activity
+     * @param location The location of the activity
+     */
     public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location){
         DocumentReference owner = db.document("users/" + uId);
         List<DocumentReference> participants = new ArrayList<>();
