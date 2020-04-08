@@ -1,11 +1,18 @@
 package com.dat257.team1.LFG.firebase;
 
+import android.util.Log;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
@@ -25,9 +33,13 @@ import androidx.annotation.NonNull;
  */
 public class FireStoreHelper {
     private FirebaseFirestore db;
+    private List<ActivityDataHolder> activities;
+    private final String TAG = FirebaseFirestore.class.getSimpleName();
 
     public FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
+        activities = new ArrayList<>();
+        loadActivities();
     }
 
     //just a dummy method will be removed later
@@ -98,5 +110,29 @@ public class FireStoreHelper {
                 // add some code that handles this exception
             }
         });
+    }
+
+    private void loadActivities(){
+        db.collection("activities").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                List<ActivityDataHolder> activityDataHolders = new ArrayList<>();
+                for(QueryDocumentSnapshot doc : value){
+                    activityDataHolders.add(doc.toObject(ActivityDataHolder.class));
+                }
+                activities = activityDataHolders;
+            }
+        });
+
+
+    }
+
+    public List<ActivityDataHolder> getActivities(){
+        return activities;
     }
 }
