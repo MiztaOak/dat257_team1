@@ -112,6 +112,12 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Method that attaches an event listener to the db that monitors the list of activities and
+     * updates the list activities if the database were to change
+     *
+     * Author: Johan Ek
+     */
     private void loadActivities(){
         db.collection("activities").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override

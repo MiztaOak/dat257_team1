@@ -6,6 +6,12 @@ import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
 
+/**
+ * A data holder class for the activities with the same stucture as the data in the database has.
+ * The data can then be transformed into a normal using the method toActivity()
+ *
+ * Author: Johan Ek
+ */
 public class ActivityDataHolder {
     public DocumentReference owner;
     public List<DocumentReference> participants;

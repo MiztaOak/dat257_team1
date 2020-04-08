@@ -20,6 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
         fireStoreHelper = new FireStoreHelper();
         //fireStoreHelper.addActivity("wZCl4ABLmASoWSyy9un7sWFNHG22");
-        
+
     }
 }
