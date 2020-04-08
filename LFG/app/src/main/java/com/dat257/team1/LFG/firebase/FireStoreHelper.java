@@ -20,14 +20,10 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 
 public class FireStoreHelper {
-    public FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     public FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
-    }
-
-    public FireStoreHelper(FirebaseFirestore db) {
-        this.db = db;
     }
 
     public void addActivity(String uId){
@@ -87,14 +83,5 @@ public class FireStoreHelper {
                 // add some code that handles this exception
             }
         });
-    }
-
-
-    public FirebaseFirestore getDb() {
-        return db;
-    }
-
-    public void setDb(FirebaseFirestore db) {
-        this.db = db;
     }
 }
