@@ -4,6 +4,7 @@ import com.dat257.team1.LFG.Events.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,13 +15,15 @@ import java.util.List;
 public class Main {
 
 
-    private List activities;
-    private Main main;
+    private static Main main;
+    private List<Activity> activities;
+    private User dummy = new User(1, "johan", "joahn", 0);
 
     private Main() {
+        activities = new ArrayList<>();
     }
 
-    public Main getMain() {
+    public static Main getInstance() {
         if(main == null) {
             main = new Main();
         }
@@ -29,14 +32,17 @@ public class Main {
 
     /**
      * Creates an activity and posts it on the Eventbus.
-     * @param name The given name to the activity
      * @param description The given description.
-     * @param id an id that is used to track the activity.
+     * String title, String description, String location, String time, User owner, List<User> participants
      */
-    public void createActivity(String name, String description, int id) {
-        //Activity activity = new Activity(name, description, id);  //Something something dark side
-        //activities.add(activity);
-        ActivityEvent activityEvent = new ActivityEvent();
+    public void createActivity(String title, String description, String location, String time) {
+        List<User> participants = new ArrayList<>();
+        participants.add(dummy);
+
+        Activity activity = new Activity(title, description, location, time, dummy, participants);  //Something something dark side
+        activities.add(activity);
+
+        ActivityEvent activityEvent = new ActivityEvent(activity);
         EventBus.getDefault().post(activityEvent);
     }
 

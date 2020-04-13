@@ -20,7 +20,7 @@ public class FindActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_find);
+        setContentView(R.layout.activity_feed);
         createActivity = (Button) findViewById(R.id.createActivity);
         menu = (Button) findViewById(R.id.menu);
         createActivity.setOnClickListener(new View.OnClickListener() {
