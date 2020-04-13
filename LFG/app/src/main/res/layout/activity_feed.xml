@@ -61,6 +61,7 @@
         android:id="@+id/createActivity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:onClick="Crea"
         android:text="Create Activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

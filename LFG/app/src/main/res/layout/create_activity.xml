@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.CreateActivityViewModel">
+    tools:context=".view.CreateActivityView">
 
     <EditText
         android:id="@+id/editTitle"
@@ -22,6 +22,7 @@
         android:id="@+id/createActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="createActivity"
         android:text="Create activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,6 +59,7 @@
         android:id="@+id/backButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="backButton"
         android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

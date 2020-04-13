@@ -8,5 +8,9 @@ public class ActivityEvent {
     public ActivityEvent(Activity activity) {
         this.activity = activity;
     }
+
+    public Activity getActivity() {
+        return activity;
+    }
 }
 
