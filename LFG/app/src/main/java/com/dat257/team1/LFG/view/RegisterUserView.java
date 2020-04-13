@@ -16,6 +16,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -38,10 +39,10 @@ import androidx.appcompat.app.AppCompatActivity;
  */
 public class RegisterUserView extends AppCompatActivity {
     private Button createButton;
-    private EditText emailField;
-    private EditText nameField;
-    private EditText passField;
-    private EditText phoneField;
+    private TextInputLayout emailField;
+    private TextInputLayout nameField;
+    private TextInputLayout passField;
+    private TextInputLayout phoneField;
     private CheckBox termsBox;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +50,10 @@ public class RegisterUserView extends AppCompatActivity {
         setContentView(R.layout.activity_register_user);
 
         createButton = (Button) findViewById(R.id.reg_enterButton);
-        emailField = (EditText) findViewById(R.id.regEmailField);
-        nameField = (EditText) findViewById(R.id.regNameField);
-        passField = (EditText) findViewById(R.id.regPassField);
-        phoneField = (EditText) findViewById(R.id.regPhoneField);
+        emailField = (TextInputLayout) findViewById(R.id.regEmailField);
+        nameField = (TextInputLayout) findViewById(R.id.regNameField);
+        passField = (TextInputLayout) findViewById(R.id.regPassField);
+        phoneField = (TextInputLayout) findViewById(R.id.regPhoneField);
         termsBox = (CheckBox) findViewById(R.id.reg_terms);
 
         createButton.setOnClickListener(new View.OnClickListener() {
@@ -136,9 +137,13 @@ public class RegisterUserView extends AppCompatActivity {
      * Author: Johan Ek
      */
     private void handleCreateUser(){
-        String email = emailField.getText().toString(), name = nameField.getText().toString(),
-        phone = phoneField.getText().toString(), pass = passField.getText().toString();
+        String email = emailField.getEditText().getText().toString(),
+                name = nameField.getEditText().getText().toString(),
+        phone = phoneField.getEditText().getText().toString(), pass = passField.getEditText().getText().toString();
         String toastMessage;
+
+
+
 
         if(!email.contains("@")){
             toastMessage = "The email has a incorrct format";
