@@ -1,14 +1,17 @@
 package com.dat257.team1.LFG.view;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dat257.team1.LFG.Events.RegisterEvent;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.viewmodel.FindActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,12 +30,19 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+/**
+ * The class representing the registration view that allows the user to register a account using a
+ * email and password.
+ *
+ * Author: Johan Ek
+ */
 public class RegisterUserView extends AppCompatActivity {
     private Button createButton;
     private EditText emailField;
     private EditText nameField;
     private EditText passField;
     private EditText phoneField;
+    private CheckBox termsBox;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +53,7 @@ public class RegisterUserView extends AppCompatActivity {
         nameField = (EditText) findViewById(R.id.regNameField);
         passField = (EditText) findViewById(R.id.regPassField);
         phoneField = (EditText) findViewById(R.id.regPhoneField);
+        termsBox = (CheckBox) findViewById(R.id.reg_terms);
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +127,14 @@ public class RegisterUserView extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Method that is called when the user clicks create account. It takes the data from the text
+     * field and first checks if the data is correct and then if it is correct it calls the method
+     * registerUser. If something is wrong with the data provided by the user a toast message
+     * alerts the user of this.
+     *
+     * Author: Johan Ek
+     */
     private void handleCreateUser(){
         String email = emailField.getText().toString(), name = nameField.getText().toString(),
         phone = phoneField.getText().toString(), pass = passField.getText().toString();
@@ -129,6 +148,8 @@ public class RegisterUserView extends AppCompatActivity {
             toastMessage = "Your password must contain more than 6 character";
         }else if(phone.equals("")){
             toastMessage = "You have to specify a phone number to create a account";
+        }else if(!termsBox.isChecked()){
+            toastMessage = "You have to accept the terms and conditions to create a account";
         }else{
             registerUser(email,pass,name);
             return;
@@ -138,10 +159,19 @@ public class RegisterUserView extends AppCompatActivity {
         toast.show();
     }
 
+    /**
+     * Method that handles the result of the registration of the user. If the registration fails
+     * then a toast message is displayed to the user alerting them about this failure. However if
+     * the creation was a success the view is changed to the feed of activities.
+     *
+     * Author: Johan Ek
+     * @param event the register event containing information about the result of the registration
+     */
     @Subscribe
     public void onRegisterEvent(RegisterEvent event){
         if(event.isSuccess()){
-
+            Intent intent = new Intent(this, FindActivity.class);
+            startActivity(intent);
         }else{
             Toast.makeText(getApplicationContext(),"Something went wrong in the account creation",Toast.LENGTH_SHORT).show();
         }
