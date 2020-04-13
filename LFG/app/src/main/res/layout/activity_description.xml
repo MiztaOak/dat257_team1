@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:layout_editor_absoluteX="52dp"
-        tools:layout_editor_absoluteY="55dp" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.118"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search"
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/textView4"
@@ -44,8 +46,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="When"
-        tools:layout_editor_absoluteX="187dp"
-        tools:layout_editor_absoluteY="190dp" />
+        tools:layout_editor_absoluteX="185dp"
+        tools:layout_editor_absoluteY="180dp" />
 
     <Button
         android:id="@+id/button"
@@ -53,7 +55,7 @@
         android:layout_height="wrap_content"
         android:text="Write a comment"
         tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="529dp" />
+        tools:layout_editor_absoluteY="552dp" />
 
     <Button
         android:id="@+id/button2"
@@ -61,6 +63,28 @@
         android:layout_height="wrap_content"
         android:text="Join activity'"
         tools:layout_editor_absoluteX="144dp"
-        tools:layout_editor_absoluteY="590dp" />
+        tools:layout_editor_absoluteY="615dp" />
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
+        android:layout_width="349dp"
+        android:layout_height="154dp"
+        tools:layout_editor_absoluteX="31dp"
+        tools:layout_editor_absoluteY="378dp"
+        />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="346dp"
+        android:layout_height="145dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Activity description"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.372" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
