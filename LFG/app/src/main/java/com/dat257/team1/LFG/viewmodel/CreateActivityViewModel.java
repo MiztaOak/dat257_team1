@@ -9,7 +9,7 @@ public class CreateActivityViewModel extends ViewModel {
     public CreateActivityViewModel() {
     }
 
-    public void createActivity(){
-        Main.getInstance().createActivity("title", "desc", "loc", "11:00"); //pass param
+    public void createActivity(CharSequence title, CharSequence description){
+        Main.getInstance().createActivity(title.toString(), description.toString(), "loc", "11:00"); //pass param
     }
 }

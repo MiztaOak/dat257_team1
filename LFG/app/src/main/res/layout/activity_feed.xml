@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.FindActivity">
+    tools:context=".view.ActivityFeedView">
 
     <TextView
         android:id="@+id/title2"
@@ -61,7 +61,7 @@
         android:id="@+id/createActivity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:onClick="Crea"
+        android:onClick="launchCreateActivity"
         android:text="Create Activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

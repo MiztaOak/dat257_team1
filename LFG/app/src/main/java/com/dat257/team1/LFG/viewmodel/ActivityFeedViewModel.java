@@ -15,11 +15,11 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.List;
 import java.util.Objects;
 
-public class FeedViewModel extends ViewModel implements LifecycleObserver{
+public class ActivityFeedViewModel extends ViewModel implements LifecycleObserver{
 
     private MutableLiveData<List<Activity>> mutableActivityList;
 
-    public FeedViewModel() {
+    public ActivityFeedViewModel() {
         initBus();
     }
 

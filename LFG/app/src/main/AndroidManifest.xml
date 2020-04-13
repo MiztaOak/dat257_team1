@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".view.loginView"></activity>
-        <activity android:name=".viewmodel.HelloWorld" />
-        <activity android:name=".viewmodel.FindActivity" />
+        <activity android:name=".view.ActivityFeedView"></activity>
+        <activity android:name=".view.CreateActivityView"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
