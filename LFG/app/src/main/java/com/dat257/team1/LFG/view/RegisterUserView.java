@@ -142,9 +142,6 @@ public class RegisterUserView extends AppCompatActivity {
         phone = phoneField.getEditText().getText().toString(), pass = passField.getEditText().getText().toString();
         String toastMessage;
 
-
-
-
         if(!email.contains("@")){
             toastMessage = "The email has a incorrct format";
         }else if(name.equals("")){
