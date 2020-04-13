@@ -1,8 +1,14 @@
 package com.dat257.team1.LFG.view;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.dat257.team1.LFG.Events.RegisterEvent;
+import com.dat257.team1.LFG.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -12,6 +18,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,10 +28,40 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterUserView extends AppCompatActivity {
+    private Button createButton;
+    private EditText emailField;
+    private EditText nameField;
+    private EditText passField;
+    private EditText phoneField;
 
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register_user);
 
-    public RegisterUserView() {
-        super();
+        createButton = (Button) findViewById(R.id.reg_enterButton);
+        emailField = (EditText) findViewById(R.id.regEmailField);
+        nameField = (EditText) findViewById(R.id.regNameField);
+        passField = (EditText) findViewById(R.id.regPassField);
+        phoneField = (EditText) findViewById(R.id.regPhoneField);
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                handleCreateUser();
+            }
+        });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     /**
@@ -36,7 +75,7 @@ public class RegisterUserView extends AppCompatActivity {
      * @param password the password to the account
      * @param name the name of the user registering the account
      */
-    public void registerUser(final String email,final String password, final String name){
+    private void registerUser(final String email,final String password, final String name){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         mAuth.createUserWithEmailAndPassword(email,password)
@@ -53,7 +92,7 @@ public class RegisterUserView extends AppCompatActivity {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            //should prob send success event
+                                            EventBus.getDefault().post(new RegisterEvent(true));
                                         }
                                     }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -62,18 +101,49 @@ public class RegisterUserView extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
-                                                //send event to view telling it that the creation failed
+                                                EventBus.getDefault().post(new RegisterEvent(false));
                                             }
-                                            //help
+                                            //help edge case no data for user in the db but the user is still
+                                            // registered what should we do???
                                         }
                                     });
                                 }
                             });
                         }else{
-                            //handle failure could maybe be handled by sending a event to the waiting
-                            // view telling it that there was a error
+                            EventBus.getDefault().post(new RegisterEvent(false));
                         }
                     }
                 });
+    }
+
+    private void handleCreateUser(){
+        String email = emailField.getText().toString(), name = nameField.getText().toString(),
+        phone = phoneField.getText().toString(), pass = passField.getText().toString();
+        String toastMessage;
+
+        if(!email.contains("@")){
+            toastMessage = "The email has a incorrct format";
+        }else if(name.equals("")){
+            toastMessage = "You have to specify a name to create a account";
+        }else if(pass.length() <= 6){
+            toastMessage = "Your password must contain more than 6 character";
+        }else if(phone.equals("")){
+            toastMessage = "You have to specify a phone number to create a account";
+        }else{
+            registerUser(email,pass,name);
+            return;
+        }
+
+        Toast toast = Toast.makeText(getApplicationContext(),toastMessage,Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    @Subscribe
+    public void onRegisterEvent(RegisterEvent event){
+        if(event.isSuccess()){
+
+        }else{
+            Toast.makeText(getApplicationContext(),"Something went wrong in the account creation",Toast.LENGTH_SHORT).show();
+        }
     }
 }
