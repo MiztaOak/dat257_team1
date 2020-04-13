@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 
 import com.dat257.team1.LFG.R;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 public class ActivityViewModel extends AppCompatActivity {
 

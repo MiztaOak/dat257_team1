@@ -9,7 +9,6 @@ import android.widget.Button;
 
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.viewmodel.FindActivity;
 
 public class FindActivity extends AppCompatActivity {
 

@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -10,12 +9,7 @@ import android.widget.Button;
 
 import com.dat257.team1.LFG.viewmodel.FindActivity;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MainActivity extends AppCompatActivity {
-    private FireStoreHelper fireStoreHelper;
-
     private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
