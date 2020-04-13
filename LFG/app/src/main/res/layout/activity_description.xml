@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/activityImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -16,7 +16,7 @@
         tools:layout_editor_absoluteY="55dp" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/addCommentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -26,12 +26,12 @@
         />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/joinActivityButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Join activity'"
-        app:layout_constraintTop_toBottomOf="@+id/button"
+        app:layout_constraintTop_toBottomOf="@+id/addCommentButton"
         tools:layout_editor_absoluteX="144dp" />
 
     <com.google.android.gms.maps.MapView
@@ -43,12 +43,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText3"
+        app:layout_constraintTop_toBottomOf="@+id/activityDescription"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.617" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/activityDescription"
         android:layout_width="346dp"
         android:layout_height="145dp"
         android:ems="10"
@@ -74,7 +74,7 @@
         app:layout_constraintVertical_bias="0.061">
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/activityTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Title"
@@ -82,14 +82,14 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="User name"
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/activityWhen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="When"
