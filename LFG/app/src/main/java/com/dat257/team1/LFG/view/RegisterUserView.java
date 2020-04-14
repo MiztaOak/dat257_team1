@@ -87,7 +87,7 @@ public class RegisterUserView extends AppCompatActivity {
      * @param password the password to the account
      * @param name the name of the user registering the account
      */
-    private void registerUser(final String email,final String password, final String name){
+    private void registerUser(final String email,final String password, final String name,final String phone){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
         mAuth.createUserWithEmailAndPassword(email,password)
@@ -100,6 +100,7 @@ public class RegisterUserView extends AppCompatActivity {
                             userData.put("name",name);
                             userData.put("email",email);
                             userData.put("friends",null);
+                            userData.put("phoneNumber",phone);
                             FirebaseFirestore.getInstance().collection("users").document(user.getUid()).set(userData)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -136,24 +137,24 @@ public class RegisterUserView extends AppCompatActivity {
      *
      * Author: Johan Ek
      */
-    private void handleCreateUser(){
+    private void handleCreateUser() {
         String email = emailField.getEditText().getText().toString(),
                 name = nameField.getEditText().getText().toString(),
-        phone = phoneField.getEditText().getText().toString(), pass = passField.getEditText().getText().toString();
+                phone = phoneField.getEditText().getText().toString(), pass = passField.getEditText().getText().toString();
         String toastMessage;
 
-        if(!email.contains("@")){
-            toastMessage = "The email has a incorrct format";
-        }else if(name.equals("")){
+        if (!email.contains("@")) {
+            toastMessage = "The email has a incorrect format";
+        } else if (name.equals("")) {
             toastMessage = "You have to specify a name to create a account";
-        }else if(pass.length() <= 6){
+        } else if (pass.length() <= 6) {
             toastMessage = "Your password must contain more than 6 character";
-        }else if(phone.equals("")){
+        } else if (phone.equals("")) {
             toastMessage = "You have to specify a phone number to create a account";
-        }else if(!termsBox.isChecked()){
+        } else if (!termsBox.isChecked()) {
             toastMessage = "You have to accept the terms and conditions to create a account";
         }else{
-            registerUser(email,pass,name);
+            registerUser(email,pass,name,phone);
             return;
         }
 
