@@ -5,7 +5,7 @@
     android:id="@+id/loginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.loginView">
+    tools:context=".view.LoginUserView">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -45,23 +45,27 @@
         app:layout_constraintVertical_bias="0.07" />
 
     <EditText
-        android:id="@+id/LEmailBar"
+        android:id="@+id/LEmailField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="272dp"
         android:ems="10"
         android:inputType="textEmailAddress"
+        android:textColor="#CDC8C8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Please enter your email" />
 
     <EditText
-        android:id="@+id/LPasswordBar"
+        android:id="@+id/LPasswordField"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="340dp"
         android:ems="10"
         android:inputType="textPassword"
+        android:text="Please enter your password"
+        android:textColor="#BCB3B3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
