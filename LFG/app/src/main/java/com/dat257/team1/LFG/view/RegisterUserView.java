@@ -141,25 +141,37 @@ public class RegisterUserView extends AppCompatActivity {
         String email = emailField.getEditText().getText().toString(),
                 name = nameField.getEditText().getText().toString(),
                 phone = phoneField.getEditText().getText().toString(), pass = passField.getEditText().getText().toString();
-        String toastMessage;
+
+        if(correctData(email,name,pass,phone)){
+            registerUser(email,pass,name,phone);
+        }
+    }
+
+    private boolean correctData(String email, String name, String pass, String phone){
+        boolean status = true;
+        emailField.setError(null);
+        nameField.setError(null);
+        passField.setError(null);
+        phoneField.setError(null);
+        termsBox.setError(null);
 
         if (!email.contains("@")) {
-            toastMessage = "The email has a incorrect format";
-        } else if (name.equals("")) {
-            toastMessage = "You have to specify a name to create a account";
-        } else if (pass.length() <= 6) {
-            toastMessage = "Your password must contain more than 6 character";
-        } else if (phone.equals("")) {
-            toastMessage = "You have to specify a phone number to create a account";
-        } else if (!termsBox.isChecked()) {
-            toastMessage = "You have to accept the terms and conditions to create a account";
-        }else{
-            registerUser(email,pass,name,phone);
-            return;
+            emailField.setError("The email has a incorrect format");
+            status = false;
+        } if (name.equals("")) {
+            nameField.setError("You have to specify a name to create a account");
+            status = false;
+        } if (pass.length() <= 6) {
+            passField.setError("Your password must contain more than 6 character");
+            status = false;
+        } if (phone.equals("")) {
+            phoneField.setError("You have to specify a phone number to create a account");
+            status = false;
+        } if (!termsBox.isChecked()) {
+            termsBox.setError("You have to accept the terms and conditions to create a account");
+            status = false;
         }
-
-        Toast toast = Toast.makeText(getApplicationContext(),toastMessage,Toast.LENGTH_SHORT);
-        toast.show();
+        return status;
     }
 
     /**
