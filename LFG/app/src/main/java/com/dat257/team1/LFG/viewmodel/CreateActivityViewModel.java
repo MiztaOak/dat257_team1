@@ -1,16 +1,7 @@
 package com.dat257.team1.LFG.viewmodel;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-
-import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Main;
 
 public class CreateActivityViewModel extends ViewModel {
@@ -23,12 +14,9 @@ public class CreateActivityViewModel extends ViewModel {
       main = Main.getMain();
     }
 
-    public void createActivity(String title, String desc) {
+    public void createActivity(String title, String description) {
         if (isValid()) {
-            main.createActivity(title, description, "Heden", "14:30");
-            activity.setTitle(title);
-            activity.setDescription(desc);
-            main.addActivity(activity);
+            main.createActivity(uID,title, description, "Heden", "14:30");
         }
     }
 

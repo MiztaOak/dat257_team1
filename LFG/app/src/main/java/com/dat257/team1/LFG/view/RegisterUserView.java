@@ -1,17 +1,14 @@
 package com.dat257.team1.LFG.view;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import com.dat257.team1.LFG.Events.RegisterEvent;
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.viewmodel.FindActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -185,7 +182,7 @@ public class RegisterUserView extends AppCompatActivity {
     @Subscribe
     public void onRegisterEvent(RegisterEvent event){
         if(event.isSuccess()){
-            Intent intent = new Intent(this, FindActivity.class);
+            Intent intent = new Intent(this, FindActivityView.class);
             startActivity(intent);
         }else{
             Toast.makeText(getApplicationContext(),"Something went wrong in the account creation",Toast.LENGTH_SHORT).show();

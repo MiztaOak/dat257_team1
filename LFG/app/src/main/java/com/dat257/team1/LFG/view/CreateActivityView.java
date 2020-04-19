@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 import com.dat257.team1.LFG.viewmodel.FeedViewModel;
-import com.dat257.team1.LFG.viewmodel.FindActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.dat257.team1.LFG.R;
@@ -27,13 +27,16 @@ public class CreateActivityView extends AppCompatActivity {
         setContentView(R.layout.create_activity);
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
 
+        titleTextView = ((EditText) findViewById(R.id.editTitle));
+        descTextView = ((EditText) findViewById(R.id.editDesc));
+
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
         Button backButton = (Button) findViewById(R.id.backButton);
 
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                createActivityViewModel.createActivity(getActivityTitle(), getActivityDesc());
+                createActivityViewModel.createActivity(getActTitle(), getActDesc());
                 openFindActivity();
             }
         });
@@ -47,19 +50,17 @@ public class CreateActivityView extends AppCompatActivity {
     }
     public void openFindActivity(){
 
-        Intent intent = new Intent(this, FindActivity.class
+        Intent intent = new Intent(this, FindActivityView.class
         );
         startActivity(intent);
     }
 
     private String getActTitle() {
-        String title = ((EditText) findViewById(R.id.editTitle)).getText().toString();
-        return title;
+        return titleTextView.getText().toString();
     }
 
     private String getActDesc() {
-        String desc = ((EditText) findViewById(R.id.editDesc)).getText().toString(); //Change to editDesc
-        return desc;
+        return descTextView.getText().toString();
     }
 
     public void createActivity(View view) {

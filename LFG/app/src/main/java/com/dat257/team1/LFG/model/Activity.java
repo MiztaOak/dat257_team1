@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Activity {
 
-    private int id;
+    private String id;
     private String title;
     private String description;
     private String location;
@@ -23,7 +23,7 @@ public class Activity {
      * @param owner
      * @param participants
      */
-    public Activity(int id, String title, String description, String location, String time, User owner, List<User> participants) {
+    public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -38,11 +38,11 @@ public class Activity {
      */
     public Activity() {}
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

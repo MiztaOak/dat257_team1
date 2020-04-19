@@ -22,6 +22,7 @@ public class Main {
 
 
     private Main() {
+        activities = new ArrayList();
     }
 
     public static Main getMain() {
@@ -39,10 +40,10 @@ public class Main {
      * @param location A location that is used to locate the activity.
      * @param time The time the activity is taken place.
      */
-    public void createActivity(String title, String description, String location, String time) {
-        Activity activity = new Activity(title, description, location, time);  //Something something dark side
+    public void createActivity(String id, String title, String description, String location, String time) {
+        Activity activity = new Activity(id,title, description, location, time, null, null);  //Something something dark side
         activities.add(activity);
-        ActivityEvent activityEvent = new ActivityEvent();
+        ActivityEvent activityEvent = new ActivityEvent(activity);
         EventBus.getDefault().post(activityEvent);
     }
 
@@ -50,15 +51,4 @@ public class Main {
         return activities;
     }
 
-    /**
-     * Method for creating an activity and storing it locally and in the database.
-     * @param name The given name to the activity.
-     * @param description The given description.
-     * @param id An id that is used to track the activity.
-     */
-    public void addActivity(Activity activity) {
-        activities.add(activity);
-        ActivityEvent activityEvent = new ActivityEvent(activity);
-        EventBus.getDefault().post(activityEvent);
-    }
 }
