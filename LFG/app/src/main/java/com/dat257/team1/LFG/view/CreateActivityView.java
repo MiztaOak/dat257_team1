@@ -25,6 +25,7 @@ public class CreateActivityView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity);
+        createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
         Button backButton = (Button) findViewById(R.id.backButton);
@@ -32,6 +33,7 @@ public class CreateActivityView extends AppCompatActivity {
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                createActivityViewModel.createActivity(getActivityTitle(), getActivityDesc());
                 openFindActivity();
             }
         });
@@ -43,7 +45,6 @@ public class CreateActivityView extends AppCompatActivity {
             }
         });
     }
-
     public void openFindActivity(){
 
         Intent intent = new Intent(this, FindActivity.class
@@ -51,14 +52,14 @@ public class CreateActivityView extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private CharSequence getActTitle() {
-        TextView title = findViewById(R.id.editTitle);
-        return title.getText();
+    private String getActTitle() {
+        String title = ((EditText) findViewById(R.id.editTitle)).getText().toString();
+        return title;
     }
 
-    private CharSequence getActDesc() {
-        TextView desc = findViewById(R.id.editDesc); //Change to editDesc
-        return desc.getText();
+    private String getActDesc() {
+        String desc = ((EditText) findViewById(R.id.editDesc)).getText().toString(); //Change to editDesc
+        return desc;
     }
 
     public void createActivity(View view) {

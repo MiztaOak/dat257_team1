@@ -1,9 +1,12 @@
 package com.dat257.team1.LFG.model;
 
 import com.dat257.team1.LFG.Events.ActivityEvent;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
+
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +19,7 @@ public class Main {
 
     private List activities;
     private static Main main;
+
 
     private Main() {
     }
@@ -46,4 +50,15 @@ public class Main {
         return activities;
     }
 
+    /**
+     * Method for creating an activity and storing it locally and in the database.
+     * @param name The given name to the activity.
+     * @param description The given description.
+     * @param id An id that is used to track the activity.
+     */
+    public void addActivity(Activity activity) {
+        activities.add(activity);
+        ActivityEvent activityEvent = new ActivityEvent(activity);
+        EventBus.getDefault().post(activityEvent);
+    }
 }
