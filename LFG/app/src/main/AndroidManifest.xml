@@ -9,13 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".view.LoginUserView"></activity>
         <activity
-            android:name=".view.loginView"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".view.ActivityFeedView" />
-        <activity android:name=".view.CreateActivityView" />
+            android:name=".view.LoginPageView"
+            android:label="@string/login_page_view"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".view.ActivityFeedView"></activity>
+        <activity android:name=".view.CreateActivityView"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,5 +25,7 @@
         </activity>
         <activity android:name=".view.RegisterUserView" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
