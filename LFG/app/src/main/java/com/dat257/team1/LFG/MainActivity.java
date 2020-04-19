@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.viewmodel.FindActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFindActivity();
+                openCreateActivityView();
 
             }
         });
@@ -34,5 +35,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void openCreateActivityView(){
 
+        Intent intent = new Intent(this, CreateActivityView.class
+        );
+        startActivity(intent);
+    }
 }

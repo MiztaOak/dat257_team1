@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.ActivityViewModel">
+    tools:context=".viewmodel.CreateActivityViewModel">
 
     <EditText
         android:id="@+id/editTitle"
@@ -30,7 +30,7 @@
         app:layout_constraintVertical_bias="0.977" />
 
     <EditText
-        android:id="@+id/Add_Description"
+        android:id="@+id/editDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"

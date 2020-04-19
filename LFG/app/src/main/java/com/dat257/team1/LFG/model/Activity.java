@@ -32,7 +32,9 @@ public class Activity {
     /**
      * Constructor creating an activity without any information.
      */
-    private Activity() {}
+
+    public Activity(String title, String description, String location, String time) {
+    }
 
     public String getTitle() {
         return title;
