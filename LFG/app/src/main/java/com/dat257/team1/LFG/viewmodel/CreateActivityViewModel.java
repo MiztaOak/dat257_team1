@@ -20,11 +20,12 @@ public class CreateActivityViewModel extends ViewModel {
     private String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
 
     public CreateActivityViewModel() {
+      main = Main.getMain();
     }
 
     public void createActivity(String title, String desc) {
-        Activity activity = new Activity();
         if (isValid()) {
+            main.createActivity(title, description, "Heden", "14:30");
             activity.setTitle(title);
             activity.setDescription(desc);
             main.addActivity(activity);

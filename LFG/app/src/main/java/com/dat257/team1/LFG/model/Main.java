@@ -18,30 +18,32 @@ public class Main {
 
 
     private List activities;
-    private Main main;
+    private static Main main;
 
 
     private Main() {
     }
 
-    public Main getMain() {
+    public static Main getMain() {
         if(main == null) {
             main = new Main();
         }
         return main;
     }
 
+
     /**
      * Creates an activity and posts it on the Eventbus.
-     * @param name The given name to the activity
+     * @param title The given name to the activity
      * @param description The given description.
-     * @param id an id that is used to track the activity.
+     * @param location A location that is used to locate the activity.
+     * @param time The time the activity is taken place.
      */
-    public void createActivity(String name, String description, int id) {
-        //Activity activity = new Activity(name, description, id);  //Something something dark side
-        //activities.add(activity);
-        //ActivityEvent activityEvent = new ActivityEvent();
-        //EventBus.getDefault().post(activityEvent);
+    public void createActivity(String title, String description, String location, String time) {
+        Activity activity = new Activity(title, description, location, time);  //Something something dark side
+        activities.add(activity);
+        ActivityEvent activityEvent = new ActivityEvent();
+        EventBus.getDefault().post(activityEvent);
     }
 
     public List getActivities() {
