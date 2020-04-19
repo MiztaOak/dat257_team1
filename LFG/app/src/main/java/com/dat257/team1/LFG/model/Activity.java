@@ -1,9 +1,12 @@
 package com.dat257.team1.LFG.model;
 
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
+
 import java.util.List;
 
 public class Activity {
 
+    private int id;
     private String title;
     private String description;
     private String location;
@@ -20,7 +23,8 @@ public class Activity {
      * @param owner
      * @param participants
      */
-    public Activity(String title, String description, String location, String time, User owner, List<User> participants) {
+    public Activity(int id, String title, String description, String location, String time, User owner, List<User> participants) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
@@ -32,7 +36,15 @@ public class Activity {
     /**
      * Constructor creating an activity without any information.
      */
-    private Activity() {}
+    public Activity() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -46,9 +58,7 @@ public class Activity {
         return location;
     }
 
-    public String getTime() {
-        return time;
-    }
+    public String getTime() { return time; }
 
     public User getOwner() {
         return owner;
@@ -81,4 +91,5 @@ public class Activity {
     public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
+
 }
