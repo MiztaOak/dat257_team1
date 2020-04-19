@@ -9,9 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".view.loginView"></activity>
-        <activity android:name=".view.ActivityFeedView"></activity>
-        <activity android:name=".view.CreateActivityView"></activity>
+
+        <activity
+            android:name=".view.loginView"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".view.ActivityFeedView" />
+        <activity android:name=".view.CreateActivityView" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

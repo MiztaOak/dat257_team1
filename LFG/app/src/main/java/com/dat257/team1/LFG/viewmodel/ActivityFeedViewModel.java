@@ -20,12 +20,8 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
     private MutableLiveData<List<Activity>> mutableActivityList;
 
     public ActivityFeedViewModel() {
-        initBus();
     }
 
-    private void initBus() {
-
-    }
 
     public MutableLiveData<List<Activity>> getMutableActivityList() {
         if(mutableActivityList == null) {

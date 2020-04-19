@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">LFG</string>
+    <string name="tab_text_1">Register</string>
+    <string name="tab_text_2">Sign in</string>
+    <string name="sign_in">Sign in</string>
+    <string name="let_s_get_you_started">Let\'s get you started</string>
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>
