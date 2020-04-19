@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.dat257.team1.LFG.view.FindActivityView;
 
-import com.dat257.team1.LFG.viewmodel.FindActivity;
 
 public class MainActivity extends AppCompatActivity {
     private Button button;
@@ -28,8 +28,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void openFindActivity(){
-
-        Intent intent = new Intent(this, FindActivity.class
+        Intent intent = new Intent(this, FindActivityView.class
         );
         startActivity(intent);
     }
