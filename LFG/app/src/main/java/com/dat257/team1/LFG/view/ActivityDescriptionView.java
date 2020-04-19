@@ -61,6 +61,5 @@ public class ActivityDescriptionView extends AppCompatActivity {
         addComment = findViewById(R.id.write_comment);
         activityTitle = findViewById(R.id.activity_title);
         userName = findViewById(R.id.user_name);
-        userName = findViewById(R.id.user_name);
     }
 }
