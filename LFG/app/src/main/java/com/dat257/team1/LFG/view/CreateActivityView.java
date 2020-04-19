@@ -25,7 +25,6 @@ public class CreateActivityView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity);
-        //createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
         Button backButton = (Button) findViewById(R.id.backButton);
