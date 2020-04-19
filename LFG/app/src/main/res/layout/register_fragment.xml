@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    tools:context=".view.LoginPageView">
+    tools:context=".view.loginPage.LoginPageView">
 
 
     <LinearLayout
@@ -47,13 +47,14 @@
             android:layout_marginBottom="40dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#000000"
                 android:theme="@style/EditScreenTextInputLoginStyle">
 
                 <EditText
+                    android:id="@+id/sign_up_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawableRight="@drawable/ic_email_white_24dp"
@@ -65,15 +66,16 @@
                     android:textColor="@android:color/black"
                     android:textSize="20sp" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#0E0E0E"
                 android:theme="@style/EditScreenTextInputLoginStyle">
 
                 <EditText
+                    android:id="@+id/sign_up_pwd1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawableRight="@drawable/ic_lock_white_24dp"
@@ -85,30 +87,31 @@
                     android:textColor="#0E0E0E"
                     android:textColorHint="#000000"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#0E0E0E"
                 android:theme="@style/EditScreenTextInputLoginStyle">
 
                 <EditText
+                    android:id="@+id/sign_up_pwd2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawableRight="@drawable/ic_lock_white_24dp"
                     android:drawablePadding="16dp"
                     android:fontFamily="@font/calibri"
-                    android:hint="Password"
+                    android:hint="Confirm Password"
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:textColor="#0E0E0E"
                     android:textColorHint="#000000"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <CheckBox
-                android:id="@+id/checkBox"
+                android:id="@+id/terms_conditions_checkbox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Terms and conditions"
@@ -132,7 +135,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/sign_up"
+                    android:id="@+id/sign_up_button"
                     android:layout_width="145dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"

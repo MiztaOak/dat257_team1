@@ -8,9 +8,11 @@ import android.view.View;
 import android.widget.Button;
 
 import com.dat257.team1.LFG.view.ActivityFeedView;
+import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 
 public class MainActivity extends AppCompatActivity {
     private Button button;
+    private Button testLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,6 +25,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        testLogin = findViewById(R.id.testlogin);
+        testLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLoginPage();
+            }
+        });
 
 
     }
@@ -30,6 +39,14 @@ public class MainActivity extends AppCompatActivity {
     public void openFindActivity(){
 
         Intent intent = new Intent(this, ActivityFeedView.class
+        );
+        startActivity(intent);
+    }
+
+
+    public void openLoginPage(){
+
+        Intent intent = new Intent(this, LoginPageView.class
         );
         startActivity(intent);
     }

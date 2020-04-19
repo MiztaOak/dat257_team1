@@ -50,13 +50,14 @@
             android:layout_marginBottom="40dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#000000"
                 android:theme="@style/EditScreenTextInputLoginStyle">
 
                 <EditText
+                    android:id="@+id/sign_in_email"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawableRight="@drawable/ic_email_white_24dp"
@@ -67,15 +68,16 @@
                     android:maxLines="1"
                     android:textColor="#000000"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="#000000"
                 android:theme="@style/EditScreenTextInputLoginStyle">
 
                 <EditText
+                    android:id="@+id/sign_in_pwd"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:drawableRight="@drawable/ic_lock_white_24dp"
@@ -87,7 +89,7 @@
                     android:textColor="#000000"
                     android:textColorHint="#000000"
                     android:textSize="20sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
@@ -105,7 +107,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/sign_up"
+                    android:id="@+id/sign_in_button"
                     android:layout_width="145dp"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="16dp"

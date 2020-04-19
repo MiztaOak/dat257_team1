@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".view.LoginUserView"></activity>
         <activity
-            android:name=".view.LoginPageView"
+            android:name=".view.loginPage.LoginPageView"
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".view.ActivityFeedView"></activity>

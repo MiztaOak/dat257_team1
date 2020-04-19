@@ -1,6 +1,6 @@
 package com.dat257.team1.LFG.model;
 
-import com.dat257.team1.LFG.Events.ActivityEvent;
+import com.dat257.team1.LFG.events.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 

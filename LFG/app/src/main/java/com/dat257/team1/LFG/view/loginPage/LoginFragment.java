@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.loginPage;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,6 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
 
+
+/**
+ * A simple login on an account fragment
+ *
+ * @author : Jakobew
+ */
 public class LoginFragment extends Fragment {
 
     @Nullable

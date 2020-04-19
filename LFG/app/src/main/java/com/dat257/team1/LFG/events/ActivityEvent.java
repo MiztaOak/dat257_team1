@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.Events;
+package com.dat257.team1.LFG.events;
 
 import com.dat257.team1.LFG.model.Activity;
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.dat257.team1.LFG.Events.ActivityEvent;
+import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.model.Activity;
 
 import org.greenrobot.eventbus.EventBus;
