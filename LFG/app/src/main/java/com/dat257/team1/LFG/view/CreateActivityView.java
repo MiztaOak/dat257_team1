@@ -68,5 +68,4 @@ public class CreateActivityView extends AppCompatActivity {
         startActivity(intent);
 
     }
-    //remove openFindActivity, createActivity does this
 }
