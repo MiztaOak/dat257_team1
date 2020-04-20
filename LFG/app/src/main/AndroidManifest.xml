@@ -17,8 +17,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAmbg2Kiqj0k3pF68L46nFPwV_-YiEs2RI"/>
         <activity android:name=".view.CreateActivityView" />
-        <activity android:name=".view.HelloWorldView"></activity>
-        <activity android:name=".view.FindActivityView" />
+        <activity
+            android:name=".view.loginPage.LoginPageView"
+            android:label="@string/login_page_view"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".view.ActivityFeedView"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,7 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.RegisterUserView" />
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
