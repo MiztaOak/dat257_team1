@@ -153,14 +153,15 @@
             android:id="@+id/sign_in_button"
             android:layout_width="145dp"
             android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonshapewhitebg"
             android:fontFamily="@font/calibri_regular"
+            android:onClick="jjj"
             android:text="@string/sign_in"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_gravity="center_horizontal"/>
+            android:textStyle="bold" />
 
     </LinearLayout>
 

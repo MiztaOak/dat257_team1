@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -50,8 +49,6 @@ public class LoginPageView extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
-
-        ImageView loginPageBackground = findViewById(R.id.loginPageImageView);
         initiateComponents();
         //loginButtonListener();
     }
