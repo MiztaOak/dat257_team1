@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.Events;
+package com.dat257.team1.LFG.events;
 
 public class RegisterEvent {
     private boolean success;

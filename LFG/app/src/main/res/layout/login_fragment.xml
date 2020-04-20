@@ -156,7 +156,6 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/buttonshapewhitebg"
             android:fontFamily="@font/calibri_regular"
-            android:onClick="jjj"
             android:text="@string/sign_in"
             android:textAllCaps="false"
             android:textColor="#FFFFFF"
