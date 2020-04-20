@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 
@@ -16,7 +17,6 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.LoginPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
@@ -49,7 +49,9 @@ public class LoginPageView extends AppCompatActivity {
         viewPager.setAdapter(loginPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
-        loginButton = findViewById(R.id.sign_in_button);
+        viewPager.setOffscreenPageLimit(2);
+
+        ImageView loginPageBackground = findViewById(R.id.loginPageImageView);
         initiateComponents();
         //loginButtonListener();
     }
@@ -59,7 +61,7 @@ public class LoginPageView extends AppCompatActivity {
      * after checking if the user has entered a validate email and password.
      */
     private void loginButtonListener() {
-
+        loginButton = findViewById(R.id.sign_in_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

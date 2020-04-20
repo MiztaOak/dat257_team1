@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.loginPage;
 
 import android.content.Context;
 import androidx.annotation.StringRes;
@@ -7,9 +7,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginFragment;
-import com.dat257.team1.LFG.view.loginPage.RegisterFragment;
-
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
  * one of the sections/tabs/pages.
@@ -24,6 +21,7 @@ public class LoginPagerAdapter extends FragmentPagerAdapter {
         super(fm);
         mContext = context;
     }
+
 
     @Override
     public Fragment getItem(int position) {
