@@ -1,11 +1,5 @@
 package com.dat257.team1.LFG.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
-
-import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
-import com.dat257.team1.LFG.viewmodel.FeedViewModel;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,9 +7,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 
 public class CreateActivityView extends AppCompatActivity {
+
+    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
     private TextView titleTextView;
     private TextView descTextView;
@@ -27,7 +27,7 @@ public class CreateActivityView extends AppCompatActivity {
         setContentView(R.layout.create_activity);
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
 
-        titleTextView = ((EditText) findViewById(R.id.editTitle));
+        titleTextView = ((EditText) findViewById(R.id.edit_title));
         descTextView = ((EditText) findViewById(R.id.editDesc));
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
@@ -48,9 +48,9 @@ public class CreateActivityView extends AppCompatActivity {
             }
         });
     }
-    public void openFindActivity(){
 
-        Intent intent = new Intent(this, FindActivityView.class
+    public void openFindActivity() {
+        Intent intent = new Intent(this, ActivityFeedView.class
         );
         startActivity(intent);
     }
@@ -61,13 +61,5 @@ public class CreateActivityView extends AppCompatActivity {
 
     private String getActDesc() {
         return descTextView.getText().toString();
-    }
-
-    public void createActivity(View view) {
-        createActivityViewModel.createActivity(getActTitle(), getActDesc());
-        Intent intent = new Intent(this, FeedViewModel.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-
     }
 }

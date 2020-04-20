@@ -4,10 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".viewmodel.CreateActivityViewModel">
+    tools:context=".view.CreateActivityView">
+
 
     <EditText
-        android:id="@+id/editTitle"
+        android:id="@+id/edit_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -47,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Title"
-        app:layout_constraintBottom_toTopOf="@+id/editTitle"
+        app:layout_constraintBottom_toTopOf="@+id/edit_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/createActivityButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTitle"
+        app:layout_constraintTop_toBottomOf="@+id/edit_title"
         app:layout_constraintVertical_bias="0.05" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

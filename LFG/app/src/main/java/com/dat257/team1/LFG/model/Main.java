@@ -1,11 +1,7 @@
 package com.dat257.team1.LFG.model;
 
-import com.dat257.team1.LFG.Events.ActivityEvent;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
-
-
+import com.dat257.team1.LFG.events.ActivityEvent;
 import org.greenrobot.eventbus.EventBus;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,16 +12,15 @@ import java.util.List;
  */
 public class Main {
 
-
-    private List activities;
     private static Main main;
-
+    private List<Activity> activities;
+    private User dummy = new User(1, "johan", "joahn", 0);
 
     private Main() {
-        activities = new ArrayList();
+        activities = new ArrayList<>();
     }
 
-    public static Main getMain() {
+    public static Main getInstance() {
         if(main == null) {
             main = new Main();
         }
@@ -41,8 +36,12 @@ public class Main {
      * @param time The time the activity is taken place.
      */
     public void createActivity(String id, String title, String description, String location, String time) {
-        Activity activity = new Activity(id,title, description, location, time, null, null);  //Something something dark side
+        List<User> participants = new ArrayList<>();
+        participants.add(dummy);
+
+        Activity activity = new Activity(id, title, description, location, time, dummy, participants);
         activities.add(activity);
+
         ActivityEvent activityEvent = new ActivityEvent(activity);
         EventBus.getDefault().post(activityEvent);
     }
