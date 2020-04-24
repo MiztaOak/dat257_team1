@@ -30,4 +30,6 @@ public class CreateActivityViewModel extends ViewModel {
         //Some code to check if the inputs for creating an activity are correct.
         return true;
     }
+
+    //Arsenije
 }
