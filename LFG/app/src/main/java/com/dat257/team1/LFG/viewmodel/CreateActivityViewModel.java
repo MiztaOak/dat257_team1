@@ -32,4 +32,5 @@ public class CreateActivityViewModel extends ViewModel {
     }
 
     //Arsenije
+    //Gabriel
 }
