@@ -34,6 +34,7 @@ public class ActivityFeedView extends AppCompatActivity {
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
+    public ArrayList<CardsView> cardsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +52,7 @@ public class ActivityFeedView extends AppCompatActivity {
             }
         });
 
-        ArrayList<CardsView> cardsList = new ArrayList<>();
+        //ArrayList<CardsView> cardsList = new ArrayList<>();
 
         cardsList.add(new CardsView(R.drawable.ic_android_black_24dp, "Fotboll", "fotboll på heden kl 13:00"));
         cardsList.add(new CardsView(R.drawable.ic_radio_button_unchecked_black_24dp, "Basketspelare sökes", "söker basketspelare till match 14:00"));

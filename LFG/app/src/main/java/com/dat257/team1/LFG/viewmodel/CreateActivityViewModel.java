@@ -17,14 +17,12 @@ public class CreateActivityViewModel extends ViewModel {
     public CreateActivityViewModel() {
     }
 
-    public void createActivity(String title, String description) {
+    public void createActivity(String title, String description, String address, String time) {
         if (isValid()) {
             //Dummy ID, change later!
             String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
-            //Main.getInstance().createActivity(uID,title, description, address, time);
-            List<User> participants = new ArrayList<>();
-            //Dummy user, change later!
-            //Main.getInstance().createActivity(uID, owner, participants, title, description, new GeoPoint(30,40), new Timestamp(3000,40));
+            Main.getInstance().createActivity(uID,title, description, address, time);
+
         }
     }
 
