@@ -21,7 +21,7 @@ public class CreateActivityViewModel extends ViewModel {
         if (isValid()) {
             //Dummy ID, change later!
             String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
-            //Main.getInstance().createActivity(uID,title, description, "Heden", "14:30");
+            //Main.getInstance().createActivity(uID,title, description, address, time);
             List<User> participants = new ArrayList<>();
             //Dummy user, change later!
             //Main.getInstance().createActivity(uID, owner, participants, title, description, new GeoPoint(30,40), new Timestamp(3000,40));
