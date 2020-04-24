@@ -9,11 +9,11 @@ public class CreateActivityViewModel extends ViewModel {
     public CreateActivityViewModel() {
     }
 
-    public void createActivity(String title, String description) {
+    public void createActivity(String title, String description, String address, String time) {
         if (isValid()) {
             //Dummy ID, change later!
             String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
-            Main.getInstance().createActivity(uID,title, description, "Heden", "14:30");
+            Main.getInstance().createActivity(uID,title, description, address, time);
         }
     }
 
