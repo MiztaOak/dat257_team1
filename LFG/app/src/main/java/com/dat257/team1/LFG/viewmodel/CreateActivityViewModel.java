@@ -1,8 +1,16 @@
 package com.dat257.team1.LFG.viewmodel;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.model.Main;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.auth.User;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CreateActivityViewModel extends ViewModel {
 
@@ -13,7 +21,10 @@ public class CreateActivityViewModel extends ViewModel {
         if (isValid()) {
             //Dummy ID, change later!
             String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
-            Main.getInstance().createActivity(uID,title, description, "Heden", "14:30");
+            //Main.getInstance().createActivity(uID,title, description, "Heden", "14:30");
+            List<User> participants = new ArrayList<>();
+            //Dummy user, change later!
+            //Main.getInstance().createActivity(uID, owner, participants, title, description, new GeoPoint(30,40), new Timestamp(3000,40));
         }
     }
 

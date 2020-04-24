@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 class User {
-    private int id; // since many users can have the same name
+    private String id; // since many users can have the same name
     private String name;
     private int phoneNumber;
     private String email;
     private List<User> friendList;
 
 
-    public User(int id, String name, String email, int phoneNumber) {
+    public User(String id, String name, String email, int phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -27,7 +27,7 @@ class User {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
