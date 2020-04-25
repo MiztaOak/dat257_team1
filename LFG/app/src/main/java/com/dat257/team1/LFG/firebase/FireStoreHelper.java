@@ -2,8 +2,11 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.model.Main;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -14,6 +17,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,11 +41,19 @@ public class FireStoreHelper {
     private FirebaseFirestore db;
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
+    private static FireStoreHelper instance;
 
-    public FireStoreHelper(){
+
+    private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
         activities = new ArrayList<>();
         loadActivities();
+    }
+
+    public static FireStoreHelper getInstance() {
+        if(instance == null)
+            instance = new FireStoreHelper();
+        return instance;
     }
 
     //just a dummy method will be removed later
@@ -131,12 +144,32 @@ public class FireStoreHelper {
                 activities = new ArrayList<>();
                 for(QueryDocumentSnapshot doc : value){
                     ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
-                    activities.add(data.toActivity(doc.getId()));
+                    if(data.hasValidData())
+                        activities.add(data.toActivity(doc.getId()));
                 }
+                Main.getInstance().setActivities(activities);
             }
         });
 
 
+    }
+
+    public void loadComments(String id) {
+        db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<Comment> comments = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: value){
+                    CommentDataHolder data = doc.toObject(CommentDataHolder.class);
+                    comments.add(data.toComment());
+                }
+                EventBus.getDefault().post(new BatchCommentEvent(comments));
+            }
+        });
     }
 
     public List<Activity> getActivities(){
@@ -151,7 +184,7 @@ public class FireStoreHelper {
     public void addCommentToActivity(Activity activity, Comment comment) {
         Map<String,Object> data = new HashMap<>();
         data.put("commentText",comment.getCommentText());
-        data.put("poster","/users/"+comment.getCommenterRef());
+        data.put("poster",db.document("/users/"+comment.getCommenterRef()));
         data.put("postDate",new Timestamp(comment.getCommentDate()));
 
         db.collection("activities").document(activity.getId()).
@@ -159,12 +192,12 @@ public class FireStoreHelper {
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                //post success event to front end?
+                EventBus.getDefault().post(new CommentEvent(true));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //post failure event to front end?
+                EventBus.getDefault().post(false);
             }
         });
     }

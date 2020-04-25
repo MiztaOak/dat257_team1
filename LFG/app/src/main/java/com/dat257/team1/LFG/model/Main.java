@@ -30,7 +30,7 @@ public class Main {
         comments.add(new Comment("comment2", Calendar.getInstance().getTime(),"Me"));
         comments.add(new Comment("comment3", Calendar.getInstance().getTime(),"Me"));
 
-        focusedActivity = new Activity("Dz0LrkQTOeefy7dqqx3E97xBHLE2","Test title","Test desc","here","now",dummy,new ArrayList<User>(),comments);
+        focusedActivity = new Activity("u8A4858pFvnr5IyKxOTc","Test title","Test desc","here","now",dummy,new ArrayList<User>());
     }
 
     public static Main getInstance() {
@@ -68,7 +68,10 @@ public class Main {
     }
 
     public void addComment(Activity activity, Comment comment) {
-        FireStoreHelper fsHelper = new FireStoreHelper();
-        fsHelper.addCommentToActivity(activity,comment);
+        FireStoreHelper.getInstance().addCommentToActivity(activity,comment);
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
     }
 }

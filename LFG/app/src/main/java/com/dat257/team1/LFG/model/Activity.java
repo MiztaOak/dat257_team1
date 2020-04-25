@@ -14,7 +14,6 @@ public class Activity {
     private String time;
     private User owner;
     private List<User> participants;
-    private List<Comment> comments;
 
 
 
@@ -28,10 +27,6 @@ public class Activity {
      * @param participants
      */
     public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants) {
-        this(id,title,description,location,time,owner,participants,new ArrayList<Comment>());
-    }
-
-    public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants, List<Comment> comments) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,7 +34,6 @@ public class Activity {
         this.time = time;
         this.owner = owner;
         this.participants = participants;
-        this.comments = comments;
     }
 
     /**
@@ -99,9 +93,5 @@ public class Activity {
 
     public void setParticipants(List<User> participants) {
         this.participants = participants;
-    }
-
-    public List<Comment> getComments() {
-        return comments;
     }
 }

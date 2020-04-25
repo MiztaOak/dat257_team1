@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -13,11 +15,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 import java.util.Observable;
@@ -91,7 +97,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
         activitySchedule.setText("Time/Date");
         activityDescription.setText("Activity Description");
 
-
+        EventBus.getDefault().register(this);
     }
 
     private void initViews() {
@@ -105,5 +111,12 @@ public class ActivityDescriptionView extends AppCompatActivity {
         activityTitle = findViewById(R.id.activity_title);
         userName = findViewById(R.id.user_name);
         commentText = findViewById(R.id.description_commentTextField);
+    }
+
+    @Subscribe
+    public void handleCommentEvent(CommentEvent event){
+        if(!event.isSuccess()){
+            Toast.makeText(getApplicationContext(),"Something went wrong when trying to post your comment",Toast.LENGTH_SHORT).show();
+        }
     }
 }

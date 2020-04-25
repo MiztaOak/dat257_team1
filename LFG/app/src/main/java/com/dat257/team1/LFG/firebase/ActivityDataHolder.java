@@ -18,7 +18,6 @@ import java.util.List;
 public class ActivityDataHolder {
     public DocumentReference owner;
     public List<DocumentReference> participants;
-    public List<CommentDataHolder> comments;
     public String title;
     public String desc;
     public Timestamp time;
@@ -94,6 +93,7 @@ public class ActivityDataHolder {
         this.location = location;
     }
 
+
     @Override
     public String toString() {
         return "ActivityDataHolder{" +
@@ -113,9 +113,11 @@ public class ActivityDataHolder {
             participantStrings.add(ref.toString());
         }
         List<Comment> commentList = new ArrayList<>();
-        for(CommentDataHolder com: comments){
-            commentList.add(com.toComment());
-        }
-        return new Activity(id,title,desc,location.toString(),time.toString(),null/*owner.toString()*/,null/*participantStrings*/,commentList);
+
+        return new Activity(id,title,desc,location.toString(),time.toString(),null/*owner.toString()*/,null/*participantStrings*/);
+    }
+
+    public boolean hasValidData(){
+        return owner != null && title != null && desc != null && time != null && owner != null && participants != null && creationDate != null;
     }
 }

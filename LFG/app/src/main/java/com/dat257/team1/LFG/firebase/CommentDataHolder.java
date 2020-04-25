@@ -9,6 +9,9 @@ public class CommentDataHolder {
     public Timestamp postDate;
     public DocumentReference poster;
 
+    public CommentDataHolder() {
+    }
+
     public CommentDataHolder(String commentText, Timestamp postDate, DocumentReference poster) {
         this.commentText = commentText;
         this.postDate = postDate;
