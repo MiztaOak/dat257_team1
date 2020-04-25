@@ -3,6 +3,7 @@ package com.dat257.team1.LFG.model;
 import com.dat257.team1.LFG.events.ActivityEvent;
 import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -16,8 +17,18 @@ public class Main {
     private List<Activity> activities;
     private User dummy = new User(1, "johan", "joahn", 0);
 
+    //just a temp var should prob be changed to something else
+    private Activity focusedActivity;
+
     private Main() {
         activities = new ArrayList<>();
+
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("comment1", Calendar.getInstance().getTime(),"Me"));
+        comments.add(new Comment("comment2", Calendar.getInstance().getTime(),"Me"));
+        comments.add(new Comment("comment3", Calendar.getInstance().getTime(),"Me"));
+
+        focusedActivity = new Activity("Dz0LrkQTOeefy7dqqx3E97xBHLE2","Test title","Test desc","here","now",dummy,new ArrayList<User>(),comments);
     }
 
     public static Main getInstance() {
@@ -50,4 +61,7 @@ public class Main {
         return activities;
     }
 
+    public Activity getFocusedActivity() {
+        return focusedActivity;
+    }
 }

@@ -6,14 +6,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
 
+import java.util.List;
+import java.util.Observable;
+
 public class ActivityDescriptionView extends AppCompatActivity {
 
-    ActivityDescriptionViewModel activityDescriptionViewModel;
+    private ActivityDescriptionViewModel activityDescriptionViewModel;
     private ImageView activityImage;
     private TextView activityTitle;
     private TextView userName;
@@ -24,10 +34,17 @@ public class ActivityDescriptionView extends AppCompatActivity {
     private Button addComment;
     private Button joinActivity;
 
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter reAdapter;
+    private RecyclerView.LayoutManager reLayoutManager;
+
+    private MutableLiveData<List<Comment>> comments;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
+        initViews();
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,13 +59,30 @@ public class ActivityDescriptionView extends AppCompatActivity {
             }
         });
 
+        activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
+        comments = activityDescriptionViewModel.getComments();
+        comments.observe(this, new Observer<List<Comment>>() {
+            @Override
+            public void onChanged(List<Comment> comments) {
+                reAdapter.notifyDataSetChanged();
+            }
+        });
+
+        recyclerView = (RecyclerView) findViewById(R.id.comment_feed);
+        reLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(reLayoutManager);
+        reAdapter = new CommentAdapter(comments);
+        recyclerView.setAdapter(reAdapter);
+
+
+
         //activityImage.setImageResource(R.drawable.SRC); //sets the source to image
         activityTitle.setText("Activity Title");
         userName.setText("User Name");
         activitySchedule.setText("Time/Date");
         activityDescription.setText("Activity Description");
 
-        initViews();
+
     }
 
     private void initViews() {

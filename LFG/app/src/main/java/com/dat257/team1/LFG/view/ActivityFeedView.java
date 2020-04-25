@@ -78,9 +78,14 @@ public class ActivityFeedView extends AppCompatActivity {
         menu.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                clickMenu();
             }
         }));
+    }
+
+    private void clickMenu(){
+        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        startActivity(intent);
     }
 
     public void launchCreateActivity() {
