@@ -14,17 +14,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.firestore.GeoPoint;
 
 /**
  * This class is responsible for displaying the address on google maps
  *
  * @author : Oussama Anadani
  */
-public class activity_maps extends FragmentActivity implements OnMapReadyCallback {
+public class GoogleMaps extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private Location currentLocation;
-    private FusedLocationProviderClient fusedLocationProviderClient;
 
 
     @Override
@@ -62,7 +61,7 @@ public class activity_maps extends FragmentActivity implements OnMapReadyCallbac
      *
      * @param location The location that will be marked on the map
      */
-    private void markLocation(LatLng location) {
+    public void markLocation(LatLng location) {
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(location));
         mMap.animateCamera(CameraUpdateFactory.newLatLng(location));
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
