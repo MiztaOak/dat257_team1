@@ -26,7 +26,7 @@ public class Main {
     private List<Activity> activities;
     private User dummy = new User("1", "johan", "joahn", 0);
     private FireStoreHelper fireBaseObject;
-    private String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
+    private String activityID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
 
     private Main() {
         activities = new ArrayList<>();
@@ -63,9 +63,9 @@ public class Main {
         fireBaseObject.addActivity(activityEvent);
     }
 
-    public void createActivity (String title, String description, String address, String time) {
+    public void createActivity (String title, String description, String time, String adress) {
         List<User> participants = new ArrayList<>();
-        createActivity(uID, dummy, participants, title, description, null, null);
+        createActivity(activityID, dummy, participants, title, description, null, null);
     }
 
     public List getActivities() {
