@@ -1,11 +1,16 @@
 package com.dat257.team1.LFG.model;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.sql.Time;
 import java.util.List;
+import java.util.Locale;
 
 public class Activity {
 
@@ -95,5 +100,6 @@ public class Activity {
     public void setParticipants(List<User> participants) {
         this.participants = participants;
     }
+
 
 }
