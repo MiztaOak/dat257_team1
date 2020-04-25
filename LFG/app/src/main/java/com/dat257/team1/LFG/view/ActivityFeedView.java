@@ -32,9 +32,10 @@ public class ActivityFeedView extends AppCompatActivity {
     private Button menu;
 
 
+
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    public ArrayList<CardsView> cardsList = new ArrayList<>();
+    private ArrayList<CardsView> cardsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +83,14 @@ public class ActivityFeedView extends AppCompatActivity {
 
             }
         }));
+    }
+
+    public RecyclerView.Adapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public ArrayList<CardsView> getCardsList(){
+        return cardsList;
     }
 
     public void launchCreateActivity() {
