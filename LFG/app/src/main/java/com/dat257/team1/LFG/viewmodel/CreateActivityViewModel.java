@@ -1,5 +1,7 @@
 package com.dat257.team1.LFG.viewmodel;
 
+import android.annotation.SuppressLint;
+
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.model.Main;
@@ -9,11 +11,12 @@ public class CreateActivityViewModel extends ViewModel {
     public CreateActivityViewModel() {
     }
 
-    public void createActivity(String title, String description) {
+    @SuppressLint("RestrictedApi") //Work-around caused by a bug that did not allow me to create a user
+    public void createActivity(String title, String description, String time, String address) {
         if (isValid()) {
-            //Dummy ID, change later!
-            String uID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
-            Main.getInstance().createActivity(uID,title, description, "Heden", "14:30");
+
+            Main.getInstance().createActivity(title, description, time, address);
+
         }
     }
 
