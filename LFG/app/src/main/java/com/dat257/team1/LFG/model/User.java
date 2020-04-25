@@ -3,7 +3,7 @@ package com.dat257.team1.LFG.model;
 import java.util.ArrayList;
 import java.util.List;
 
-class User {
+public class User {
     private String id; // since many users can have the same name
     private String name;
     private int phoneNumber;

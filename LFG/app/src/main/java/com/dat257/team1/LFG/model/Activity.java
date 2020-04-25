@@ -13,6 +13,7 @@ public class Activity {
     private String title;
     private String description;
     private GeoPoint location;
+
     private Timestamp time;
     private User owner;
     private List<User> participants;

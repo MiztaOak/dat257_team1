@@ -66,6 +66,8 @@ public class FireStoreHelper {
         activity.put("desc", currentActivity.getDescription());
         activity.put("time", currentActivity.getTime());
         activity.put("location", currentActivity.getLocation());
+        activity.put("owner", currentActivity.getOwner());
+        activity.put("participants", currentActivity.getParticipants());
 
         db.collection("activities").add(activity)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
