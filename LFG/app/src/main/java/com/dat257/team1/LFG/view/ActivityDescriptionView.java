@@ -3,6 +3,7 @@ package com.dat257.team1.LFG.view;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
     private RecyclerView commentFeed;
     private Button addComment;
     private Button joinActivity;
+    private EditText commentText;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter reAdapter;
@@ -48,6 +50,11 @@ public class ActivityDescriptionView extends AppCompatActivity {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(!commentText.getText().toString().equals("")) {
+                    activityDescriptionViewModel.addComment(commentText.getText().toString());
+                    commentText.setText("");
+                    commentText.clearFocus();
+                }
                 System.out.println("Added a comment");
             }
         });
@@ -69,6 +76,8 @@ public class ActivityDescriptionView extends AppCompatActivity {
         });
 
         recyclerView = (RecyclerView) findViewById(R.id.comment_feed);
+        //recyclerView.setNestedScrollingEnabled(false);
+        recyclerView.setHasFixedSize(false);
         reLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(reLayoutManager);
         reAdapter = new CommentAdapter(comments);
@@ -95,5 +104,6 @@ public class ActivityDescriptionView extends AppCompatActivity {
         addComment = findViewById(R.id.write_comment);
         activityTitle = findViewById(R.id.activity_title);
         userName = findViewById(R.id.user_name);
+        commentText = findViewById(R.id.description_commentTextField);
     }
 }

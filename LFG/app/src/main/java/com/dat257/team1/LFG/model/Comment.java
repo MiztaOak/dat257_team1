@@ -4,12 +4,12 @@ import java.util.Date;
 
 public class Comment {
     private String commentText;
-    private Date commentData;
+    private Date commentDate;
     private String commenterRef;
 
-    public Comment(String commentText, Date commentData, String commenterRef) {
+    public Comment(String commentText, Date commentDate, String commenterRef) {
         this.commentText = commentText;
-        this.commentData = commentData;
+        this.commentDate = commentDate;
         this.commenterRef = commenterRef;
     }
 
@@ -17,8 +17,8 @@ public class Comment {
         return commentText;
     }
 
-    public Date getCommentData() {
-        return commentData;
+    public Date getCommentDate() {
+        return commentDate;
     }
 
     public String getCommenterRef() {

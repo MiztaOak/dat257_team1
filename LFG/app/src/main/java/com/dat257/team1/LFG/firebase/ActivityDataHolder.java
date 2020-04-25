@@ -1,9 +1,12 @@
 package com.dat257.team1.LFG.firebase;
 
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Comment;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,6 +18,7 @@ import java.util.List;
 public class ActivityDataHolder {
     public DocumentReference owner;
     public List<DocumentReference> participants;
+    public List<CommentDataHolder> comments;
     public String title;
     public String desc;
     public Timestamp time;
@@ -101,5 +105,17 @@ public class ActivityDataHolder {
                 ", creationDate=" + creationDate +
                 ", location=" + location +
                 '}';
+    }
+
+    public Activity toActivity(String id){
+        List<String> participantStrings = new ArrayList<>();
+        for(DocumentReference ref: participants){
+            participantStrings.add(ref.toString());
+        }
+        List<Comment> commentList = new ArrayList<>();
+        for(CommentDataHolder com: comments){
+            commentList.add(com.toComment());
+        }
+        return new Activity(id,title,desc,location.toString(),time.toString(),null/*owner.toString()*/,null/*participantStrings*/,commentList);
     }
 }

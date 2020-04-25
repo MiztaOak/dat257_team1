@@ -1,6 +1,8 @@
 package com.dat257.team1.LFG.model;
 
 import com.dat257.team1.LFG.events.ActivityEvent;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
+
 import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,5 +65,10 @@ public class Main {
 
     public Activity getFocusedActivity() {
         return focusedActivity;
+    }
+
+    public void addComment(Activity activity, Comment comment) {
+        FireStoreHelper fsHelper = new FireStoreHelper();
+        fsHelper.addCommentToActivity(activity,comment);
     }
 }

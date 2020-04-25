@@ -2,6 +2,8 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Comment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -32,7 +34,7 @@ import androidx.annotation.Nullable;
  */
 public class FireStoreHelper {
     private FirebaseFirestore db;
-    private List<ActivityDataHolder> activities;
+    private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
 
     public FireStoreHelper(){
@@ -126,18 +128,44 @@ public class FireStoreHelper {
                     return;
                 }
 
-                List<ActivityDataHolder> activityDataHolders = new ArrayList<>();
+                activities = new ArrayList<>();
                 for(QueryDocumentSnapshot doc : value){
-                    activityDataHolders.add(doc.toObject(ActivityDataHolder.class));
+                    ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                    activities.add(data.toActivity(doc.getId()));
                 }
-                activities = activityDataHolders;
             }
         });
 
 
     }
 
-    public List<ActivityDataHolder> getActivities(){
+    public List<Activity> getActivities(){
         return activities;
+    }
+
+    /**
+     * Method that adds a new comment to a given activity in the db
+     * @param activity the object representing the given activity
+     * @param comment the object representing the comment that should be posted
+     */
+    public void addCommentToActivity(Activity activity, Comment comment) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("commentText",comment.getCommentText());
+        data.put("poster","/users/"+comment.getCommenterRef());
+        data.put("postDate",new Timestamp(comment.getCommentDate()));
+
+        db.collection("activities").document(activity.getId()).
+                collection("comments").add(data).
+                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                //post success event to front end?
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //post failure event to front end?
+            }
+        });
     }
 }
