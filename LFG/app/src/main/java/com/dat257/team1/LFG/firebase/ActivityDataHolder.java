@@ -112,9 +112,8 @@ public class ActivityDataHolder {
         for(DocumentReference ref: participants){
             participantStrings.add(ref.toString());
         }
-        List<Comment> commentList = new ArrayList<>();
 
-        return new Activity(id,title,desc,location.toString(),time.toString(),null/*owner.toString()*/,null/*participantStrings*/);
+        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location);
     }
 
     public boolean hasValidData(){

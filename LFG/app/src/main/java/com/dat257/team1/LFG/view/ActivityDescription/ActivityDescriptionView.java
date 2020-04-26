@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.ActivityDescription;
 
 import android.os.Bundle;
 import android.view.View;
@@ -19,8 +19,19 @@ import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
+import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.service.GoogleMaps;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
+import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.List;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,11 +59,23 @@ public class ActivityDescriptionView extends AppCompatActivity {
 
     private MutableLiveData<List<Comment>> comments;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         initViews();
+
+        activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
+        activityDescriptionViewModel.getActivity().observe(this, new Observer<Activity>() {
+            @Override
+            public void onChanged(Activity activity) {
+             //  GeoPoint location = new GeoPoint(activity.getLocation().getLatitude(), activity.getLocation().getLongitude());
+              LatLng locationTest = new LatLng(57.708870, 11.974560);
+             //   updateActivityDescriptionMap(locationTest);
+            }
+        });
+
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -118,5 +141,11 @@ public class ActivityDescriptionView extends AppCompatActivity {
         if(!event.isSuccess()){
             Toast.makeText(getApplicationContext(),"Something went wrong when trying to post your comment",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void updateActivityDescriptionMap(LatLng location) {
+    // display activity
+        GoogleMaps gm = new GoogleMaps();
+        gm.markLocation(location);
     }
 }

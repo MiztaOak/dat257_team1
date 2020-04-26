@@ -17,9 +17,12 @@ import java.util.List;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.dat257.team1.LFG.model.Activity;
+
 public class ActivityDescriptionViewModel extends ViewModel {
     private MutableLiveData<List<Comment>> comments;
     private MutableLiveData<Activity> activity;
+
 
     public ActivityDescriptionViewModel(){
         activity = new MutableLiveData<>();
@@ -57,5 +60,6 @@ public class ActivityDescriptionViewModel extends ViewModel {
     public void handleBatchCommentEvent(BatchCommentEvent event){
         comments.setValue(event.getComments());
     }
+
 }
 

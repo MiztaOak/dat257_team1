@@ -2,11 +2,14 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.model.Activity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -17,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.dat257.team1.LFG.events.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -38,10 +42,10 @@ import androidx.annotation.Nullable;
  *
  */
 public class FireStoreHelper {
+    private static FireStoreHelper instance;
     private FirebaseFirestore db;
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
-    private static FireStoreHelper instance;
 
 
     private FireStoreHelper(){
@@ -53,25 +57,27 @@ public class FireStoreHelper {
     public static FireStoreHelper getInstance() {
         if(instance == null)
             instance = new FireStoreHelper();
+
         return instance;
     }
 
     //just a dummy method will be removed later
-    public void addActivity(String uId){
+    public void addActivity(ActivityEvent activityEvent) {
         Calendar.getInstance().set(2020,4,30,15,30);
-        DocumentReference owner = db.document("users/" + uId);
+        Activity currentActivity = activityEvent.getActivity();
+        DocumentReference owner = db.document("users/" + currentActivity.getId());
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
         Map<String, Object> activity = new HashMap<>();
 
-        activity.put("title","Test activity");
-        activity.put("desc","this is a test activity meant to test the connection to the database");
-        activity.put("time",new Timestamp(Calendar.getInstance().getTime()));
-        activity.put("creationDate",new Timestamp(new Date()));
-        activity.put("owner",owner);
-        activity.put("location",new GeoPoint(30,40));
-        activity.put("participants",participants);
+        activity.put("id", currentActivity.getId());
+        activity.put("title", currentActivity.getTitle());
+        activity.put("desc", currentActivity.getDescription());
+        activity.put("time", currentActivity.getTime());
+        activity.put("location", currentActivity.getLocation());
+        activity.put("owner", currentActivity.getOwner());
+        activity.put("participants", currentActivity.getParticipants());
 
         db.collection("activities").add(activity)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

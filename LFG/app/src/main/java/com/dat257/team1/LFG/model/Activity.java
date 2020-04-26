@@ -1,21 +1,31 @@
 package com.dat257.team1.LFG.model;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
+
 
 import java.util.ArrayList;
+
+import java.sql.Time;
+
 import java.util.List;
+import java.util.Locale;
 
 public class Activity {
 
     private String id;
     private String title;
     private String description;
-    private String location;
-    private String time;
-    private User owner;
-    private List<User> participants;
+    private GeoPoint location;
 
-
+    private Timestamp time;
+    private String owner;
+    private List<String> participants;
 
     /**
      * Constructor creating an activity with information.
@@ -26,7 +36,7 @@ public class Activity {
      * @param owner
      * @param participants
      */
-    public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants) {
+    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -39,7 +49,7 @@ public class Activity {
     /**
      * Constructor creating an activity without any information.
      */
-    public Activity() {}
+    public Activity() { }
 
     public String getId() {
         return id;
@@ -57,17 +67,17 @@ public class Activity {
         return description;
     }
 
-    public String getLocation() {
+    public GeoPoint getLocation() {
         return location;
     }
 
-    public String getTime() { return time; }
+    public Timestamp getTime() { return time; }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public List<User> getParticipants() {
+    public List<String> getParticipants() {
         return participants;
     }
 
@@ -79,19 +89,20 @@ public class Activity {
         this.description = description;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(GeoPoint location) {
         this.location = location;
     }
 
-    public void setTime(String time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
+
 }
