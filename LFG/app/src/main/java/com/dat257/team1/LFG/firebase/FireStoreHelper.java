@@ -3,12 +3,16 @@ package com.dat257.team1.LFG.firebase;
 import android.util.Log;
 
 
+
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
-import com.dat257.team1.LFG.model.Activity;
+
+import com.dat257.team1.LFG.events.MessageEvent;
+import com.dat257.team1.LFG.model.Message;
+import com.dat257.team1.LFG.model.Chat;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -47,7 +51,6 @@ public class FireStoreHelper {
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
 
-
     private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
         activities = new ArrayList<>();
@@ -66,6 +69,7 @@ public class FireStoreHelper {
         Calendar.getInstance().set(2020,4,30,15,30);
         Activity currentActivity = activityEvent.getActivity();
         DocumentReference owner = db.document("users/" + currentActivity.getId());
+
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
@@ -79,44 +83,6 @@ public class FireStoreHelper {
         activity.put("owner", currentActivity.getOwner());
         activity.put("participants", currentActivity.getParticipants());
 
-        db.collection("activities").add(activity)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                // add some code that handles the success
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-               // add some code that handles this exception
-            }
-        });
-    }
-
-    /**
-     * Method that creates uploads a new activity to the Firestore database
-     *
-     * Author: Johan Ek
-     * @param uId The user id for the owner of the activity
-     * @param date The date of the activity
-     * @param title The title of the activity
-     * @param desc The description of the activity
-     * @param location The location of the activity
-     */
-    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location){
-        DocumentReference owner = db.document("users/" + uId);
-        List<DocumentReference> participants = new ArrayList<>();
-        participants.add(owner);
-
-        Map<String, Object> activity = new HashMap<>();
-
-        activity.put("title",title);
-        activity.put("desc",desc);
-        activity.put("time",date);
-        activity.put("creationDate",new Timestamp(new Date()));
-        activity.put("owner",owner);
-        activity.put("location",location);
-        activity.put("participants",participants);
 
         db.collection("activities").add(activity)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -133,16 +99,63 @@ public class FireStoreHelper {
     }
 
     /**
+     * Method that creates uploads a new activity to the Firestore database
+     * <p>
+     * Author: Johan Ek
+     *
+     * @param uId      The user id for the owner of the activity
+     * @param date     The date of the activity
+     * @param title    The title of the activity
+     * @param desc     The description of the activity
+     * @param location The location of the activity
+     */
+    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location) {
+        DocumentReference owner = db.document("users/" + uId);
+        List<DocumentReference> participants = new ArrayList<>();
+        participants.add(owner);
+
+        //Chat chat = new Chat(Main.getInstance().getDummy2().getId(), Main.getInstance().getDummy2().getOwner(), Main.getInstance().getDummy2().getParticipants(), Main.getInstance().getDummy2().getMessages());
+        Chat chat = new Chat();
+
+        Map<String, Object> activity = new HashMap<>();
+
+        
+        activity.put("title", title);
+        activity.put("desc", desc);
+        activity.put("time", date);
+        activity.put("creationDate", new Timestamp(new Date()));
+        activity.put("owner", owner);
+        activity.put("location", location);
+        activity.put("participants", participants);
+        activity.put("chat", chat);
+
+
+        db.collection("activities").add(activity)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // add some code that handles the success
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                // add some code that handles this exception
+            }
+        });
+
+    }
+
+    /**
      * Method that attaches an event listener to the db that monitors the list of activities and
      * updates the list activities if the database were to change
-     *
+     * <p>
      * Author: Johan Ek
      */
-    private void loadActivities(){
+    private void loadActivities() {
         db.collection("activities").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
+                if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
@@ -156,8 +169,6 @@ public class FireStoreHelper {
                 Main.getInstance().setActivities(activities);
             }
         });
-
-
     }
 
     public void loadComments(String id) {
@@ -178,10 +189,6 @@ public class FireStoreHelper {
         });
     }
 
-    public List<Activity> getActivities(){
-        return activities;
-    }
-
     /**
      * Method that adds a new comment to a given activity in the db
      * @param activity the object representing the given activity
@@ -192,19 +199,52 @@ public class FireStoreHelper {
         data.put("commentText",comment.getCommentText());
         data.put("poster",db.document("/users/"+comment.getCommenterRef()));
         data.put("postDate",new Timestamp(comment.getCommentDate()));
-
         db.collection("activities").document(activity.getId()).
                 collection("comments").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                EventBus.getDefault().post(new CommentEvent(true));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        EventBus.getDefault().post(new CommentEvent(true));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 EventBus.getDefault().post(false);
             }
         });
     }
+
+    public List<Activity> getActivities() {
+        return activities;
+    }
+
+
+    /**
+     * Method that creates uploads a new message to the Firestore database
+     */
+    public void writeMessage(MessageEvent messageEvent) {
+
+        DocumentReference owner = db.document("users/" + messageEvent.getMessage().getId());
+        Map<String, Object> message = new HashMap<>();
+
+        message.put("sender", owner);
+        message.put("sent", new Timestamp(new Date()));
+        message.put("text", messageEvent.getMessage().getContent());
+        db.collection("message").add(message).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                //TODO add code to handle sucess
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //TODO add code that handles failure
+            }
+        });
+    }
+
+    private void loadChat() {
+        //TODO create a load chat like the load activities by first creating a MessageDataHolder
+    }
+
 }

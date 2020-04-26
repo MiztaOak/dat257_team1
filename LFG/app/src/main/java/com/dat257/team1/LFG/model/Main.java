@@ -1,12 +1,12 @@
 package com.dat257.team1.LFG.model;
 
-import android.content.Context;
+<<<<<<< HEAD
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
-
+import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
@@ -19,6 +19,7 @@ import com.google.firebase.Timestamp;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -39,6 +40,7 @@ public class Main {
 
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
+    private List<Message> messages;
 
     private Main() {
         activities = new ArrayList<>();
@@ -70,10 +72,11 @@ public class Main {
      * @param time
      * @param location
      */
+
     public void createActivity(String id, User owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         //participants.add(dummy);
-
         Activity activity = new Activity(id, owner.getId(), participants, title, description, time, location);
+        Chat chat = new Chat();
         activities.add(activity);
 
         ActivityEvent activityEvent = new ActivityEvent(activity);
@@ -138,4 +141,21 @@ public class Main {
         }
         return p1;
     }
+    /*
+    Creates a message and posts it on the Eventbus.
+     */
+
+    public void writeMessage(String id, String content, User sender, Timestamp time){
+
+        Message message = new Message(id, content, sender, time);
+        messages.add(message);
+
+        MessageEvent messageEvent = new MessageEvent(message);
+        EventBus.getDefault().post(messageEvent);
+
+
+    }
+
+    public List getMessages(){return messages;}
+
 }

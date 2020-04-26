@@ -22,10 +22,11 @@ public class Activity {
     private String title;
     private String description;
     private GeoPoint location;
-
     private Timestamp time;
     private String owner;
     private List<String> participants;
+    private Chat chat;
+
 
     /**
      * Constructor creating an activity with information.
@@ -36,6 +37,18 @@ public class Activity {
      * @param owner
      * @param participants
      */
+
+    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location, Chat chat) {
+
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.location = location;
+        this.time = time;
+        this.owner = owner;
+        this.participants = participants;
+        this.chat = chat;
+    }
     public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         this.id = id;
         this.title = title;
@@ -44,7 +57,9 @@ public class Activity {
         this.time = time;
         this.owner = owner;
         this.participants = participants;
+        this.chat = null;
     }
+
 
     /**
      * Constructor creating an activity without any information.
