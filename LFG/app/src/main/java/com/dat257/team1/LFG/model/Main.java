@@ -42,8 +42,9 @@ public class Main {
     public void createActivity(String id, String title, String description, String location, String time) {
         List<User> participants = new ArrayList<>();
         participants.add(dummy);
+        Chat chat = new Chat();
 
-        Activity activity = new Activity(id, title, description, location, time, dummy, participants);
+        Activity activity = new Activity(id, title, description, location, time, dummy, participants, chat);
         activities.add(activity);
 
         ActivityEvent activityEvent = new ActivityEvent(activity);

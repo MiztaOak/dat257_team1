@@ -2,8 +2,12 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+
 import com.dat257.team1.LFG.Events.MessageEvent;
 import com.dat257.team1.LFG.model.Message;
+import com.dat257.team1.LFG.model.Chat;
+import com.dat257.team1.LFG.model.Main;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -91,8 +95,12 @@ public class FireStoreHelper {
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
+        //Chat chat = new Chat(Main.getInstance().getDummy2().getId(), Main.getInstance().getDummy2().getOwner(), Main.getInstance().getDummy2().getParticipants(), Main.getInstance().getDummy2().getMessages());
+        Chat chat = new Chat();
+
         Map<String, Object> activity = new HashMap<>();
 
+        
         activity.put("title", title);
         activity.put("desc", desc);
         activity.put("time", date);
@@ -100,6 +108,8 @@ public class FireStoreHelper {
         activity.put("owner", owner);
         activity.put("location", location);
         activity.put("participants", participants);
+
+
 
         db.collection("activities").add(activity)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -113,6 +123,7 @@ public class FireStoreHelper {
                 // add some code that handles this exception
             }
         });
+
     }
 
     /**
