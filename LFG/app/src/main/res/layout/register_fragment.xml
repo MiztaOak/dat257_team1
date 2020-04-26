@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="110dp"
         android:orientation="horizontal">
 
 
@@ -35,7 +35,7 @@
         android:layout_below="@+id/linearLayout"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="45dp"
         android:orientation="vertical"
         android:paddingLeft="32dp"
         android:paddingRight="32dp">
@@ -44,18 +44,60 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="#000000"
+            android:textColorHint="#0E0E0E"
             android:theme="@style/EditScreenTextInputLoginStyle">
 
             <EditText
                 android:id="@+id/sign_up_email"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableRight="@drawable/ic_email_white_24dp"
+                android:drawableEnd="@drawable/ic_email_black_24dp"
                 android:drawablePadding="16dp"
                 android:fontFamily="@font/calibri_regular"
-                android:hint="Email"
+                android:hint="@string/email"
                 android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#0E0E0E"
+            android:theme="@style/EditScreenTextInputLoginStyle">
+
+            <EditText
+                android:id="@+id/sign_up_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableEnd="@drawable/ic_account_black_24dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri_regular"
+                android:hint="@string/username"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="20sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="#0E0E0E"
+            android:theme="@style/EditScreenTextInputLoginStyle">
+
+            <EditText
+                android:id="@+id/sign_up_phone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableEnd="@drawable/ic_phone_black_24dp"
+                android:drawablePadding="16dp"
+                android:fontFamily="@font/calibri_regular"
+                android:hint="@string/phone_number"
+                android:inputType="phone"
                 android:maxLines="1"
                 android:textColor="@android:color/black"
                 android:textSize="20sp" />
@@ -72,10 +114,10 @@
                 android:id="@+id/sign_up_pwd1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableRight="@drawable/ic_lock_white_24dp"
+                android:drawableEnd="@drawable/ic_lock_black_24dp"
                 android:drawablePadding="16dp"
                 android:fontFamily="@font/calibri_regular"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:textColor="#0E0E0E"
@@ -93,10 +135,10 @@
                 android:id="@+id/sign_up_pwd2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:drawableRight="@drawable/ic_lock_white_24dp"
+                android:drawableEnd="@drawable/ic_lock_black_24dp"
                 android:drawablePadding="16dp"
                 android:fontFamily="@font/calibri_regular"
-                android:hint="Confirm Password"
+                android:hint="@string/confirm_password"
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:textColor="#0E0E0E"
@@ -184,4 +226,3 @@
 
 
 </RelativeLayout>
-

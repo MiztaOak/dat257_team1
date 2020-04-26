@@ -32,8 +32,10 @@ public class ActivityFeedView extends AppCompatActivity {
     private Button menu;
 
 
+
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
+    private ArrayList<CardsView> cardsList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,7 @@ public class ActivityFeedView extends AppCompatActivity {
             }
         });
 
-        ArrayList<CardsView> cardsList = new ArrayList<>();
+        //ArrayList<CardsView> cardsList = new ArrayList<>();
 
         cardsList.add(new CardsView(R.drawable.ic_android_black_24dp, "Fotboll", "fotboll på heden kl 13:00"));
         cardsList.add(new CardsView(R.drawable.ic_radio_button_unchecked_black_24dp, "Basketspelare sökes", "söker basketspelare till match 14:00"));
@@ -81,6 +83,14 @@ public class ActivityFeedView extends AppCompatActivity {
 
             }
         }));
+    }
+
+    public RecyclerView.Adapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public ArrayList<CardsView> getCardsList(){
+        return cardsList;
     }
 
     public void launchCreateActivity() {
