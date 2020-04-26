@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
@@ -31,14 +32,18 @@ public class CreateActivityView extends AppCompatActivity {
     private TextView timeTextView;
     private TextView numberOfAttendeesTextView;
     private CreateActivityViewModel createActivityViewModel;
+
     private ActivityFeedViewModel createActivityFeedViewModel;
+
+    private ActivityFeedView activityFeedView;
+    private String st;
+    private MutableLiveData<List<Activity>> mutableActivityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity);
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
-
         titleTextView = ((EditText) findViewById(R.id.editTitle));
         descTextView = ((EditText) findViewById(R.id.editDesc));
         addressTextView = ((EditText) findViewById(R.id.editAddress));
@@ -52,7 +57,7 @@ public class CreateActivityView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActAddress(), getActTime());
-                //createActivityViewModel.getCurrentActivity().setValue((Activity) Main.getInstance().getActivities().get(1));
+                insertActivity();
                 openFindActivity();
             }
         });
@@ -75,10 +80,19 @@ public class CreateActivityView extends AppCompatActivity {
         });
     }
 
+    public void insertActivity() {
+        activityFeedView.getCardsList().add(new CardsView(R.drawable.ic_android_black_24dp, getActTitle(), getActDesc()));
+        activityFeedView.getmAdapter().notifyItemInserted(0);
+    }
+
     public void openFindActivity() {
         Log.d(LOG_TAG, "Activity created!");
-        Intent intent = new Intent(this, ActivityFeedView.class
-        );
+        Intent intent = new Intent(this, ActivityFeedView.class);
+
+        //Just test to display values in ActivityFeedView
+        //st = titleTextView.getText().toString();
+        //intent.putExtra("Value", st);
+
         startActivity(intent);
     }
 

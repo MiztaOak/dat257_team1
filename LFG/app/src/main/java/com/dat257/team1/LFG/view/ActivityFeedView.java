@@ -35,6 +35,7 @@ public class ActivityFeedView extends AppCompatActivity {
     private Button menu;
 
 
+
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
     private ArrayList<CardsView> cardsList = new ArrayList<>();
@@ -89,6 +90,14 @@ public class ActivityFeedView extends AppCompatActivity {
 
             }
         }));
+    }
+
+    public RecyclerView.Adapter getmAdapter() {
+        return mAdapter;
+    }
+
+    public ArrayList<CardsView> getCardsList(){
+        return cardsList;
     }
 
     public void launchCreateActivity() {
