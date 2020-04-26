@@ -1,7 +1,10 @@
 package com.dat257.team1.LFG.model;
 
+import com.dat257.team1.LFG.Events.MessageEvent;
 import com.dat257.team1.LFG.events.ActivityEvent;
 import org.greenrobot.eventbus.EventBus;
+
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +18,7 @@ public class Main {
     private static Main main;
     private List<Activity> activities;
     private User dummy = new User(1, "johan", "joahn", 0);
+    private List<Message> messages;
 
     private Main() {
         activities = new ArrayList<>();
@@ -49,5 +53,22 @@ public class Main {
     public List getActivities() {
         return activities;
     }
+
+    /*
+    Creates a message and posts it on the Eventbus.
+     */
+
+    public void writeMessage(String id, String content, User sender, Timestamp time){
+
+        Message message = new Message(id, content, sender, time);
+        messages.add(message);
+
+        MessageEvent messageEvent = new MessageEvent(message);
+        EventBus.getDefault().post(messageEvent);
+
+
+    }
+
+    public List getMessages(){return messages;}
 
 }
