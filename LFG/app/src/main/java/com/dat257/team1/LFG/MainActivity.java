@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
     public void openLoginPage(){
         Intent intent = new Intent(this, LoginPageView.class);
         startActivity(intent);
