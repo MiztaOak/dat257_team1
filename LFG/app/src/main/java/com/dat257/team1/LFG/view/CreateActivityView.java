@@ -64,7 +64,7 @@ public class CreateActivityView extends AppCompatActivity {
 
     public void insertActivity() {
         activityFeedView.getCardsList().add(new CardsView(R.drawable.ic_android_black_24dp, getActTitle(), getActDesc()));
-        activityFeedView.getmAdapter().notifyItemInserted(1);
+        activityFeedView.getmAdapter().notifyItemInserted(0);
     }
 
     public void openFindActivity() {
