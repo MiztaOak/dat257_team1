@@ -8,7 +8,11 @@ import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
+
+import java.util.ArrayList;
+
 import java.sql.Time;
+
 import java.util.List;
 import java.util.Locale;
 
@@ -20,8 +24,8 @@ public class Activity {
     private GeoPoint location;
 
     private Timestamp time;
-    private User owner;
-    private List<User> participants;
+    private String owner;
+    private List<String> participants;
 
     /**
      * Constructor creating an activity with information.
@@ -32,7 +36,7 @@ public class Activity {
      * @param owner
      * @param participants
      */
-    public Activity(String id, User owner, List<User> participants, String title, String description, Timestamp time, GeoPoint location) {
+    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -69,11 +73,11 @@ public class Activity {
 
     public Timestamp getTime() { return time; }
 
-    public User getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-    public List<User> getParticipants() {
+    public List<String> getParticipants() {
         return participants;
     }
 
@@ -93,13 +97,12 @@ public class Activity {
         this.time = time;
     }
 
-    public void setOwner(User owner) {
+    public void setOwner(String owner) {
         this.owner = owner;
     }
 
-    public void setParticipants(List<User> participants) {
+    public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
-
 
 }

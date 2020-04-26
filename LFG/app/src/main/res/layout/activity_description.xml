@@ -9,59 +9,15 @@
         android:id="@+id/activity_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:layout_editor_absoluteY="55dp" />
-
-    <Button
-        android:id="@+id/write_comment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:text="Write a comment"
-        app:layout_constraintTop_toBottomOf="@+id/activity_map"
-        tools:layout_editor_absoluteX="129dp" />
-
-    <Button
-        android:id="@+id/join_activity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Join activity"
-        app:layout_constraintTop_toBottomOf="@+id/write_comment"
-        tools:layout_editor_absoluteX="144dp" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/activity_map"
-        android:layout_width="349dp"
-        android:layout_height="154dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.467"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_description"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
-
-    <TextView
-        android:id="@+id/activity_description"
-        android:layout_width="346dp"
-        android:layout_height="145dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Activity description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.327" />
-
+        app:srcCompat="@drawable/ic_launcher_foreground" />
 
     <LinearLayout
+        android:id="@+id/linearLayout3"
         android:layout_width="159dp"
         android:layout_height="141dp"
         android:orientation="vertical"
@@ -88,7 +44,6 @@
             android:textAlignment="center" />
 
 
-
         <TextView
             android:id="@+id/activity_time"
             android:layout_width="match_parent"
@@ -98,15 +53,74 @@
 
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/comment_feed"
-        android:layout_width="409dp"
-        android:layout_height="22dp"
-        android:text="recyclerView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/description_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:fillViewport="true"
+        android:scrollbarStyle="outsideInset"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_map"
-        app:layout_constraintVertical_bias="0.091" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activity_description"
+                android:layout_width="346dp"
+                android:layout_height="145dp"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Activity description" />
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/activity_map"
+                android:layout_width="349dp"
+                android:layout_height="154dp"
+                android:layout_marginTop="8dp" />
+
+            <Button
+                android:id="@+id/join_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:scrollbarAlwaysDrawVerticalTrack="true"
+                android:scrollbars="vertical"
+                android:text="Join activity" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <EditText
+                    android:id="@+id/description_commentTextField"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Write a comment" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/write_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Write a comment"
+                android:textSize="10sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/comment_feed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="recyclerView" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

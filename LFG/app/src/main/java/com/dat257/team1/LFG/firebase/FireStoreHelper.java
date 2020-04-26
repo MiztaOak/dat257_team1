@@ -2,7 +2,14 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+
+import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.model.Activity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -14,6 +21,8 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,19 +44,20 @@ import androidx.annotation.Nullable;
 public class FireStoreHelper {
     private static FireStoreHelper instance;
     private FirebaseFirestore db;
-    private List<ActivityDataHolder> activities;
+    private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
 
-    public FireStoreHelper(){
+
+    private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
         activities = new ArrayList<>();
         loadActivities();
     }
 
     public static FireStoreHelper getInstance() {
-        if (instance == null) {
+        if(instance == null)
             instance = new FireStoreHelper();
-        }
+
         return instance;
     }
 
@@ -137,18 +147,64 @@ public class FireStoreHelper {
                     return;
                 }
 
-                List<ActivityDataHolder> activityDataHolders = new ArrayList<>();
+                activities = new ArrayList<>();
                 for(QueryDocumentSnapshot doc : value){
-                    activityDataHolders.add(doc.toObject(ActivityDataHolder.class));
+                    ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                    if(data.hasValidData())
+                        activities.add(data.toActivity(doc.getId()));
                 }
-                activities = activityDataHolders;
+                Main.getInstance().setActivities(activities);
             }
         });
 
 
     }
 
-    public List<ActivityDataHolder> getActivities(){
+    public void loadComments(String id) {
+        db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<Comment> comments = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: value){
+                    CommentDataHolder data = doc.toObject(CommentDataHolder.class);
+                    comments.add(data.toComment());
+                }
+                EventBus.getDefault().post(new BatchCommentEvent(comments));
+            }
+        });
+    }
+
+    public List<Activity> getActivities(){
         return activities;
+    }
+
+    /**
+     * Method that adds a new comment to a given activity in the db
+     * @param activity the object representing the given activity
+     * @param comment the object representing the comment that should be posted
+     */
+    public void addCommentToActivity(Activity activity, Comment comment) {
+        Map<String,Object> data = new HashMap<>();
+        data.put("commentText",comment.getCommentText());
+        data.put("poster",db.document("/users/"+comment.getCommenterRef()));
+        data.put("postDate",new Timestamp(comment.getCommentDate()));
+
+        db.collection("activities").document(activity.getId()).
+                collection("comments").add(data).
+                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                EventBus.getDefault().post(new CommentEvent(true));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                EventBus.getDefault().post(false);
+            }
+        });
     }
 }

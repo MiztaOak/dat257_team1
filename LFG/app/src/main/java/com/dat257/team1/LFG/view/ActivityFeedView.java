@@ -18,6 +18,7 @@ import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -34,15 +35,9 @@ public class ActivityFeedView extends AppCompatActivity {
     private Button createActivity;
     private Button menu;
 
-
-
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
     private ArrayList<CardsView> cardsList = new ArrayList<>();
-
-    public ArrayList<CardsView> getCardsList () {
-        return cardsList;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +82,15 @@ public class ActivityFeedView extends AppCompatActivity {
         menu.setOnClickListener((new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                clickMenu();
             }
         }));
+    }
+
+
+    private void clickMenu() {
+        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        startActivity(intent);
     }
 
     public RecyclerView.Adapter getmAdapter() {

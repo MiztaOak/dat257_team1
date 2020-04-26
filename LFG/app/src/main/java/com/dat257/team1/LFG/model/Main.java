@@ -20,6 +20,7 @@ import com.google.firebase.Timestamp;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -36,9 +37,20 @@ public class Main {
     private String activityID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
     private ActivityFeedViewModel activityFeedViewModel;
 
+    //just a temp var should prob be changed to something else
+    private Activity focusedActivity;
+
     private Main() {
         activities = new ArrayList<>();
+
+        List<Comment> comments = new ArrayList<>();
+        comments.add(new Comment("comment1", Calendar.getInstance().getTime(),"Me"));
+        comments.add(new Comment("comment2", Calendar.getInstance().getTime(),"Me"));
+        comments.add(new Comment("comment3", Calendar.getInstance().getTime(),"Me"));
+
+        focusedActivity = new Activity("u8A4858pFvnr5IyKxOTc","bla",null,"tst","something",null,null);
         fireBaseObject = FireStoreHelper.getInstance();
+
     }
 
     public static Main getInstance() {
@@ -58,10 +70,10 @@ public class Main {
      * @param time
      * @param location
      */
-    public void createActivity(String id, User owner, List<User> participants, String title, String description, Timestamp time, GeoPoint location) {
-        participants.add(dummy);
+    public void createActivity(String id, User owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
+        //participants.add(dummy);
 
-        Activity activity = new Activity(id, owner, participants, title, description, time, location);
+        Activity activity = new Activity(id, owner.getId(), participants, title, description, time, location);
         activities.add(activity);
 
         ActivityEvent activityEvent = new ActivityEvent(activity);
@@ -71,7 +83,7 @@ public class Main {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createActivity (String title, String description, String time, String adress) {
-        List<User> participants = new ArrayList<>();
+        List<String> participants = new ArrayList<>();
         //This method incocation does not work, right now it just return a dummy value. See over the method!
         Timestamp timestamp = convertToTimestamp(time);
         createActivity(activityID, dummy, participants, title, description, timestamp, new GeoPoint(30, 20));
@@ -79,6 +91,18 @@ public class Main {
 
     public List<Activity> getActivities() {
         return activities;
+    }
+
+    public Activity getFocusedActivity() {
+        return focusedActivity;
+    }
+
+    public void addComment(Activity activity, Comment comment) {
+        FireStoreHelper.getInstance().addCommentToActivity(activity,comment);
+    }
+
+    public void setActivities(List<Activity> activities) {
+        this.activities = activities;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -89,9 +113,10 @@ public class Main {
         return new Timestamp(300,300);
     }
 
+    //no android code in model
     public GeoPoint getLocationFromAddress(String strAddress) throws IOException {
 
-        Geocoder coder = new Geocoder(this);
+        Geocoder coder = new Geocoder(this); //your not allowed to put context here bad programmer bad!
         List<Address> address;
         GeoPoint p1 = null;
 
