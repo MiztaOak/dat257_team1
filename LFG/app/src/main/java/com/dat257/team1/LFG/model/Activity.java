@@ -13,6 +13,7 @@ public class Activity {
     private String time;
     private User owner;
     private List<User> participants;
+    private Chat chat;
 
     /**
      * Constructor creating an activity with information.
@@ -23,7 +24,7 @@ public class Activity {
      * @param owner
      * @param participants
      */
-    public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants) {
+    public Activity(String id, String title, String description, String location, String time, User owner, List<User> participants, Chat chat) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -31,6 +32,7 @@ public class Activity {
         this.time = time;
         this.owner = owner;
         this.participants = participants;
+        this.chat = chat;
     }
 
     /**
