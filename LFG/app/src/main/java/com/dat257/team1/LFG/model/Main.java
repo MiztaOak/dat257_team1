@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.model;
 
-<<<<<<< HEAD
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -117,7 +116,7 @@ public class Main {
     }
 
     //no android code in model
-    public GeoPoint getLocationFromAddress(String strAddress) throws IOException {
+    /*public GeoPoint getLocationFromAddress(String strAddress) throws IOException {
 
         Geocoder coder = new Geocoder(this); //your not allowed to put context here bad programmer bad!
         List<Address> address;

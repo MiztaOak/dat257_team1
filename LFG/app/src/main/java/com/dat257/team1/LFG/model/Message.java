@@ -1,7 +1,9 @@
 package com.dat257.team1.LFG.model;
 
 
-import java.sql.Timestamp;
+
+import com.google.firebase.Timestamp;
+
 import java.util.List;
 
 public class Message {
@@ -12,7 +14,6 @@ public class Message {
 
 
     public Message (String id, String content, User sender, Timestamp time){
-
         this.id=id;
         this.content=content;
         this.sender=sender;

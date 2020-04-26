@@ -34,8 +34,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
             mImageView = itemView.findViewById(R.id.activityImage);
             mTitle = itemView.findViewById(R.id.titleText);
             mDescription = itemView.findViewById(R.id.DescriptionText);
-
-
         }
     }
 
