@@ -9,12 +9,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ActivityFeedView;
+import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 
 import java.util.List;
@@ -27,7 +30,11 @@ public class CreateActivityView extends AppCompatActivity {
     private TextView descTextView;
     private TextView addressTextView;
     private TextView timeTextView;
+    private TextView numberOfAttendeesTextView;
     private CreateActivityViewModel createActivityViewModel;
+
+    private ActivityFeedViewModel createActivityFeedViewModel;
+
     private ActivityFeedView activityFeedView;
     private String st;
     private MutableLiveData<List<Activity>> mutableActivityList;
@@ -41,6 +48,7 @@ public class CreateActivityView extends AppCompatActivity {
         descTextView = ((EditText) findViewById(R.id.editDesc));
         addressTextView = ((EditText) findViewById(R.id.editAddress));
         timeTextView = ((EditText) findViewById(R.id.editTime));
+        numberOfAttendeesTextView = ((EditText) findViewById(R.id.editTitle));
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
         Button backButton = (Button) findViewById(R.id.backButton);
@@ -54,6 +62,16 @@ public class CreateActivityView extends AppCompatActivity {
             }
         });
 
+        final Observer<Activity> nameObserver = new Observer<Activity>() {
+            @Override
+            public void onChanged(final Activity newActivity) {
+                // Update the UI, in this case, a TextView.
+
+            }
+        };
+
+        createActivityViewModel.getCurrentActivity().observe(this, nameObserver);
+
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,7 +82,7 @@ public class CreateActivityView extends AppCompatActivity {
 
     public void insertActivity() {
         activityFeedView.getCardsList().add(new CardsView(R.drawable.ic_android_black_24dp, getActTitle(), getActDesc()));
-        activityFeedView.getmAdapter().notifyItemInserted(1);
+        activityFeedView.getmAdapter().notifyItemInserted(0);
     }
 
     public void openFindActivity() {
@@ -90,6 +108,7 @@ public class CreateActivityView extends AppCompatActivity {
         return addressTextView.getText().toString();
     }
 
-    private String getActTime() {
-        return timeTextView.getText().toString(); }
+    private String getActTime() { return timeTextView.getText().toString(); }
+
+    public String getNumOfAttendees() { return numberOfAttendeesTextView.getText().toString(); }
 }
