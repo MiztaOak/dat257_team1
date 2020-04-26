@@ -108,7 +108,7 @@ public class FireStoreHelper {
         activity.put("owner", owner);
         activity.put("location", location);
         activity.put("participants", participants);
-
+        activity.put("chat", chat);
 
 
         db.collection("activities").add(activity)
