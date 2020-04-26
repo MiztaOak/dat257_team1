@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.view.ActivityFeedView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -43,6 +44,5 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
             EventBus.getDefault().register(this);
         }
     }
-
 
 }

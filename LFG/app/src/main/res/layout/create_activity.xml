@@ -159,4 +159,31 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.647" />
 
+    <EditText
+        android:id="@+id/editAttendees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:fontFamily="@font/calibri_regular"
+        android:hint="Attendees"
+        android:inputType="number"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.788" />
+
+    <TextView
+        android:id="@+id/numAttendees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/calibri_regular"
+        android:text="Number of Attendees"
+        android:textColor="@color/textInputLayout"
+        android:textSize="13dp"
+        app:layout_constraintBottom_toTopOf="@+id/editAttendees"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTime" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

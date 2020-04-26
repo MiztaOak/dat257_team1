@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -13,8 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -34,7 +37,11 @@ public class ActivityFeedView extends AppCompatActivity {
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    public ArrayList<CardsView> cardsList = new ArrayList<>();
+    private ArrayList<CardsView> cardsList = new ArrayList<>();
+
+    public ArrayList<CardsView> getCardsList () {
+        return cardsList;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,19 +52,19 @@ public class ActivityFeedView extends AppCompatActivity {
         activityFeedViewModel.onCreate();
 
         mutableActivityList = activityFeedViewModel.getMutableActivityList();
-        activityFeedViewModel.getMutableActivityList().observe(this, new Observer<List<Activity>>() {
+        mutableActivityList.observe(this, new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activities) {
                 //update feed
             }
         });
 
-        //ArrayList<CardsView> cardsList = new ArrayList<>();
-
+        /*ArrayList<CardsView> cardsList = new ArrayList<>();
         cardsList.add(new CardsView(R.drawable.ic_android_black_24dp, "Fotboll", "fotboll på heden kl 13:00"));
         cardsList.add(new CardsView(R.drawable.ic_radio_button_unchecked_black_24dp, "Basketspelare sökes", "söker basketspelare till match 14:00"));
         cardsList.add(new CardsView(R.drawable.ic_mood_black_24dp, "tennis", "tennis på heden kl 13:00"));
         cardsList.add(new CardsView(R.drawable.ic_watch_later_black_24dp, "padel", "padel på heden kl 13:00"));
+        */
 
         mRecyclerView = findViewById(R.id.recyclerView_feed);
         mRecyclerView.setHasFixedSize(true);

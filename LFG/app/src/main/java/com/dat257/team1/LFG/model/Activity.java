@@ -45,7 +45,7 @@ public class Activity {
     /**
      * Constructor creating an activity without any information.
      */
-    public Activity() {}
+    public Activity() { }
 
     public String getId() {
         return id;
