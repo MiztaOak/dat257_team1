@@ -11,7 +11,6 @@ import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
 
 import com.dat257.team1.LFG.events.MessageEvent;
-import com.dat257.team1.LFG.model.Message;
 import com.dat257.team1.LFG.model.Chat;
 
 import com.google.android.gms.tasks.OnFailureListener;

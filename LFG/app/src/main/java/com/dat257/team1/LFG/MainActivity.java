@@ -18,10 +18,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(this, ActivityFeedView.class);
-            openLoginPage();
-        } else{
             openFindActivity();
+        } else{
+            openLoginPage();
         }
 
     }

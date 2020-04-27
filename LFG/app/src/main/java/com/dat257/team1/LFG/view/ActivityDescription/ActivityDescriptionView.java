@@ -19,25 +19,15 @@ import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.service.GoogleMaps;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
-import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.firestore.GeoPoint;
 
 import java.util.List;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.List;
-import java.util.Observable;
 
 public class ActivityDescriptionView extends AppCompatActivity {
 
