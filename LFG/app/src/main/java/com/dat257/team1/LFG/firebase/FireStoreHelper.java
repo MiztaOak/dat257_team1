@@ -22,6 +22,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
@@ -171,8 +172,8 @@ public class FireStoreHelper {
         });
     }
 
-    public void loadComments(String id) {
-        db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
+    public ListenerRegistration loadComments(String id) {
+        return db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                 if(e != null){
@@ -187,6 +188,7 @@ public class FireStoreHelper {
                 EventBus.getDefault().post(new BatchCommentEvent(comments));
             }
         });
+
     }
 
     /**

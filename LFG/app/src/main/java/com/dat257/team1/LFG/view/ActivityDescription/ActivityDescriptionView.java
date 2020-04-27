@@ -123,6 +123,18 @@ public class ActivityDescriptionView extends AppCompatActivity {
         EventBus.getDefault().register(this);
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        activityDescriptionViewModel.startup();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        activityDescriptionViewModel.cleanup();
+    }
+
     private void initViews() {
         activityImage = findViewById(R.id.activity_image);
         mapView = findViewById(R.id.activity_map);

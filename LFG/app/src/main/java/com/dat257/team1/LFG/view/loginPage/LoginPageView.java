@@ -77,7 +77,7 @@ public class LoginPageView extends FragmentActivity {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
             Intent intent = new Intent(this, ActivityFeedView.class);
-            //startActivity(intent);
+            startActivity(intent);
         }
         //retrieveData(currentUser);
     }

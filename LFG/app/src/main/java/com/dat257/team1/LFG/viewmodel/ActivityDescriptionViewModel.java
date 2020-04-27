@@ -18,18 +18,17 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.model.Activity;
+import com.google.firebase.firestore.ListenerRegistration;
 
 public class ActivityDescriptionViewModel extends ViewModel {
     private MutableLiveData<List<Comment>> comments;
     private MutableLiveData<Activity> activity;
-
+    private ListenerRegistration listener;
 
     public ActivityDescriptionViewModel(){
         activity = new MutableLiveData<>();
         comments = new MutableLiveData<>();
         comments.setValue(new ArrayList<>());
-        setActivity(Main.getInstance().getFocusedActivity());
-        FireStoreHelper.getInstance().loadComments(activity.getValue().getId());
 
         EventBus.getDefault().register(this);
     }
@@ -61,5 +60,13 @@ public class ActivityDescriptionViewModel extends ViewModel {
         comments.setValue(event.getComments());
     }
 
+    public void startup(){
+        setActivity(Main.getInstance().getFocusedActivity());
+        listener = FireStoreHelper.getInstance().loadComments(activity.getValue().getId());
+    }
+
+    public void cleanup(){
+        listener.remove();
+    }
 }
 
