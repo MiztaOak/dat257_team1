@@ -68,6 +68,8 @@ public class ActivityDescriptionView extends AppCompatActivity {
               LatLng locationTest = new LatLng(57.708870, 11.974560);
              //   updateActivityDescriptionMap(locationTest);
                 activityDescription.setText(activity.getDescription());
+
+                //TODO POPULATE THE TEXTFIELDS FROM HERE Jenny
             }
         });
 
