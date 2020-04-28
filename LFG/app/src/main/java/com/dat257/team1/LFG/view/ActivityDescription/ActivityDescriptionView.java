@@ -26,12 +26,14 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 public class ActivityDescriptionView extends AppCompatActivity {
 
     private ActivityDescriptionViewModel activityDescriptionViewModel;
+    private MutableLiveData<Activity> mutableActivity;
+    private MutableLiveData<List<Comment>> comments;
+
     private ImageView activityImage;
     private TextView activityTitle;
     private TextView userName;
@@ -47,22 +49,33 @@ public class ActivityDescriptionView extends AppCompatActivity {
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
 
-    private MutableLiveData<List<Comment>> comments;
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         initViews();
 
         activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
-        activityDescriptionViewModel.getActivity().observe(this, new Observer<Activity>() {
+        getLifecycle().addObserver(activityDescriptionViewModel);
+        activityDescriptionViewModel.onCreate();
+
+        mutableActivity = activityDescriptionViewModel.getMutableActivity();
+        activityDescriptionViewModel.getMutableActivity().observe(this, new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
              //  GeoPoint location = new GeoPoint(activity.getLocation().getLatitude(), activity.getLocation().getLongitude());
               LatLng locationTest = new LatLng(57.708870, 11.974560);
              //   updateActivityDescriptionMap(locationTest);
+                activityDescription.setText(activity.getDescription());
+            }
+        });
+
+        comments = activityDescriptionViewModel.getMutableComments();
+        activityDescriptionViewModel.getMutableComments().observe(this, new Observer<List<Comment>>() {
+            @Override
+            public void onChanged(List<Comment> comments) {
+                reAdapter.notifyDataSetChanged();
             }
         });
 
@@ -85,15 +98,6 @@ public class ActivityDescriptionView extends AppCompatActivity {
             }
         });
 
-        activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
-        comments = activityDescriptionViewModel.getComments();
-        comments.observe(this, new Observer<List<Comment>>() {
-            @Override
-            public void onChanged(List<Comment> comments) {
-                reAdapter.notifyDataSetChanged();
-            }
-        });
-
         recyclerView = (RecyclerView) findViewById(R.id.comment_feed);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
@@ -102,15 +106,11 @@ public class ActivityDescriptionView extends AppCompatActivity {
         reAdapter = new CommentAdapter(comments);
         recyclerView.setAdapter(reAdapter);
 
-
-
         //activityImage.setImageResource(R.drawable.SRC); //sets the source to image
         activityTitle.setText("Activity Title");
         userName.setText("User Name");
         activitySchedule.setText("Time/Date");
         activityDescription.setText("Activity Description");
-
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -138,6 +138,8 @@ public class ActivityDescriptionView extends AppCompatActivity {
         commentText = findViewById(R.id.description_commentTextField);
     }
 
+
+    //TODO HIGHLY ILLEGAL!
     @Subscribe
     public void handleCommentEvent(CommentEvent event){
         if(!event.isSuccess()){

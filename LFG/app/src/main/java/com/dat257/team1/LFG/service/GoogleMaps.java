@@ -1,42 +1,36 @@
 package com.dat257.team1.LFG.service;
 
-import android.location.Location;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.firebase.firestore.GeoPoint;
 
 /**
  * This class is responsible for displaying the address on google maps
  *
  * @author : Oussama Anadani
  */
-public class GoogleMaps extends FragmentActivity implements OnMapReadyCallback {
+public class GoogleMaps extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        return rootView;
     }
-
-
 
     /**
      * Manipulates the map once available.
@@ -68,7 +62,6 @@ public class GoogleMaps extends FragmentActivity implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(location).title("Activity here"));
 
     }
-
 
 
 }

@@ -65,26 +65,26 @@ public class FireStoreHelper {
     }
 
     //just a dummy method will be removed later
-    public void addActivity(ActivityEvent activityEvent) {
+    public void addActivity(Activity activity) {
         Calendar.getInstance().set(2020,4,30,15,30);
-        Activity currentActivity = activityEvent.getActivity();
+        Activity currentActivity = activity;
         DocumentReference owner = db.document("users/" + currentActivity.getId());
 
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
-        Map<String, Object> activity = new HashMap<>();
+        Map<String, Object> activityMap = new HashMap<>();
 
-        activity.put("id", currentActivity.getId());
-        activity.put("title", currentActivity.getTitle());
-        activity.put("desc", currentActivity.getDescription());
-        activity.put("time", currentActivity.getTime());
-        activity.put("location", currentActivity.getLocation());
-        activity.put("owner", currentActivity.getOwner());
-        activity.put("participants", currentActivity.getParticipants());
+        activityMap.put("id", currentActivity.getId());
+        activityMap.put("title", currentActivity.getTitle());
+        activityMap.put("desc", currentActivity.getDescription());
+        activityMap.put("time", currentActivity.getTime());
+        activityMap.put("location", currentActivity.getLocation());
+        activityMap.put("owner", currentActivity.getOwner());
+        activityMap.put("participants", currentActivity.getParticipants());
 
 
-        db.collection("activities").add(activity)
+        db.collection("activities").add(activityMap)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

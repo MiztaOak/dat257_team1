@@ -5,6 +5,8 @@ import android.location.Geocoder;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+
+import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
@@ -21,6 +23,7 @@ import java.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +54,6 @@ public class Main {
 
         focusedActivity = new Activity("u8A4858pFvnr5IyKxOTc","bla",null,"tst","something",null,null);
         fireBaseObject = FireStoreHelper.getInstance();
-
     }
 
     public static Main getInstance() {
@@ -80,19 +82,33 @@ public class Main {
 
         ActivityEvent activityEvent = new ActivityEvent(activity);
         EventBus.getDefault().post(activityEvent);
-        fireBaseObject.addActivity(activityEvent);
+        fireBaseObject.addActivity(activity);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void createActivity (String title, String description, String time, String adress) {
+
         List<String> participants = new ArrayList<>();
         //This method incocation does not work, right now it just return a dummy value. See over the method!
-        Timestamp timestamp = convertToTimestamp(time);
-        createActivity(activityID, dummy, participants, title, description, timestamp, new GeoPoint(30, 20));
+        //Timestamp timestamp = convertToTimestamp(time); //TODO broken.
+        Date date = new Date();
+        date.setTime(1111);
+        Timestamp timestamp1 = new Timestamp(date);
+        createActivity(activityID, dummy, participants, title, description, timestamp1, new GeoPoint(30, 20));
     }
 
     public List<Activity> getActivities() {
         return activities;
+    }
+
+    public void updateActivityFeed() {
+        activities = fireBaseObject.getActivities(); //TODO don't get all activities
+        ActivityFeedEvent activityFeedEvent = new ActivityFeedEvent(getActivities());
+        EventBus.getDefault().post(activityFeedEvent);
+    }
+
+    public void setFocusedActivity(Activity activity) {
+        this.focusedActivity = activity;
     }
 
     public Activity getFocusedActivity() {

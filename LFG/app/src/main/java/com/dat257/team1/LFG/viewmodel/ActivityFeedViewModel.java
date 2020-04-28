@@ -7,7 +7,9 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.ActivityEvent;
+import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ActivityFeedView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,10 +33,19 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
         return mutableActivityList;
     }
 
+    public void updateFeed() {
+        Main.getInstance().updateActivityFeed();
+    }
+
     @Subscribe
-    public void onUpdatedFeedEvent(ActivityEvent event) {
+    public void onUpdateActivityFeedEvent(ActivityFeedEvent event) {
+        mutableActivityList.postValue(event.getActivityList());
+    }
+
+    @Subscribe
+    public void onUpdatedFeedActivityEvent(ActivityEvent event) {
          MutableLiveData<List<Activity>> mutableLiveData = getMutableActivityList();
-         Objects.requireNonNull(mutableLiveData.getValue()).add(event.getActivity());
+         //Objects.requireNonNull(mutableLiveData.getValue()).add(event.getActivity()); //TODO UGLY
     }
 
 

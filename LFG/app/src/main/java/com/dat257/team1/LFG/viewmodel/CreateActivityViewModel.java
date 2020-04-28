@@ -36,7 +36,6 @@ public class CreateActivityViewModel extends ViewModel {
     public void createActivity(String title, String description, String time, String address) {
         if (isValid()) {
             Main.getInstance().createActivity(title, description, time, address);
-            currentActivity.setValue((Activity) Main.getInstance().getActivities().get(0));
         }
     }
 

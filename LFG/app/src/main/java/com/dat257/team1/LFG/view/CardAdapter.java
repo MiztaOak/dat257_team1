@@ -1,7 +1,5 @@
 package com.dat257.team1.LFG.view;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.appcompat.app.AppCompatActivity;
+
 import com.dat257.team1.LFG.R;
 
 import java.util.ArrayList;
@@ -20,7 +17,7 @@ import java.util.ArrayList;
 
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder> {
 
-    private ArrayList<CardsView> mCardsList;
+    private ArrayList<ActivityCardFragment> mCardsList;
 
     public static class CardViewHolder extends RecyclerView.ViewHolder{
 
@@ -37,7 +34,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
         }
     }
 
-    public CardAdapter(ArrayList<CardsView> cardsList){
+    public CardAdapter(ArrayList<ActivityCardFragment> cardsList){
         mCardsList = cardsList;
 
     }
@@ -47,7 +44,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @NonNull
     @Override
     public CardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_cards, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_card_fragment, parent, false);
         CardViewHolder cvh = new CardViewHolder(v);
         return cvh;
     }
@@ -55,7 +52,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.CardViewHolder
     @Override
     public void onBindViewHolder(@NonNull CardViewHolder holder, int position) {
 
-        CardsView currentCard = mCardsList.get(position);
+        ActivityCardFragment currentCard = mCardsList.get(position);
 
         holder.mImageView.setImageResource(currentCard.getImageResource());
         holder.mDescription.setText(currentCard.getDescription());

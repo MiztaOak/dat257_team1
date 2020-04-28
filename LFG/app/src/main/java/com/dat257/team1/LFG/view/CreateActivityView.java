@@ -77,10 +77,12 @@ public class CreateActivityView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity);
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
         geocoder = new Geocoder(this, Locale.getDefault());
         PlacesClient placesClient = Places.createClient(this);
+
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
         titleTextView = ((EditText) findViewById(R.id.editTitle));
         descTextView = ((EditText) findViewById(R.id.editDesc));
@@ -95,9 +97,8 @@ public class CreateActivityView extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActAddress(), getActTime());
-                insertActivity();
-                openFindActivity();
+                createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActTime(), getActAddress());
+                openActivityFeed();
             }
         });
 
@@ -114,7 +115,7 @@ public class CreateActivityView extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFindActivity();
+                openActivityFeed();
             }
         });
 
@@ -245,18 +246,10 @@ public class CreateActivityView extends AppCompatActivity {
 
     }
 
-    public void insertActivity() {
-        activityFeedView.getCardsList().add(new CardsView(R.drawable.ic_android_black_24dp, getActTitle(), getActDesc()));
-        activityFeedView.getmAdapter().notifyItemInserted(0);
-    }
 
-    public void openFindActivity() {
+    public void openActivityFeed() {
         Log.d(LOG_TAG, "Activity created!");
         Intent intent = new Intent(this, ActivityFeedView.class);
-
-        //Just test to display values in ActivityFeedView
-        //st = titleTextView.getText().toString();
-        //intent.putExtra("Value", st);
 
         startActivity(intent);
     }
@@ -275,9 +268,6 @@ public class CreateActivityView extends AppCompatActivity {
         return "null"; //TODO
     }
 
-    private boolean isFormValid() {
-        return true; //TODO
-    }
     public void getLocationOnClick(View view) {
         getUserLocation();
     }
