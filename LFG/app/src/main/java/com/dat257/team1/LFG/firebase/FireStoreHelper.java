@@ -7,6 +7,7 @@ import android.util.Log;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
 
@@ -20,16 +21,15 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.dat257.team1.LFG.events.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +54,10 @@ public class FireStoreHelper {
     private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
         activities = new ArrayList<>();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
         loadActivities();
     }
 
@@ -62,40 +66,6 @@ public class FireStoreHelper {
             instance = new FireStoreHelper();
 
         return instance;
-    }
-
-    //just a dummy method will be removed later
-    public void addActivity(Activity activity) {
-        Calendar.getInstance().set(2020,4,30,15,30);
-        Activity currentActivity = activity;
-        DocumentReference owner = db.document("users/" + currentActivity.getId());
-
-        List<DocumentReference> participants = new ArrayList<>();
-        participants.add(owner);
-
-        Map<String, Object> activityMap = new HashMap<>();
-
-        activityMap.put("id", currentActivity.getId());
-        activityMap.put("title", currentActivity.getTitle());
-        activityMap.put("desc", currentActivity.getDescription());
-        activityMap.put("time", currentActivity.getTime());
-        activityMap.put("location", currentActivity.getLocation());
-        activityMap.put("owner", currentActivity.getOwner());
-        activityMap.put("participants", currentActivity.getParticipants());
-
-
-        db.collection("activities").add(activityMap)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // add some code that handles the success
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // add some code that handles this exception
-            }
-        });
     }
 
     /**
@@ -109,17 +79,19 @@ public class FireStoreHelper {
      * @param desc     The description of the activity
      * @param location The location of the activity
      */
-    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location) {
-        DocumentReference owner = db.document("users/" + uId);
+    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location, Boolean privateAct, Category category, int numOfMaxAttendees) {
+        DocumentReference owner = db.document("/users/" + uId);
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
+
+        List<DocumentReference> joinRequestList = new ArrayList<>();
 
         //Chat chat = new Chat(Main.getInstance().getDummy2().getId(), Main.getInstance().getDummy2().getOwner(), Main.getInstance().getDummy2().getParticipants(), Main.getInstance().getDummy2().getMessages());
         Chat chat = new Chat();
 
         Map<String, Object> activity = new HashMap<>();
 
-        
+
         activity.put("title", title);
         activity.put("desc", desc);
         activity.put("time", date);
@@ -128,7 +100,10 @@ public class FireStoreHelper {
         activity.put("location", location);
         activity.put("participants", participants);
         activity.put("chat", chat);
-
+        activity.put("joinRequestList", joinRequestList);
+        activity.put("category", category);
+        activity.put("privateEvent", privateAct);
+        activity.put("numOfMaxAttendees", numOfMaxAttendees);
 
         db.collection("activities").add(activity)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -142,7 +117,6 @@ public class FireStoreHelper {
                 // add some code that handles this exception
             }
         });
-
     }
 
     /**

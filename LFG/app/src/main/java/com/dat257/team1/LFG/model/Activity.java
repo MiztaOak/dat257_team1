@@ -13,19 +13,28 @@ import java.util.ArrayList;
 
 import java.sql.Time;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Class that represents an activity/event that users can create and also join.
+ * @author Jakobew
+ */
 public class Activity {
 
     private String id;
     private String title;
     private String description;
     private GeoPoint location;
-    private Timestamp time;
+    private Timestamp timestamp;
     private String owner;
     private List<String> participants;
     private Chat chat;
+    private Boolean privateAct;
+    private int numAttendees;
+    private Category category;
+    private List<User> joinRequestList;
 
 
     /**
@@ -33,38 +42,66 @@ public class Activity {
       * @param title
      * @param description
      * @param location
-     * @param time
+     * @param timestamp
      * @param owner
      * @param participants
      */
 
-    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location, Chat chat) {
+    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp timestamp, GeoPoint location, Chat chat, Boolean privateAct, int numAttendees, Category category, List<User> joinRequestList) {
 
         this.id = id;
         this.title = title;
         this.description = description;
         this.location = location;
-        this.time = time;
+        this.timestamp = timestamp;
         this.owner = owner;
         this.participants = participants;
         this.chat = chat;
-    }
-    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.location = location;
-        this.time = time;
-        this.owner = owner;
-        this.participants = participants;
-        this.chat = null;
+        this.privateAct = privateAct;
+        this.numAttendees = numAttendees;
+        this.category = category;
+        this.joinRequestList = joinRequestList;
     }
 
+    public Chat getChat() {
+        return chat;
+    }
 
-    /**
-     * Constructor creating an activity without any information.
-     */
-    public Activity() { }
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public Boolean getPrivateAct() {
+        return privateAct;
+    }
+
+    public void setPrivateAct(Boolean privateAct) {
+        this.privateAct = privateAct;
+    }
+
+    public int getNumAttendees() {
+        return numAttendees;
+    }
+
+    public void setNumAttendees(int numAttendees) {
+        this.numAttendees = numAttendees;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<User> getJoinRequestList() {
+        return joinRequestList;
+    }
+
+    public void setJoinRequestList(ArrayList joinRequestList) {
+        this.joinRequestList = joinRequestList;
+    }
 
     public String getId() {
         return id;
@@ -86,7 +123,6 @@ public class Activity {
         return location;
     }
 
-    public Timestamp getTime() { return time; }
 
     public String getOwner() {
         return owner;
@@ -108,8 +144,12 @@ public class Activity {
         this.location = location;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
     }
 
     public void setOwner(String owner) {

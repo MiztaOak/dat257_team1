@@ -30,7 +30,9 @@
             android:layout_toEndOf="@+id/activityImage"
             android:text="Title"
             android:textSize="20sp"
-            android:textStyle="bold"></TextView>
+            android:textStyle="bold">
+
+        </TextView>
 
         <TextView
             android:id="@+id/DescriptionText"

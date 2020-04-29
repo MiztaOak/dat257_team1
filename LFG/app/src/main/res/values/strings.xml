@@ -21,4 +21,14 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="title_activity_maps">Map</string>
+    <string name="activity_name">Activity name</string>
+    <string name="create_activity">Create activity</string>
+    <string name="choose_category">Category</string>
+    <string name="location">Location</string>
+    <string name="activity_title">Activity title</string>
+    <string name="activity_description">Activity description</string>
+    <string name="private_event">Private event</string>
+    <string name="initial_count">0</string>
+    <string name="peoples">Peoples</string>
+    <string name="date_amp_time"><![CDATA[Date & Time]]></string>
 </resources>
