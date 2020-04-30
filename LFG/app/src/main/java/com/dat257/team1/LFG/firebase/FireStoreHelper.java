@@ -8,6 +8,7 @@ import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
 
 import com.dat257.team1.LFG.events.MessageEvent;
@@ -248,4 +249,25 @@ public class FireStoreHelper {
         //TODO create a load chat like the load activities by first creating a MessageDataHolder
     }
 
+    public ListenerRegistration loadNotification(String uID){
+        return db.collection("activities").whereEqualTo("owner",db.document("/users/"+uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                List<JoinNotification> notifications = new ArrayList<>();
+                for(QueryDocumentSnapshot doc : value){
+                    String activityID = doc.getId();
+                    String title = doc.getString("title");
+                    List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("waiting"); //evil row
+                    for(DocumentReference ref: waitingList){
+                        notifications.add(new JoinNotification(activityID,title,ref.getId(),"help"));
+                    }
+                }
+            }
+        });
+    }
 }
