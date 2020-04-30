@@ -68,8 +68,9 @@ public class ActivityDescriptionView extends AppCompatActivity {
               LatLng locationTest = new LatLng(57.708870, 11.974560);
              //   updateActivityDescriptionMap(locationTest);
                 activityDescription.setText(activity.getDescription());
-
-                //TODO POPULATE THE TEXTFIELDS FROM HERE Jenny
+                activityTitle.setText(activity.getTitle());
+                activitySchedule.setText(activity.getTimestamp().toString());
+                activityImage.setImageResource(R.drawable.dog_image_activity);
             }
         });
 
