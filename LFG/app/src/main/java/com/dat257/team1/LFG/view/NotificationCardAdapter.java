@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view;
 
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,8 +7,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
+import com.dat257.team1.LFG.model.JoinNotification;
 
 import java.util.List;
 
@@ -19,9 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCardAdapter.AcceptReqViewHolder>{
 
-    private MutableLiveData<List<Pair<String, Activity>>> requests;
+    private MutableLiveData<List<JoinNotification>> requests;
 
-    public NotificationCardAdapter(MutableLiveData<List<Pair<String,Activity>>> requests){
+    public NotificationCardAdapter(MutableLiveData<List<JoinNotification>> requests){
         this.requests = requests;
     }
 
@@ -49,7 +48,20 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
 
     @Override
     public void onBindViewHolder(@NonNull NotificationCardAdapter.AcceptReqViewHolder holder, int position) {
-
+        JoinNotification joinNotification = requests.getValue().get(position);
+        holder.infoText.setText(joinNotification.getUserName() + " wants to join your activity"+ joinNotification.getActivityTitle() + ".");
+        holder.accept.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FireStoreHelper.getInstance().handleRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
+            }
+        });
+        holder.decline.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FireStoreHelper.getInstance().handleRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
+            }
+        });
     }
 
     @Override

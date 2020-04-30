@@ -1,12 +1,8 @@
 package com.dat257.team1.LFG.viewmodel;
 
-import android.util.Pair;
-
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.JoinNotification;
-import com.dat257.team1.LFG.model.Main;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.ListenerRegistration;
 

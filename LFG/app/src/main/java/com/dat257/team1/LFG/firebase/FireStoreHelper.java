@@ -18,7 +18,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.GeoPoint;
@@ -26,6 +28,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
+import com.google.firebase.firestore.Transaction;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -172,6 +175,13 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Attaches a listener that loads all comments for a given activity
+     *
+     * Author: Johan Ek
+     * @param id the id of the activity
+     * @return the listener
+     */
     public ListenerRegistration loadComments(String id) {
         return db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -193,6 +203,8 @@ public class FireStoreHelper {
 
     /**
      * Method that adds a new comment to a given activity in the db
+     *
+     * Author: Johan Ek
      * @param activity the object representing the given activity
      * @param comment the object representing the comment that should be posted
      */
@@ -249,6 +261,13 @@ public class FireStoreHelper {
         //TODO create a load chat like the load activities by first creating a MessageDataHolder
     }
 
+    /**
+     * Method that attaches a listener to all activities that are owned by the user with id uID
+     *
+     * Author: Johan Ek
+     * @param uID id of the user that is the owner
+     * @return a listener that is attached to all activities that uID owns
+     */
     public ListenerRegistration loadNotification(String uID){
         return db.collection("activities").whereEqualTo("owner",db.document("/users/"+uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -267,6 +286,41 @@ public class FireStoreHelper {
                         notifications.add(new JoinNotification(activityID,title,ref.getId(),"help"));
                     }
                 }
+            }
+        });
+    }
+
+    /**
+     * Method that either accepts a join request or declines it. This is handled in a atomic transaction
+     * to avoid the possibility that the user is removed from the waiting list but not added to the
+     * participants
+     *
+     * Author: Johan Ek
+     * @param uID the id of the user that is requesting to join
+     * @param activityID id of the activity that the user is trying to join
+     * @param accept if true then the request was accepted
+     */
+    public void handleRequest(String uID,String activityID,boolean accept){
+        final DocumentReference docRef = db.collection("activity").document(activityID);
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+                DocumentSnapshot snapshot = transaction.get(docRef);
+                transaction.update(docRef,"waiting", FieldValue.arrayRemove(db.document("/users/"+uID)));
+                if(accept)
+                    transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
             }
         });
     }
