@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.ActivityFeedView;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FireStoreHelper.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if(currentUser != null){
             openFindActivity();

@@ -36,6 +36,7 @@
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.ActivityFeedView" />
+        <activity android:name=".view.NotificationView" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

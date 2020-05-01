@@ -91,7 +91,7 @@ public class ActivityFeedView extends AppCompatActivity {
 
 
     private void clickMenu() {
-        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        Intent intent = new Intent(this, NotificationView.class);
         startActivity(intent);
     }
 

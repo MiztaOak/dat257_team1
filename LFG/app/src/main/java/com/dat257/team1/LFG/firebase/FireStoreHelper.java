@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
@@ -23,8 +24,10 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
@@ -57,6 +60,10 @@ public class FireStoreHelper {
 
     private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
         loadActivities();
     }
@@ -166,6 +173,7 @@ public class FireStoreHelper {
 
                 activities = new ArrayList<>();
                 for(QueryDocumentSnapshot doc : value){
+                    Log.w(TAG,doc.getId());
                     ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
                     if(data.hasValidData())
                         activities.add(data.toActivity(doc.getId()));
@@ -281,11 +289,12 @@ public class FireStoreHelper {
                 for(QueryDocumentSnapshot doc : value){
                     String activityID = doc.getId();
                     String title = doc.getString("title");
-                    List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("waiting"); //evil row
+                    List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("joinRequestList"); //evil row
                     for(DocumentReference ref: waitingList){
-                        notifications.add(new JoinNotification(activityID,title,ref.getId(),"help"));
+                        notifications.add(new JoinNotification(activityID,title,ref.getId(),"help")); //what to do about name, redundant data?
                     }
                 }
+                EventBus.getDefault().post(new JoinNotificationEvent(notifications));
             }
         });
     }
@@ -301,13 +310,13 @@ public class FireStoreHelper {
      * @param accept if true then the request was accepted
      */
     public void handleRequest(String uID,String activityID,boolean accept){
-        final DocumentReference docRef = db.collection("activity").document(activityID);
+        final DocumentReference docRef = db.collection("activities").document(activityID);
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException{
-                DocumentSnapshot snapshot = transaction.get(docRef);
-                transaction.update(docRef,"waiting", FieldValue.arrayRemove(db.document("/users/"+uID)));
+                //DocumentSnapshot snapshot = transaction.get(docRef);
+                transaction.update(docRef,"joinRequestList", FieldValue.arrayRemove(db.document("/users/"+uID)));
                 if(accept)
                     transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
                 return null;
@@ -315,12 +324,12 @@ public class FireStoreHelper {
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
+                Log.d(TAG, "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Log.w(TAG, "Transaction failure.", e);
             }
         });
     }
