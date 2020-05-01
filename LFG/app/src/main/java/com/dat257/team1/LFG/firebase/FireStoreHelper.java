@@ -3,7 +3,7 @@ package com.dat257.team1.LFG.firebase;
 import android.util.Log;
 
 
-
+import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.model.Activity;
@@ -13,6 +13,7 @@ import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Chat;
 
+import com.dat257.team1.LFG.model.Message;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -20,6 +21,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -53,6 +55,10 @@ public class FireStoreHelper {
 
     private FireStoreHelper(){
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
         loadActivities();
     }
@@ -223,29 +229,44 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessage(MessageEvent messageEvent) {
+    public void writeMessageInChat(Chat chat, Message message) {
 
-        DocumentReference owner = db.document("users/" + messageEvent.getMessage().getId());
-        Map<String, Object> message = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
 
-        message.put("sender", owner);
-        message.put("sent", new Timestamp(new Date()));
-        message.put("text", messageEvent.getMessage().getContent());
-        db.collection("message").add(message).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        data.put("messageText", message.getContent());
+        data.put("sender", db.document("/users/"+message.getSender()));
+        data.put("sent", message.getTime());
+        db.collection("message").add(data).
+                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                //TODO add code to handle sucess
+                EventBus.getDefault().post(new MessageEvent(true));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //TODO add code that handles failure
+                EventBus.getDefault().post(false);
             }
         });
     }
 
-    private void loadChat() {
-        //TODO create a load chat like the load activities by first creating a MessageDataHolder
+    public ListenerRegistration loadChat(String id) {
+        return db.collection("chats").document(id).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<Message> messages = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: value){
+                    MessageDataHolder data = doc.toObject(MessageDataHolder.class);
+                    messages.add(data.toMessage());
+                }
+                EventBus.getDefault().post(new ChatEvent(messages));
+            }
+        });
+
     }
 
 }
