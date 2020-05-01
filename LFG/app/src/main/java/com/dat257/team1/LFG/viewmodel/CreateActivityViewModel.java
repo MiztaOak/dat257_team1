@@ -43,10 +43,10 @@ public class CreateActivityViewModel extends ViewModel {
 
     public void createActivity(String title, String description, Long time, Location location, Boolean privateEvent, int numAttendees, Category category) {
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-        Timestamp timestamp = new Timestamp(time,0);
-        if (checkFields(title, description, timestamp, geoPoint, category) == 0) {
+        Timestamp timestamp = new Timestamp((time/1000),0);
+        //if (checkFields(title, description, timestamp, geoPoint, category) == 0) {
             Main.getInstance().createActivity(title, description, timestamp, geoPoint, privateEvent, numAttendees, category);
-        }
+        //}
     }
 
     private int checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks

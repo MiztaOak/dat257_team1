@@ -381,7 +381,7 @@ public class CreateActivityView extends AppCompatActivity {
     }
 
     private Long getActTime() {
-        return calendarView.getDate();
+        return (calendarView.getDate() + (timePicker.getMinute() * 60000) + (timePicker.getHour() * 3600000));
     }
 
     private int getNumOfAttendees() {
