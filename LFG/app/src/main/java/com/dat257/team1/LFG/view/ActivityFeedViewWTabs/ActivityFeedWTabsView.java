@@ -3,7 +3,6 @@ package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
