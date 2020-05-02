@@ -53,13 +53,13 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FireStoreHelper.getInstance().handleRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
+                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
             }
         });
         holder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FireStoreHelper.getInstance().handleRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
+                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
             }
         });
     }

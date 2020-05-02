@@ -81,7 +81,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
         joinActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Joined activity");
+                activityDescriptionViewModel.joinActivity();
             }
         });
 

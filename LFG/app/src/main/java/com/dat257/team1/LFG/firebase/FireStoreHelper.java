@@ -309,7 +309,7 @@ public class FireStoreHelper {
      * @param activityID id of the activity that the user is trying to join
      * @param accept if true then the request was accepted
      */
-    public void handleRequest(String uID,String activityID,boolean accept){
+    public void handleJoinRequest(String uID, String activityID, boolean accept){
         final DocumentReference docRef = db.collection("activities").document(activityID);
 
         db.runTransaction(new Transaction.Function<Void>() {
@@ -319,6 +319,45 @@ public class FireStoreHelper {
                 transaction.update(docRef,"joinRequestList", FieldValue.arrayRemove(db.document("/users/"+uID)));
                 if(accept)
                     transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Transaction failure.", e);
+            }
+        });
+    }
+
+    /**
+     * Method that creates a join request for a user on a certain activity.
+     *
+     * Author: Johan Ek
+     * @param uID the user id of the user that wants to join the activity
+     * @param activityID the id of the activity
+     */
+    public void createJoinRequest(String uID, String activityID){
+        final DocumentReference docRef = db.collection("activities").document(activityID);
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+                DocumentSnapshot snapshot = transaction.get(docRef);
+                if(snapshot.exists()){
+                    List<DocumentReference> participants = (List<DocumentReference>) snapshot.get("participants"); //cursed row
+                    DocumentReference userRef = db.document("/users/"+uID);
+                    assert participants != null;
+                    if(participants.contains(userRef)){
+                       //send some sort of notify to the user that they have already joined
+                    }else{
+                        transaction.update(docRef,"joinRequestList", FieldValue.arrayUnion(userRef));
+                    }
+                }
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
