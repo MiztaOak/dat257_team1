@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
@@ -142,6 +143,15 @@ public class ActivityDescriptionView extends AppCompatActivity {
     public void handleCommentEvent(CommentEvent event){
         if(!event.isSuccess()){
             Toast.makeText(getApplicationContext(),"Something went wrong when trying to post your comment",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void handleJoinEvent(JoinActivityEvent event){
+        if(!event.isSuccess()){
+            Toast.makeText(getApplicationContext(),event.getMessage(),Toast.LENGTH_SHORT).show();
+        }else{
+            //do something maybe leave this view?
         }
     }
 

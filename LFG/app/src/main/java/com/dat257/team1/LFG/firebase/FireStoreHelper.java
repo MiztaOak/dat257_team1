@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
@@ -344,30 +345,41 @@ public class FireStoreHelper {
     public void createJoinRequest(String uID, String activityID){
         final DocumentReference docRef = db.collection("activities").document(activityID);
 
-        db.runTransaction(new Transaction.Function<Void>() {
+        db.runTransaction(new Transaction.Function<String>() {
             @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+            public String apply(Transaction transaction) throws FirebaseFirestoreException{
                 DocumentSnapshot snapshot = transaction.get(docRef);
+                String message = "An unknown error has occurred";
                 if(snapshot.exists()){
                     List<DocumentReference> participants = (List<DocumentReference>) snapshot.get("participants"); //cursed row
+                    Long max = (Long)snapshot.get("numOfMaxAttendees");
                     DocumentReference userRef = db.document("/users/"+uID);
+
                     assert participants != null;
                     if(participants.contains(userRef)){
-                       //send some sort of notify to the user that they have already joined
+                        message = "You have already joined this activity";
+                    }else if (max <= participants.size() && max != 0){
+                        message = "That activity is currently full.";
                     }else{
+                        message = null;
                         transaction.update(docRef,"joinRequestList", FieldValue.arrayUnion(userRef));
                     }
                 }
-                return null;
+                return message;
             }
-        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+        }).addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(String message) {
+                if(message == null)
+                    EventBus.getDefault().post(new JoinActivityEvent(true));
+                else
+                    EventBus.getDefault().post(new JoinActivityEvent(false,message));
                 Log.d(TAG, "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                EventBus.getDefault().post(new JoinActivityEvent(false,"An unknown error has occurred"));
                 Log.w(TAG, "Transaction failure.", e);
             }
         });
