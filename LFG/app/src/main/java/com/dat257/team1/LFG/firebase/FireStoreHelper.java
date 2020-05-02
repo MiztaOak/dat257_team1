@@ -290,6 +290,10 @@ public class FireStoreHelper {
                 for(QueryDocumentSnapshot doc : value){
                     String activityID = doc.getId();
                     String title = doc.getString("title");
+                    List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants"); //cursed row
+                    Long max = (Long)doc.get("numOfMaxAttendees");
+                    if(max != 0 && max <= participants.size())
+                        continue;
                     List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("joinRequestList"); //evil row
                     for(DocumentReference ref: waitingList){
                         notifications.add(new JoinNotification(activityID,title,ref.getId(),"help")); //what to do about name, redundant data?
