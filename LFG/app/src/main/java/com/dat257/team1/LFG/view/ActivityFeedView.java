@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.MutableLiveData;
@@ -15,10 +14,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
@@ -39,6 +36,7 @@ public class ActivityFeedView extends AppCompatActivity {
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
     private ArrayList<CardsView> cardsList = new ArrayList<>();
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +54,20 @@ public class ActivityFeedView extends AppCompatActivity {
                 //update feed
             }
         });
+/*
+       button = (Button) findViewById(R.id.go_to_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                FragmentManager fm = getSupportFragmentManager();
+                Map gm = new Map();
+                fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
+
+            }
+        });
+
+ */
         /*ArrayList<CardsView> cardsList = new ArrayList<>();
         cardsList.add(new CardsView(R.drawable.ic_android_black_24dp, "Fotboll", "fotboll på heden kl 13:00"));
         cardsList.add(new CardsView(R.drawable.ic_radio_button_unchecked_black_24dp, "Basketspelare sökes", "söker basketspelare till match 14:00"));
@@ -99,7 +110,7 @@ public class ActivityFeedView extends AppCompatActivity {
         return mAdapter;
     }
 
-    public ArrayList<CardsView> getCardsList(){
+    public ArrayList<CardsView> getCardsList() {
         return cardsList;
     }
 
@@ -109,4 +120,5 @@ public class ActivityFeedView extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
 }

@@ -2,17 +2,17 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-
+import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
-
-import com.dat257.team1.LFG.events.MessageEvent;
-import com.dat257.team1.LFG.model.Chat;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
@@ -20,11 +20,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.dat257.team1.LFG.events.ActivityEvent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -35,15 +35,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
  * fetch data or upload it to the database.
- *
+ * <p>
  * Author: Johan Ek
- *
  */
 public class FireStoreHelper {
     private static FireStoreHelper instance;
@@ -51,14 +47,19 @@ public class FireStoreHelper {
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
 
-    private FireStoreHelper(){
+    private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
         loadActivities();
     }
 
+
     public static FireStoreHelper getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new FireStoreHelper();
 
         return instance;
@@ -66,7 +67,7 @@ public class FireStoreHelper {
 
     //just a dummy method will be removed later
     public void addActivity(ActivityEvent activityEvent) {
-        Calendar.getInstance().set(2020,4,30,15,30);
+        Calendar.getInstance().set(2020, 4, 30, 15, 30);
         Activity currentActivity = activityEvent.getActivity();
         DocumentReference owner = db.document("users/" + currentActivity.getId());
 
@@ -119,7 +120,7 @@ public class FireStoreHelper {
 
         Map<String, Object> activity = new HashMap<>();
 
-        
+
         activity.put("title", title);
         activity.put("desc", desc);
         activity.put("time", date);
@@ -161,9 +162,9 @@ public class FireStoreHelper {
                 }
 
                 activities = new ArrayList<>();
-                for(QueryDocumentSnapshot doc : value){
+                for (QueryDocumentSnapshot doc : value) {
                     ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
-                    if(data.hasValidData())
+                    if (data.hasValidData())
                         activities.add(data.toActivity(doc.getId()));
                 }
                 Main.getInstance().setActivities(activities);
@@ -175,12 +176,12 @@ public class FireStoreHelper {
         return db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
+                if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
                 List<Comment> comments = new ArrayList<>();
-                for(QueryDocumentSnapshot doc: value){
+                for (QueryDocumentSnapshot doc : value) {
                     CommentDataHolder data = doc.toObject(CommentDataHolder.class);
                     comments.add(data.toComment());
                 }
@@ -192,14 +193,15 @@ public class FireStoreHelper {
 
     /**
      * Method that adds a new comment to a given activity in the db
+     *
      * @param activity the object representing the given activity
-     * @param comment the object representing the comment that should be posted
+     * @param comment  the object representing the comment that should be posted
      */
     public void addCommentToActivity(Activity activity, Comment comment) {
-        Map<String,Object> data = new HashMap<>();
-        data.put("commentText",comment.getCommentText());
-        data.put("poster",db.document("/users/"+comment.getCommenterRef()));
-        data.put("postDate",new Timestamp(comment.getCommentDate()));
+        Map<String, Object> data = new HashMap<>();
+        data.put("commentText", comment.getCommentText());
+        data.put("poster", db.document("/users/" + comment.getCommenterRef()));
+        data.put("postDate", new Timestamp(comment.getCommentDate()));
         db.collection("activities").document(activity.getId()).
                 collection("comments").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
