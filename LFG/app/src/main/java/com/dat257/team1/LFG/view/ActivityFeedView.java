@@ -18,8 +18,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.LocalUser;
 import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -35,6 +37,7 @@ public class ActivityFeedView extends AppCompatActivity {
 
     private Button createActivity;
     private Button menu;
+    private Button logOut;
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
@@ -64,6 +67,27 @@ public class ActivityFeedView extends AppCompatActivity {
         cardsList.add(new CardsView(R.drawable.ic_watch_later_black_24dp, "padel", "padel på heden kl 13:00"));
         */
 
+
+
+
+
+        //Move this to the menu fragment instead of having it here. Change findview to logout
+        //button instead, menu was a temporary hold.
+
+
+        /*logOut = (Button) findViewById(R.id.menu);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchLoginPage();
+                LocalUser.signOut();
+            }
+        });
+
+    */
+
+
+
         mRecyclerView = findViewById(R.id.recyclerView_feed);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
@@ -88,6 +112,19 @@ public class ActivityFeedView extends AppCompatActivity {
             }
         }));
     }
+
+
+
+
+    //Move this to menu fragment.
+    /*
+    private void launchLoginPage(){
+        Intent intent = new Intent(this, LoginPageView.class);
+        startActivity(intent);
+    }
+
+
+     */
 
 
     private void clickMenu() {
