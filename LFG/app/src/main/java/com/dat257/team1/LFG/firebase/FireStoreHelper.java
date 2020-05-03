@@ -9,10 +9,13 @@ import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinActivityEvent;
+import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
 
 import com.dat257.team1.LFG.events.MessageEvent;
@@ -27,16 +30,21 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
+import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
+
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -175,7 +183,8 @@ public class FireStoreHelper {
                 }
 
                 activities = new ArrayList<>();
-                for (QueryDocumentSnapshot doc : value) {
+                for(QueryDocumentSnapshot doc : value){
+                    Log.w(TAG,doc.getId());
                     ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
                     if (data.hasValidData())
                         activities.add(data.toActivity(doc.getId()));
@@ -185,6 +194,13 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Attaches a listener that loads all comments for a given activity
+     *
+     * Author: Johan Ek
+     * @param id the id of the activity
+     * @return the listener
+     */
     public ListenerRegistration loadComments(String id) {
         return db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -207,6 +223,7 @@ public class FireStoreHelper {
     /**
      * Method that adds a new comment to a given activity in the db
      *
+     * Author: Johan Ek
      * @param activity the object representing the given activity
      * @param comment  the object representing the comment that should be posted
      */
@@ -278,4 +295,122 @@ public class FireStoreHelper {
 
     }
 
+    /**
+     * Method that attaches a listener to all activities that are owned by the user with id uID
+     *
+     * Author: Johan Ek
+     * @param uID id of the user that is the owner
+     * @return a listener that is attached to all activities that uID owns
+     */
+    public ListenerRegistration loadNotification(String uID){
+        return db.collection("activities").whereEqualTo("owner",db.document("/users/"+uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                List<JoinNotification> notifications = new ArrayList<>();
+                for(QueryDocumentSnapshot doc : value){
+                    String activityID = doc.getId();
+                    String title = doc.getString("title");
+                    List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants"); //cursed row
+                    Long max = (Long)doc.get("numOfMaxAttendees");
+                    if(max != 0 && max <= participants.size())
+                        continue;
+                    List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("joinRequestList"); //evil row
+                    for(DocumentReference ref: waitingList){
+                        notifications.add(new JoinNotification(activityID,title,ref.getId(),"help")); //what to do about name, redundant data?
+                    }
+                }
+                EventBus.getDefault().post(new JoinNotificationEvent(notifications));
+            }
+        });
+    }
+
+    /**
+     * Method that either accepts a join request or declines it. This is handled in a atomic transaction
+     * to avoid the possibility that the user is removed from the waiting list but not added to the
+     * participants
+     *
+     * Author: Johan Ek
+     * @param uID the id of the user that is requesting to join
+     * @param activityID id of the activity that the user is trying to join
+     * @param accept if true then the request was accepted
+     */
+    public void handleJoinRequest(String uID, String activityID, boolean accept){
+        final DocumentReference docRef = db.collection("activities").document(activityID);
+
+        db.runTransaction(new Transaction.Function<Void>() {
+            @Override
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+                //DocumentSnapshot snapshot = transaction.get(docRef);
+                transaction.update(docRef,"joinRequestList", FieldValue.arrayRemove(db.document("/users/"+uID)));
+                if(accept)
+                    transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
+                return null;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d(TAG, "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Transaction failure.", e);
+            }
+        });
+    }
+
+    /**
+     * Method that creates a join request for a user on a certain activity.
+     *
+     * Author: Johan Ek
+     * @param uID the user id of the user that wants to join the activity
+     * @param activityID the id of the activity
+     */
+    public void createJoinRequest(String uID, String activityID){
+        final DocumentReference docRef = db.collection("activities").document(activityID);
+
+        db.runTransaction(new Transaction.Function<String>() {
+            @Override
+            public String apply(Transaction transaction) throws FirebaseFirestoreException{
+                DocumentSnapshot snapshot = transaction.get(docRef);
+                String message = "An unknown error has occurred";
+                if(snapshot.exists()){
+                    List<DocumentReference> participants = (List<DocumentReference>) snapshot.get("participants"); //cursed row
+                    Long max = (Long)snapshot.get("numOfMaxAttendees");
+                    DocumentReference userRef = db.document("/users/"+uID);
+
+                    assert participants != null;
+                    if(participants.contains(userRef)){
+                        message = "You have already joined this activity";
+                    }else if (max <= participants.size() && max != 0){
+                        message = "That activity is currently full.";
+                    }else{
+                        message = null;
+                        transaction.update(docRef,"joinRequestList", FieldValue.arrayUnion(userRef));
+                    }
+                }
+                return message;
+            }
+        }).addOnSuccessListener(new OnSuccessListener<String>() {
+            @Override
+            public void onSuccess(String message) {
+                if(message == null)
+                    EventBus.getDefault().post(new JoinActivityEvent(true));
+                else
+                    EventBus.getDefault().post(new JoinActivityEvent(false,message));
+                Log.d(TAG, "Transaction success!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                EventBus.getDefault().post(new JoinActivityEvent(false,"An unknown error has occurred"));
+                Log.w(TAG, "Transaction failure.", e);
+            }
+        });
+    }
 }

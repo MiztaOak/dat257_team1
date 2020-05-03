@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.LocalUser;
 import com.dat257.team1.LFG.model.Main;
@@ -22,6 +23,7 @@ import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +143,7 @@ public class ActivityFeedView extends AppCompatActivity {
 
 
     private void clickMenu() {
-        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        Intent intent = new Intent(this, NotificationView.class);
         startActivity(intent);
     }
 
