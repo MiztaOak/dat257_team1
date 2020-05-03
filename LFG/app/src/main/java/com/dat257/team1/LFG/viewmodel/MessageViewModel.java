@@ -12,6 +12,7 @@ import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.Message;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -20,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MessageViewModel extends ViewModel{
@@ -55,8 +57,9 @@ public class MessageViewModel extends ViewModel{
     }
 
     public void sendMessage(String messageText){
-        Message message = new Message(messageText, FirebaseAuth.getInstance().getCurrentUser().getUid(), Calendar.getInstance().getTime()
-                );
+
+        Message message = new Message(messageText, FirebaseAuth.getInstance().getCurrentUser().getUid(), new Timestamp(new Date()));
+
         Main.getInstance().writeMessage(chat.getValue(),message);
     }
 

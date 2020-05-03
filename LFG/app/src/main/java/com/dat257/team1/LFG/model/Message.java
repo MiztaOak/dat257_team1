@@ -10,10 +10,10 @@ import java.util.List;
 public class Message {
     private String content;
     private String sender;
-    private Date time;
+    private Timestamp time;
 
 
-    public Message (String content, String sender, Date time){
+    public Message (String content, String sender, Timestamp time){
         this.content=content;
         this.sender=sender;
         this.time=time;
@@ -26,7 +26,7 @@ public class Message {
 
     public String getSender(){return sender;}
 
-    public Date getTime(){return time;}
+    public Timestamp getTime(){return time;}
 
     public void setContent(String content){this.content=content;}
 
