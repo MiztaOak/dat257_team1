@@ -31,4 +31,6 @@
     <string name="initial_count">0</string>
     <string name="peoples">Peoples</string>
     <string name="date_amp_time"><![CDATA[Date & Time]]></string>
+    <string name="join_notification_text">%1$s wants to join your activity %2$s.</string>
+
 </resources>

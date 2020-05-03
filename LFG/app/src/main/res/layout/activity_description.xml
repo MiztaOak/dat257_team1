@@ -78,7 +78,7 @@
                 android:text="Activity description" />
 
             <com.google.android.gms.maps.MapView
-                android:id="@+id/activity_map"
+                android:id="@+id/mapView"
                 android:layout_width="349dp"
                 android:layout_height="154dp"
                 android:layout_marginTop="8dp" />

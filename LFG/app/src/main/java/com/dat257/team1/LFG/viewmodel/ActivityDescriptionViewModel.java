@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.viewmodel;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
-import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
@@ -20,7 +19,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.dat257.team1.LFG.model.Activity;
 import com.google.firebase.firestore.ListenerRegistration;
 
 public class ActivityDescriptionViewModel extends ViewModel implements LifecycleObserver {
@@ -78,6 +76,10 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
 
     public void cleanup(){
         listener.remove();
+    }
+
+    public void joinActivity() {
+        FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),activity.getValue().getId());
     }
 }
 

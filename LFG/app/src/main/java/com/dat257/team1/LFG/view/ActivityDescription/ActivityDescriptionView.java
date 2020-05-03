@@ -9,24 +9,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
-import com.dat257.team1.LFG.service.GoogleMaps;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+import org.greenrobot.eventbus.EventBus;
+
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
 
 public class ActivityDescriptionView extends AppCompatActivity {
 
@@ -55,6 +61,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         initViews();
+        fetchActivityLocation();
 
         activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
         getLifecycle().addObserver(activityDescriptionViewModel);
@@ -79,13 +86,26 @@ public class ActivityDescriptionView extends AppCompatActivity {
             @Override
             public void onChanged(List<Comment> comments) {
                 reAdapter.notifyDataSetChanged();
+                mapView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        FragmentManager fm = getSupportFragmentManager();
+                        LatLng locationTest = new LatLng(57.708870, 11.974560);
+                        //    Map gm = new Map();
+                        // gm.markLocation(locationTest);
+                        // fm.beginTransaction().replace(R.id.mapView, gm).commit();
+                        //  mapView.getMapAsync(this);
+
+                    }
+                });
             }
         });
+
 
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!commentText.getText().toString().equals("")) {
+                if (!commentText.getText().toString().equals("")) {
                     activityDescriptionViewModel.addComment(commentText.getText().toString());
                     commentText.setText("");
                     commentText.clearFocus();
@@ -97,7 +117,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
         joinActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Joined activity");
+                activityDescriptionViewModel.joinActivity();
             }
         });
 
@@ -116,6 +136,11 @@ public class ActivityDescriptionView extends AppCompatActivity {
         activityDescription.setText("Activity Description");
     }
 
+
+    private void fetchActivityLocation() {
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -130,7 +155,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
 
     private void initViews() {
         activityImage = findViewById(R.id.activity_image);
-        mapView = findViewById(R.id.activity_map);
+        mapView = findViewById(R.id.mapView);
         commentFeed = findViewById(R.id.comment_feed);
         activitySchedule = findViewById(R.id.activity_time);
         activityDescription = findViewById(R.id.activity_description);
@@ -144,15 +169,24 @@ public class ActivityDescriptionView extends AppCompatActivity {
 
     //TODO HIGHLY ILLEGAL!
     @Subscribe
-    public void handleCommentEvent(CommentEvent event){
+    public void handleCommentEvent(CommentEvent event) {
+        if (!event.isSuccess()) {
+            Toast.makeText(getApplicationContext(), "Something went wrong when trying to post your comment", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void handleJoinEvent(JoinActivityEvent event){
         if(!event.isSuccess()){
-            Toast.makeText(getApplicationContext(),"Something went wrong when trying to post your comment",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),event.getMessage(),Toast.LENGTH_SHORT).show();
+        }else{
+            //do something maybe leave this view?
         }
     }
 
     private void updateActivityDescriptionMap(LatLng location) {
-    // display activity
-        GoogleMaps gm = new GoogleMaps();
-        gm.markLocation(location);
+        // display activity
+        // GoogleMaps gm = new GoogleMaps();
+        // gm.markLocation(location);
     }
 }

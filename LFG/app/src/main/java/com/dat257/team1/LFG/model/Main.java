@@ -16,7 +16,6 @@ import org.greenrobot.eventbus.EventBus;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -28,7 +27,6 @@ import java.util.List;
 public class Main {
 
     private static Main main;
-    FirebaseAuth mAuth;
     private List<Activity> activities;
     private User dummy = new User("1", "johan", "joahn", 0);
     private FireStoreHelper fireBaseObject;
@@ -44,8 +42,6 @@ public class Main {
         comments.add(new Comment("comment1", Calendar.getInstance().getTime(), "Me"));
         comments.add(new Comment("comment2", Calendar.getInstance().getTime(), "Me"));
         comments.add(new Comment("comment3", Calendar.getInstance().getTime(), "Me")); //TODO
-
-        mAuth = FirebaseAuth.getInstance();
         fireBaseObject = FireStoreHelper.getInstance();
     }
 
@@ -62,11 +58,11 @@ public class Main {
      * @param timestamp
      * @param geoPoint
      */
-    public void createActivity(String title, String description, Timestamp timestamp, GeoPoint geoPoint, Boolean privateEvent, int numAttendees, Category category) {
+    public void createActivity(String title, String description, Timestamp timestamp, GeoPoint geoPoint, Boolean privateEvent, int numAttendees, Category category, String uID) {
         //activities.add(activity);
         //ActivityEvent activityEvent = new ActivityEvent(activity);
         //EventBus.getDefault().post(activityEvent);
-        fireBaseObject.addActivity(mAuth.getCurrentUser().getUid(), timestamp, title, description, geoPoint, privateEvent, category, numAttendees);
+        fireBaseObject.addActivity(uID, timestamp, title, description, geoPoint, privateEvent, category, numAttendees);
     }
 
     public List<Activity> getActivities() {
@@ -106,13 +102,8 @@ public class Main {
         return new Timestamp(300, 300);
     }
 
-    public void writeMessage(String id, String content, User sender, Timestamp time) {
-
-        Message message = new Message(id, content, sender, time);
-        messages.add(message);
-
-        MessageEvent messageEvent = new MessageEvent(message);
-        EventBus.getDefault().post(messageEvent);
+    public void writeMessage(Chat chat, Message message) {
+        FireStoreHelper.getInstance().writeMessageInChat(chat, message);
     }
 
     public List getMessages() {

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
@@ -31,10 +32,13 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     private Button createActivity;
     private Button menu;
+    private Button logOut;
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
     private ArrayList<Activity> cardsList;
+
+    Button button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,10 +57,38 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
                 mAdapter.notifyDataSetChanged();
             }
         });
+/*
+       button = (Button) findViewById(R.id.go_to_btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                FragmentManager fm = getSupportFragmentManager();
+                Map gm = new Map();
+                fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
+
+            }
+        });
+ */
 
         setUpRecyclerView();
         updateFeed();
 
+
+        //Move this to the menu fragment instead of having it here. Change findview to logout
+        //button instead, menu was a temporary hold.
+
+
+        /*logOut = (Button) findViewById(R.id.menu);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchLoginPage();
+                LocalUser.signOut();
+            }
+        });
+
+    */
         createActivity = (Button) findViewById(R.id.createActivity);
         menu = (Button) findViewById(R.id.menu);
         createActivity.setOnClickListener(new View.OnClickListener() {
@@ -81,13 +113,26 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
-    private void updateFeed() {
-        activityFeedViewModel.updateFeed();
+
+
+    //Move this to menu fragment.
+    /*
+    private void launchLoginPage(){
+        Intent intent = new Intent(this, LoginPageView.class);
+        startActivity(intent);
     }
 
+
+     */
+
+
     private void clickMenu() {
-        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        Intent intent = new Intent(this, NotificationView.class);
         startActivity(intent);
+    }
+
+    private void updateFeed() {
+        activityFeedViewModel.updateFeed();
     }
 
     public void launchCreateActivity() {
@@ -104,4 +149,5 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
+
 }
