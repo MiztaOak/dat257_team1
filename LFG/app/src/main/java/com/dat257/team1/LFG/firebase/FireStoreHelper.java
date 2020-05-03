@@ -118,7 +118,6 @@ public class FireStoreHelper {
         DocumentReference activityRef = db.collection("activities").document();
 
         DocumentReference owner = db.document("users/" + uId);
-        DocumentReference chatId = db.document("chats/" + Chat.getId());
         List<DocumentReference> messages = new ArrayList<>();
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);

@@ -10,7 +10,7 @@ import java.util.List;
 public class Chat {
 
 
-    private static String id;
+    private String id;
     private DocumentReference owner;
     private List<DocumentReference> participants;
     private List<DocumentReference> messages;
@@ -37,7 +37,7 @@ public class Chat {
     }
     public Chat(){}
 
-    public static String getId(){return id;}
+    public String getId(){return id;}
 
     public DocumentReference getOwner(){return owner;}
 

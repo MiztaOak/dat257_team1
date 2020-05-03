@@ -76,11 +76,7 @@ public class Main {
 
     public void createActivity(String id, User owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         //participants.add(dummy);
-        List<User> chatParticipants = new ArrayList<>();
-        List<Message> messages = new ArrayList<>();
         Activity activity = new Activity(id, owner.getId(), participants, title, description, time, location);
-        //Does chat need to be added as a parameter in the method...?
-        Chat chat = new Chat(Chat.getId(), owner, chatParticipants, messages);
         activities.add(activity);
 
         ActivityEvent activityEvent = new ActivityEvent(activity);
