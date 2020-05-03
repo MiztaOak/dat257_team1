@@ -111,15 +111,16 @@ public class FireStoreHelper {
      */
     public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location) {
         DocumentReference owner = db.document("users/" + uId);
+        DocumentReference chatId = db.document("chats/" + Chat.getId());
+        List<DocumentReference> messages = new ArrayList<>();
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
-        //Chat chat = new Chat(Main.getInstance().getDummy2().getId(), Main.getInstance().getDummy2().getOwner(), Main.getInstance().getDummy2().getParticipants(), Main.getInstance().getDummy2().getMessages());
-        Chat chat = new Chat();
+        Chat chat = new Chat(chatId.getId(), owner, participants, messages);
 
         Map<String, Object> activity = new HashMap<>();
 
-        
+
         activity.put("title", title);
         activity.put("desc", desc);
         activity.put("time", date);
