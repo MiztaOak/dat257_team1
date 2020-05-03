@@ -145,15 +145,9 @@ public class Main {
     Creates a message and posts it on the Eventbus.
      */
 
-    public void writeMessage(String id, String content, User sender, Timestamp time){
 
-        Message message = new Message(id, content, sender, time);
-        messages.add(message);
-
-        MessageEvent messageEvent = new MessageEvent(message);
-        EventBus.getDefault().post(messageEvent);
-
-
+    public void writeMessage(Chat chat, Message message) {
+        FireStoreHelper.getInstance().writeMessageInChat(chat, message);
     }
 
     public List getMessages(){return messages;}

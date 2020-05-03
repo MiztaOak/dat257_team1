@@ -8,8 +8,6 @@ import java.security.acl.Owner;
 import java.util.List;
 
 public class Chat {
-
-
     private String id;
     private DocumentReference owner;
     private List<DocumentReference> participants;

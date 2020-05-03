@@ -2,11 +2,16 @@ package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-
+import com.dat257.team1.LFG.events.ActivityEvent;
+import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Main;
 
@@ -14,6 +19,9 @@ import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Chat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+
+import com.dat257.team1.LFG.model.Message;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -22,6 +30,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -38,15 +47,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
  * fetch data or upload it to the database.
- *
+ * <p>
  * Author: Johan Ek
- *
  */
 public class FireStoreHelper {
     private static FireStoreHelper instance;
@@ -54,14 +59,19 @@ public class FireStoreHelper {
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
 
-    private FireStoreHelper(){
+    private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(false)
+                .build();
+        db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
         loadActivities();
     }
 
+
     public static FireStoreHelper getInstance() {
-        if(instance == null)
+        if (instance == null)
             instance = new FireStoreHelper();
 
         return instance;
@@ -69,7 +79,7 @@ public class FireStoreHelper {
 
     //just a dummy method will be removed later
     public void addActivity(ActivityEvent activityEvent) {
-        Calendar.getInstance().set(2020,4,30,15,30);
+        Calendar.getInstance().set(2020, 4, 30, 15, 30);
         Activity currentActivity = activityEvent.getActivity();
         DocumentReference owner = db.document("users/" + currentActivity.getId());
 
@@ -165,9 +175,9 @@ public class FireStoreHelper {
                 }
 
                 activities = new ArrayList<>();
-                for(QueryDocumentSnapshot doc : value){
+                for (QueryDocumentSnapshot doc : value) {
                     ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
-                    if(data.hasValidData())
+                    if (data.hasValidData())
                         activities.add(data.toActivity(doc.getId()));
                 }
                 Main.getInstance().setActivities(activities);
@@ -179,12 +189,12 @@ public class FireStoreHelper {
         return db.collection("activities").document(id).collection("comments").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
+                if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
                 List<Comment> comments = new ArrayList<>();
-                for(QueryDocumentSnapshot doc: value){
+                for (QueryDocumentSnapshot doc : value) {
                     CommentDataHolder data = doc.toObject(CommentDataHolder.class);
                     comments.add(data.toComment());
                 }
@@ -196,14 +206,15 @@ public class FireStoreHelper {
 
     /**
      * Method that adds a new comment to a given activity in the db
+     *
      * @param activity the object representing the given activity
-     * @param comment the object representing the comment that should be posted
+     * @param comment  the object representing the comment that should be posted
      */
     public void addCommentToActivity(Activity activity, Comment comment) {
-        Map<String,Object> data = new HashMap<>();
-        data.put("commentText",comment.getCommentText());
-        data.put("poster",db.document("/users/"+comment.getCommenterRef()));
-        data.put("postDate",new Timestamp(comment.getCommentDate()));
+        Map<String, Object> data = new HashMap<>();
+        data.put("commentText", comment.getCommentText());
+        data.put("poster", db.document("/users/" + comment.getCommenterRef()));
+        data.put("postDate", new Timestamp(comment.getCommentDate()));
         db.collection("activities").document(activity.getId()).
                 collection("comments").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -227,29 +238,44 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessage(MessageEvent messageEvent) {
+    public void writeMessageInChat(Chat chat, Message message) {
 
-        DocumentReference owner = db.document("users/" + messageEvent.getMessage().getId());
-        Map<String, Object> message = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
 
-        message.put("sender", owner);
-        message.put("sent", new Timestamp(new Date()));
-        message.put("text", messageEvent.getMessage().getContent());
-        db.collection("message").add(message).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        data.put("messageText", message.getContent());
+        data.put("sender", db.document("/users/"+message.getSender()));
+        data.put("sent", message.getTime());
+        db.collection("chats").document(chat.id).collection("messages").add(data).
+                addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
-                //TODO add code to handle sucess
+                EventBus.getDefault().post(new MessageEvent(true));
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //TODO add code that handles failure
+                EventBus.getDefault().post(false);
             }
         });
     }
 
-    private void loadChat() {
-        //TODO create a load chat like the load activities by first creating a MessageDataHolder
+    public ListenerRegistration loadChat(String id) {
+        return db.collection("chats").document(id).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if(e != null){
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<Message> messages = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: value){
+                    MessageDataHolder data = doc.toObject(MessageDataHolder.class);
+                    messages.add(data.toMessage());
+                }
+                EventBus.getDefault().post(new ChatEvent(messages));
+            }
+        });
+
     }
 
 }
