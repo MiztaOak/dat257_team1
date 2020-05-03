@@ -13,6 +13,7 @@ import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
@@ -38,18 +39,17 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.dat257.team1.LFG.events.ActivityEvent;
+
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
+
 
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -85,39 +85,6 @@ public class FireStoreHelper {
         return instance;
     }
 
-    //just a dummy method will be removed later
-    public void addActivity(ActivityEvent activityEvent) {
-        Calendar.getInstance().set(2020, 4, 30, 15, 30);
-        Activity currentActivity = activityEvent.getActivity();
-        DocumentReference owner = db.document("users/" + currentActivity.getId());
-
-        List<DocumentReference> participants = new ArrayList<>();
-        participants.add(owner);
-
-        Map<String, Object> activity = new HashMap<>();
-
-        activity.put("id", currentActivity.getId());
-        activity.put("title", currentActivity.getTitle());
-        activity.put("desc", currentActivity.getDescription());
-        activity.put("time", currentActivity.getTime());
-        activity.put("location", currentActivity.getLocation());
-        activity.put("owner", currentActivity.getOwner());
-        activity.put("participants", currentActivity.getParticipants());
-
-
-        db.collection("activities").add(activity)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // add some code that handles the success
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                // add some code that handles this exception
-            }
-        });
-    }
 
     /**
      * Method that creates uploads a new activity to the Firestore database
@@ -130,15 +97,16 @@ public class FireStoreHelper {
      * @param desc     The description of the activity
      * @param location The location of the activity
      */
-    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location) {
+    public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location, Boolean privateAct, Category category, int numOfMaxAttendees) {
         WriteBatch batch = db.batch();
         DocumentReference chatRef = db.collection("chats").document();
         DocumentReference activityRef = db.collection("activities").document();
-
-        DocumentReference owner = db.document("users/" + uId);
-        List<DocumentReference> messages = new ArrayList<>();
+        DocumentReference owner = db.document("/users/" + uId);
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
+
+        List<DocumentReference> joinRequestList = new ArrayList<>();
+        List<DocumentReference> messages = new ArrayList<>();
 
         Map<String, Object> activity = new HashMap<>();
         Map<String,Object> chatData = new HashMap<>();
@@ -153,10 +121,15 @@ public class FireStoreHelper {
         activity.put("owner", owner);
         activity.put("location", location);
         activity.put("participants", participants);
+        activity.put("joinRequestList", joinRequestList);
+        activity.put("category", category);
+        activity.put("privateEvent", privateAct);
+        activity.put("numOfMaxAttendees", numOfMaxAttendees);
         activity.put("chat", chatRef);
 
         batch.set(chatRef,chatData);
         batch.set(activityRef,activity);
+
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -164,7 +137,6 @@ public class FireStoreHelper {
 
             }
         });
-
     }
 
     /**
@@ -262,7 +234,7 @@ public class FireStoreHelper {
         data.put("messageText", message.getContent());
         data.put("sender", db.document("/users/"+message.getSender()));
         data.put("sent", message.getTime());
-        db.collection("chats").document(chat.id).collection("messages").add(data).
+        db.collection("chats").document(chat.getId()).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {

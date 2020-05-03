@@ -8,6 +8,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -15,26 +16,19 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.LocalUser;
-import com.dat257.team1.LFG.model.Main;
 
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
-import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
-import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityFeedView extends AppCompatActivity {
+public class ActivityFeedView extends AppCompatActivity implements ICardViewHolderClickListener, LifecycleObserver {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private Button createActivity;
     private Button menu;
@@ -42,7 +36,8 @@ public class ActivityFeedView extends AppCompatActivity {
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    private ArrayList<CardsView> cardsList = new ArrayList<>();
+    private ArrayList<Activity> cardsList;
+
     Button button;
 
     @Override
@@ -50,6 +45,7 @@ public class ActivityFeedView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        cardsList = new ArrayList<>();
         activityFeedViewModel = new ViewModelProvider(this).get(ActivityFeedViewModel.class);
         getLifecycle().addObserver(activityFeedViewModel);
         activityFeedViewModel.onCreate();
@@ -58,7 +54,7 @@ public class ActivityFeedView extends AppCompatActivity {
         mutableActivityList.observe(this, new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activities) {
-                //update feed
+                mAdapter.notifyDataSetChanged();
             }
         });
 /*
@@ -73,17 +69,10 @@ public class ActivityFeedView extends AppCompatActivity {
 
             }
         });
-
  */
-        /*ArrayList<CardsView> cardsList = new ArrayList<>();
-        cardsList.add(new CardsView(R.drawable.ic_android_black_24dp, "Fotboll", "fotboll på heden kl 13:00"));
-        cardsList.add(new CardsView(R.drawable.ic_radio_button_unchecked_black_24dp, "Basketspelare sökes", "söker basketspelare till match 14:00"));
-        cardsList.add(new CardsView(R.drawable.ic_mood_black_24dp, "tennis", "tennis på heden kl 13:00"));
-        cardsList.add(new CardsView(R.drawable.ic_watch_later_black_24dp, "padel", "padel på heden kl 13:00"));
-        */
 
-
-
+        setUpRecyclerView();
+        updateFeed();
 
 
         //Move this to the menu fragment instead of having it here. Change findview to logout
@@ -100,17 +89,6 @@ public class ActivityFeedView extends AppCompatActivity {
         });
 
     */
-
-
-
-        mRecyclerView = findViewById(R.id.recyclerView_feed);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        mAdapter = new CardAdapter(cardsList);
-
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-
         createActivity = (Button) findViewById(R.id.createActivity);
         menu = (Button) findViewById(R.id.menu);
         createActivity.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +106,12 @@ public class ActivityFeedView extends AppCompatActivity {
         }));
     }
 
+    private void setUpRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.recyclerView_feed);
+        mAdapter = new ActivityCardRecyclerAdapter(this, mutableActivityList, this);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
 
 
@@ -147,17 +131,21 @@ public class ActivityFeedView extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public RecyclerView.Adapter getmAdapter() {
-        return mAdapter;
-    }
-
-    public ArrayList<CardsView> getCardsList() {
-        return cardsList;
+    private void updateFeed() {
+        activityFeedViewModel.updateFeed();
     }
 
     public void launchCreateActivity() {
         Log.d(LOG_TAG, "Create activity clicked!");
         Intent intent = new Intent(this, CreateActivityView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onCardClicked() {
+        Log.d(LOG_TAG, "Card Clicked!");
+        Intent intent = new Intent(this, ActivityDescriptionView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

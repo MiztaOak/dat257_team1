@@ -1,6 +1,7 @@
 package com.dat257.team1.LFG.view;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,24 +13,30 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
+import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,6 +53,7 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -56,88 +64,143 @@ public class CreateActivityView extends AppCompatActivity {
 
     int PERMISSION_ID = 12;
 
-    FusedLocationProviderClient fusedLocationProviderClient;
-    Geocoder geocoder;
-    String address;
-    String city;
-    String country;
-    Location currentLocation;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private PlacesClient placesClient;
+    private Geocoder geocoder;
+    private AutocompleteSupportFragment autocompleteFragment;
+    private Location location;
+    private int numOfAttendees;
+    private EditText numAttendees;
     private TextView titleTextView;
     private TextView descTextView;
-    private TextView addressTextView;
-    private TextView timeTextView;
-    private TextView numberOfAttendeesTextView;
+    private TimePicker timePicker;
+    private CalendarView calendarView;
+    private Spinner categorySpinner;
+    private CheckBox privateEvent;
     private CreateActivityViewModel createActivityViewModel;
-    private ActivityFeedViewModel createActivityFeedViewModel;
-    private ActivityFeedView activityFeedView;
-    private String st;
-    private MutableLiveData<List<Activity>> mutableActivityList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_activity);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key));
-        geocoder = new Geocoder(this, Locale.getDefault());
-        PlacesClient placesClient = Places.createClient(this);
+
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
-        titleTextView = ((EditText) findViewById(R.id.editTitle));
-        descTextView = ((EditText) findViewById(R.id.editDesc));
-        addressTextView = ((EditText) findViewById(R.id.editAddress));
-        timeTextView = ((EditText) findViewById(R.id.editTime));
-        numberOfAttendeesTextView = ((EditText) findViewById(R.id.editTitle));
+        initViews();
 
         Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
-        Button backButton = (Button) findViewById(R.id.backButton);
-
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActAddress(), getActTime());
-                insertActivity();
-                openFindActivity();
+                createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActTime(), getActLocation(), isPrivateEvent(), getNumOfAttendees(), getCategory());
+                openActivityFeed();
             }
         });
-
-        final Observer<Activity> nameObserver = new Observer<Activity>() {
-            @Override
-            public void onChanged(final Activity newActivity) {
-                // Update the UI, in this case, a TextView.
-
-            }
-        };
-
-        createActivityViewModel.getCurrentActivity().observe(this, nameObserver);
-
+        ImageButton backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFindActivity();
+                openActivityFeed();
+            }
+        });
+
+        ImageButton incNumAttendees = findViewById(R.id.increaseNumAttendees);
+        incNumAttendees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (numOfAttendees < 999999) {
+                    numOfAttendees++;
+                    numAttendees.setText(numOfAttendees);
+                }
+            }
+        });
+
+        ImageButton decNumAttendees = findViewById(R.id.decreaseNumAttendees);
+        decNumAttendees.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (numOfAttendees > 0) {
+                    numOfAttendees--;
+                    numAttendees.setText(numOfAttendees);
+                }
+            }
+        });
+        titleTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (titleTextView.getText().toString().length() <= 0) {
+                    titleTextView.setError("Enter title", getResources().getDrawable(R.drawable.ic_error_red_24dp));
+                }
+            }
+        });
+
+        descTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (descTextView.getText().toString().length() <= 0) {
+                    descTextView.setError("Enter description", getResources().getDrawable(R.drawable.ic_error_red_24dp));
+                }
+            }
+        });
+
+        numAttendees.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                numOfAttendees = Integer.parseInt(charSequence.toString());
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (editable.toString().matches("[0-9]") && editable.toString().length() > 0) {
+                    numOfAttendees = Integer.parseInt(editable.toString());
+                } else {
+                    numAttendees.setText(numOfAttendees);
+                    numAttendees.setError("Only numbers allowed", getResources().getDrawable(R.drawable.ic_error_red_24dp));
+                }
             }
         });
 
         // Initialize the AutocompleteSupportFragment.
-        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+        autocompleteFragment = (AutocompleteSupportFragment)
                 getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
-        //autocompleteFragment.setTypeFilter()
-        //autocompleteFragment.setCountries("SE");
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-
-
         // Set up a PlaceSelectionListener to handle the response.
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                currentLocation.setLatitude(place.getLatLng().latitude);
-                currentLocation.setLatitude(place.getLatLng().longitude);
+                location.setLatitude(place.getLatLng().latitude);
+                location.setLatitude(place.getLatLng().longitude);
                 // TODO
-                addressTextView.setText(String.format("%s,%s", place.getName(), place.getId()));
+                //editAddress.setText(place.getAddress());
             }
 
             @Override
@@ -145,13 +208,51 @@ public class CreateActivityView extends AppCompatActivity {
                 // TODO
             }
         });
+
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
+                //TODO maybe
+            }
+        });
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
+                //TODO maybe
+            }
+        });
+    }
+
+    private void initViews() {
+        categorySpinner = findViewById(R.id.categoryspinner); //Category
+        addCategoriesToSpinner();
+
+        Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key)); //Location
+        placesClient = Places.createClient(this);
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        titleTextView = ((EditText) findViewById(R.id.editTitle)); //Title
+
+        descTextView = ((EditText) findViewById(R.id.editDesc)); //Description
+
+        privateEvent = findViewById(R.id.privateCheckBox); //private event
+
+        numOfAttendees = 0;
+        numAttendees = findViewById(R.id.numAttendeesEditTxtView); //Number of attendees
+
+        timePicker = findViewById(R.id.timePicker); //time && date
+        timePicker.setIs24HourView(true);
+        timePicker.setHour(0);
+        timePicker.setMinute(0);
+        calendarView = findViewById(R.id.calendarView);
     }
 
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
             Location lastLocation = locationResult.getLastLocation();
-            addressTextView.setText(extrapolateLocation(lastLocation));
+            autocompleteFragment.setText(extrapolateLocation(lastLocation));
             //TODO
         }
     };
@@ -201,11 +302,8 @@ public class CreateActivityView extends AppCompatActivity {
                                 if (location == null) {
                                     requestNewLocationData();
                                 } else {
-                                    currentLocation = location;
-                                    addressTextView.setText(extrapolateLocation(location));
-                                    //latTextView.setText(location.getLatitude()+"");
-                                    //lonTextView.setText(location.getLongitude()+"");
-                                    //TODO
+                                    CreateActivityView.this.location = location;
+                                    autocompleteFragment.setText(extrapolateLocation(location));
                                 }
                             }
                         }
@@ -245,39 +343,27 @@ public class CreateActivityView extends AppCompatActivity {
 
     }
 
-    public void insertActivity() {
-        activityFeedView.getCardsList().add(new CardsView(R.drawable.ic_android_black_24dp, getActTitle(), getActDesc()));
-        activityFeedView.getmAdapter().notifyItemInserted(0);
+    private String extrapolateLocation(Location location) {
+        try {
+            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+            return addresses.get(0).getAddressLine(0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "null"; //TODO
     }
 
-    public void openFindActivity() {
+    private void addCategoriesToSpinner() {
+        categorySpinner.setAdapter(new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_dropdown_item, Category.values()));
+    }
+
+    public void openActivityFeed() {
         Log.d(LOG_TAG, "Activity created!");
         Intent intent = new Intent(this, ActivityFeedView.class);
-
-        //Just test to display values in ActivityFeedView
-        //st = titleTextView.getText().toString();
-        //intent.putExtra("Value", st);
 
         startActivity(intent);
     }
 
-    private String extrapolateLocation(Location location) {
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
-            address = addresses.get(0).getAddressLine(0);
-            //city = addresses.get(0).getLocality();
-            //country = addresses.get(0).getCountryName(); //TODO
-            return address;// + ", " + city;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return "null"; //TODO
-    }
-
-    private boolean isFormValid() {
-        return true; //TODO
-    }
     public void getLocationOnClick(View view) {
         getUserLocation();
     }
@@ -290,15 +376,24 @@ public class CreateActivityView extends AppCompatActivity {
         return descTextView.getText().toString();
     }
 
-    private String getActAddress() {
-        return addressTextView.getText().toString();
+    private Location getActLocation() {
+        return location;
     }
 
-    private String getActTime() {
-        return timeTextView.getText().toString();
+    private Long getActTime() {
+        return (calendarView.getDate() + (timePicker.getMinute() * 60000) + (timePicker.getHour() * 3600000));
     }
 
-    public String getNumOfAttendees() {
-        return numberOfAttendeesTextView.getText().toString();
+    private int getNumOfAttendees() {
+        return numOfAttendees;
     }
+
+    private boolean isPrivateEvent() {
+       return privateEvent.isChecked();
+    }
+
+    private Category getCategory() {
+       return (Category) categorySpinner.getSelectedItem();
+    }
+
 }

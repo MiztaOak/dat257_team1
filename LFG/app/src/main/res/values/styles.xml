@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -37,6 +37,11 @@
     <style name="my_location_button_style" parent="Widget.AppCompat.Button.Colored">
         <item name="colorButtonNormal">#4286F5</item>
         <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="back_button_style" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@android:color/transparent</item>
+        <item name="android:textColor">@color/textInputLayout</item>
     </style>
 
 

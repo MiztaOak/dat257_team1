@@ -27,8 +27,11 @@
         <activity android:name=".service.Map" />
         <activity
             android:name="com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView"
-            android:label="Activity Description" />
-        <activity android:name=".view.CreateActivityView" />
+            android:label="Activity Description">
+        </activity>
+        <activity android:name=".view.CreateActivityView"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".view.loginPage.LoginPageView"
             android:label="@string/login_page_view"
