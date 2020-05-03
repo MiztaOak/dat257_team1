@@ -9,6 +9,7 @@ import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
 
 import org.greenrobot.eventbus.EventBus;
@@ -17,6 +18,7 @@ import com.google.firebase.Timestamp;
 
 
 import java.io.IOException;
+import java.security.acl.Owner;
 import java.time.LocalDateTime;
 
 import java.util.ArrayList;
@@ -75,7 +77,6 @@ public class Main {
     public void createActivity(String id, User owner, List<String> participants, String title, String description, Timestamp time, GeoPoint location) {
         //participants.add(dummy);
         Activity activity = new Activity(id, owner.getId(), participants, title, description, time, location);
-        Chat chat = new Chat();
         activities.add(activity);
 
         ActivityEvent activityEvent = new ActivityEvent(activity);
@@ -84,9 +85,9 @@ public class Main {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void createActivity (String title, String description, String time, String adress) {
+    public void createActivity (String title, String description, String time, String address) {
         List<String> participants = new ArrayList<>();
-        //This method incocation does not work, right now it just return a dummy value. See over the method!
+        //This method invocation does not work, right now it just return a dummy value. See over the method!
         Timestamp timestamp = convertToTimestamp(time);
         createActivity(activityID, dummy, participants, title, description, timestamp, new GeoPoint(30, 20));
     }
