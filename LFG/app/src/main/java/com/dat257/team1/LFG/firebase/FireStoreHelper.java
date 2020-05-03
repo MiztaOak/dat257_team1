@@ -13,8 +13,10 @@ import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Chat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -25,6 +27,7 @@ import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.dat257.team1.LFG.events.ActivityEvent;
+import com.google.firebase.firestore.WriteBatch;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -110,16 +113,21 @@ public class FireStoreHelper {
      * @param location The location of the activity
      */
     public void addActivity(String uId, Timestamp date, String title, String desc, GeoPoint location) {
+        WriteBatch batch = db.batch();
+        DocumentReference chatRef = db.collection("chats").document();
+        DocumentReference activityRef = db.collection("activities").document();
+
         DocumentReference owner = db.document("users/" + uId);
         DocumentReference chatId = db.document("chats/" + Chat.getId());
         List<DocumentReference> messages = new ArrayList<>();
         List<DocumentReference> participants = new ArrayList<>();
         participants.add(owner);
 
-        Chat chat = new Chat(chatId.getId(), owner, participants, messages);
-
         Map<String, Object> activity = new HashMap<>();
+        Map<String,Object> chatData = new HashMap<>();
 
+        chatData.put("participants",participants);
+        chatData.put("messages",messages);
 
         activity.put("title", title);
         activity.put("desc", desc);
@@ -128,19 +136,15 @@ public class FireStoreHelper {
         activity.put("owner", owner);
         activity.put("location", location);
         activity.put("participants", participants);
-        activity.put("chat", chat);
+        activity.put("chat", chatRef);
 
+        batch.set(chatRef,chatData);
+        batch.set(activityRef,activity);
 
-        db.collection("activities").add(activity)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        // add some code that handles the success
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
+        batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-                // add some code that handles this exception
+            public void onComplete(@NonNull Task<Void> task) {
+
             }
         });
 
