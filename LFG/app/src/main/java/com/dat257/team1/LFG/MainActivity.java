@@ -1,10 +1,11 @@
 package com.dat257.team1.LFG;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.ActivityFeedView;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -16,21 +17,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FireStoreHelper.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        if(currentUser != null){
+        if (currentUser != null) {
             openFindActivity();
-        } else{
+        } else {
             openLoginPage();
         }
 
     }
 
-    public void openFindActivity(){
+    public void openFindActivity() {
         Intent intent = new Intent(this, ActivityFeedView.class);
         startActivity(intent);
     }
 
-    public void openLoginPage(){
+
+    public void openLoginPage() {
         Intent intent = new Intent(this, LoginPageView.class);
         startActivity(intent);
     }
