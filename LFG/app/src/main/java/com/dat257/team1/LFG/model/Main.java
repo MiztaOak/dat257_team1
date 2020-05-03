@@ -79,6 +79,9 @@ public class Main {
 
     public void updateActivityFeed() {
         activities = fireBaseObject.getActivities(); //TODO don't get all activities
+        List<String> lll = new ArrayList<>();
+        List<User> ll1l = new ArrayList<>();
+        activities.add(new Activity("w","d",lll,"ss","ss",new Timestamp(1,1), new GeoPoint(1,1),new Chat(),false,3,Category.Hiking, ll1l));
         ActivityFeedEvent activityFeedEvent = new ActivityFeedEvent(getActivities());
         EventBus.getDefault().post(activityFeedEvent);
     }

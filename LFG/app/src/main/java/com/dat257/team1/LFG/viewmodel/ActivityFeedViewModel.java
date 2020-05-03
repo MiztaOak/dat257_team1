@@ -34,20 +34,14 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
     }
 
     public void updateFeed() {
-        Main.getInstance().updateActivityFeed();
+       Main.getInstance().updateActivityFeed();
     }
 
     @Subscribe
     public void onUpdateActivityFeedEvent(ActivityFeedEvent event) {
+        getMutableActivityList(); //TODO Ugly
         mutableActivityList.postValue(event.getActivityList());
     }
-
-    @Subscribe
-    public void onUpdatedFeedActivityEvent(ActivityEvent event) {
-         MutableLiveData<List<Activity>> mutableLiveData = getMutableActivityList();
-         //Objects.requireNonNull(mutableLiveData.getValue()).add(event.getActivity()); //TODO UGLY
-    }
-
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {

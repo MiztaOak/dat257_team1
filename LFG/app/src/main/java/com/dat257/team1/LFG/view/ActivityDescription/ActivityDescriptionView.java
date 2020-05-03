@@ -119,7 +119,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        activityDescriptionViewModel.startup();
+        activityDescriptionViewModel.onCreate();
     }
 
     @Override

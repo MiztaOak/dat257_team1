@@ -71,7 +71,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
         comments.setValue(event.getComments());
     }
 
-    public void startup(){
+    public void startup(){ //TODO
         populateMutableActivity();
         listener = FireStoreHelper.getInstance().loadComments(mutableActivity.getValue().getId());
     }
