@@ -22,7 +22,7 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.activity_feed_tab);
         tab1 = findViewById(R.id.recyclerView_feed);
-        tab2 = findViewById(R.id.map);
+        //tab2 = findViewById(R.id.mapFragment);
         viewPager = findViewById(R.id.view_pager_feed);
 
         pageAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());

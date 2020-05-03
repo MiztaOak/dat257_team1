@@ -79,7 +79,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     }
 
     public void joinActivity() {
-        FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),activity.getValue().getId());
+        FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),mutableActivity.getValue().getId());
     }
 }
 

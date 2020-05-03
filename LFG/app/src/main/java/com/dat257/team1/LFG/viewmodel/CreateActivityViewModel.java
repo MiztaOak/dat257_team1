@@ -9,6 +9,7 @@ import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Main;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.time.LocalDateTime;
@@ -45,7 +46,7 @@ public class CreateActivityViewModel extends ViewModel {
         GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
         Timestamp timestamp = new Timestamp((time/1000),0);
         //if (checkFields(title, description, timestamp, geoPoint, category) == 0) {
-            Main.getInstance().createActivity(title, description, timestamp, geoPoint, privateEvent, numAttendees, category);
+            Main.getInstance().createActivity(title, description, timestamp, geoPoint, privateEvent, numAttendees, category, FirebaseAuth.getInstance().getUid());
         //}
     }
 
