@@ -5,7 +5,7 @@ import java.util.List;
 public class Chat {
 
 
-    private String id;
+    public String id;
     private User owner;
     private List<User> participants;
     private List<Message> messages;

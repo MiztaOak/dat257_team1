@@ -6,13 +6,14 @@ public class MessageEvent {
 
 
 
-    private Message message;
+    private boolean success;
 
-    public MessageEvent(Message message) {
-        this.message = message;
+    public MessageEvent (boolean success) {
+        this.success = success;
     }
 
-    public Message getMessage(){
-        return message;
+
+    public boolean isSuccess() {
+        return success;
     }
 }
