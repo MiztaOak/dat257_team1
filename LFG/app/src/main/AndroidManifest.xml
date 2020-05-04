@@ -3,13 +3,12 @@
     package="com.dat257.team1.LFG">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
         android:required="true" />
-
 
     <application
         android:allowBackup="true"
@@ -18,18 +17,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity
+            android:name=".MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <activity
-            android:name="com.dat257.team1.LFG.service.GoogleMaps"
-            android:label="@string/title_activity_maps"/>
+            android:name=".service.GoogleMaps"
+            android:label="@string/title_activity_maps" />
         <activity
-            android:name="com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView"
-            android:label="Activity Description">
-        </activity>
+            android:name=".view.ActivityDescription.ActivityDescriptionView"
+            android:label="Activity Description"></activity>
         <activity android:name=".view.CreateActivityView" />
         <activity
             android:name=".view.loginPage.LoginPageView"

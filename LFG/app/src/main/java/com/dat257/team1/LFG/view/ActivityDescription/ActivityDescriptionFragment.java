@@ -22,11 +22,8 @@ import com.google.android.gms.maps.MapView;
 
 public class ActivityDescriptionFragment extends Fragment {
 
-
     private Button addComment;
     private Button joinActivity;
-
-
 
     @Nullable
     @Override
