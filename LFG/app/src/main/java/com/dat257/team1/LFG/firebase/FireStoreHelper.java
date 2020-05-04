@@ -5,7 +5,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
@@ -18,9 +17,6 @@ import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
-
-import com.dat257.team1.LFG.events.MessageEvent;
-import com.dat257.team1.LFG.model.Chat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 
@@ -45,8 +41,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 
-
-
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
@@ -66,6 +60,7 @@ public class FireStoreHelper {
     private FirebaseFirestore db;
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
+    Map<String,String> idToNameDictionary;
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
@@ -74,6 +69,8 @@ public class FireStoreHelper {
                 .build();
         db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
+        idToNameDictionary = new HashMap<>();
+        loadUserNames();
         loadActivities();
     }
 
@@ -293,7 +290,10 @@ public class FireStoreHelper {
                         continue;
                     List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("joinRequestList"); //evil row
                     for(DocumentReference ref: waitingList){
-                        notifications.add(new JoinNotification(activityID,title,ref.getId(),"help")); //what to do about name, redundant data?
+                        if(idToNameDictionary.containsKey(ref.getId()))
+                            notifications.add(new JoinNotification(activityID,title,ref.getId(),idToNameDictionary.get(ref.getId()))); //what to do about name, redundant data?
+                        else
+                            notifications.add(new JoinNotification(activityID,title,ref.getId(),"name could not be found"));
                     }
                 }
                 EventBus.getDefault().post(new JoinNotificationEvent(notifications));
@@ -317,7 +317,7 @@ public class FireStoreHelper {
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
             public Void apply(Transaction transaction) throws FirebaseFirestoreException{
-                //DocumentSnapshot snapshot = transaction.get(docRef);
+                DocumentSnapshot snapshot = transaction.get(docRef);
                 transaction.update(docRef,"joinRequestList", FieldValue.arrayRemove(db.document("/users/"+uID)));
                 if(accept)
                     transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
@@ -382,6 +382,23 @@ public class FireStoreHelper {
             public void onFailure(@NonNull Exception e) {
                 EventBus.getDefault().post(new JoinActivityEvent(false,"An unknown error has occurred"));
                 Log.w(TAG, "Transaction failure.", e);
+            }
+        });
+    }
+
+    private void loadUserNames(){
+        db.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                Map<String,String> map = new HashMap<>();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    map.put(doc.getId(), (String) doc.get("name"));
+                }
+                idToNameDictionary = map;
             }
         });
     }
