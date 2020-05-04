@@ -1,5 +1,9 @@
 package com.dat257.team1.LFG.viewmodel;
+import android.widget.Toast;
+
 import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
@@ -78,5 +82,6 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     public void joinActivity() {
         FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),mutableActivity.getValue().getId());
     }
+
 }
 

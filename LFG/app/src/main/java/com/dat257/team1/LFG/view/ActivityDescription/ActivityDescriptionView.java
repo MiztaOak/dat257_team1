@@ -26,6 +26,7 @@ import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
@@ -72,7 +73,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
                 //   updateActivityDescriptionMap(locationTest);
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
-                activitySchedule.setText(activity.getTimestamp().toString());
+                activitySchedule.setText(activity.getTimestamp().toDate().toString());
                 activityImage.setImageResource(R.drawable.dog_image_activity);
             }
         });
@@ -130,6 +131,8 @@ public class ActivityDescriptionView extends AppCompatActivity {
         userName.setText("User Name");
         activitySchedule.setText("Time/Date");
         activityDescription.setText("Activity Description");
+
+        EventBus.getDefault().register(this); //if you don't like it solve the toasts without this you nerd
     }
 
 
@@ -147,6 +150,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
+        EventBus.getDefault().unregister(this);
         activityDescriptionViewModel.cleanup();
     }
 
@@ -174,10 +178,9 @@ public class ActivityDescriptionView extends AppCompatActivity {
 
     @Subscribe
     public void handleJoinEvent(JoinActivityEvent event) {
-        if (!event.isSuccess()) {
-            Toast.makeText(getApplicationContext(), event.getMessage(), Toast.LENGTH_SHORT).show();
-        } else {
-            //do something maybe leave this view?
+        Toast.makeText(getApplicationContext(), event.getMessage(), Toast.LENGTH_SHORT).show();
+        if (event.isSuccess()) {
+            //leave view
         }
     }
 
