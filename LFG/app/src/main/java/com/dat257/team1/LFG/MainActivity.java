@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements
             openLoginPage();
         }
         //openFindActivity();
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
+       // Intent intent = new Intent(this, MenuActivity.class);
+       // startActivity(intent);
 
     }
 

@@ -30,7 +30,7 @@ public class Main {
     private List<Activity> activities;
     private User dummy = new User("1", "johan", "joahn", 0);
     private FireStoreHelper fireBaseObject;
-    private String activityID = "Dz0LrkQTOeefy7dqqx3E97xBHLE2";
+    private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
     private List<Message> messages;
@@ -77,7 +77,7 @@ public class Main {
         activities = fireBaseObject.getActivities(); //TODO don't get all activities
         List<String> lll = new ArrayList<>();
         List<User> ll1l = new ArrayList<>();
-        activities.add(new Activity("w","d",lll,"ss","ss",new Timestamp(1,1), new GeoPoint(1,1),new Chat(),false,3,Category.Hiking, ll1l));
+        activities.add(new Activity("w","d",lll,"ss","ss",new Timestamp(1,1), new GeoPoint(1,1),"chatId",false,3,Category.Hiking, ll1l));
         ActivityFeedEvent activityFeedEvent = new ActivityFeedEvent(getActivities());
         EventBus.getDefault().post(activityFeedEvent);
     }

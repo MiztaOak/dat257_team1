@@ -29,14 +29,14 @@ public class ActivityDataHolder {
     public Boolean privateAct;
     public int numOfAttendees;
     public Category category;
-    public Chat chat;
+    public DocumentReference chat;
     public List<DocumentReference> joinRequestList;
 
 
     public ActivityDataHolder() {
     }
 
-    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location, Chat chat, Boolean privateAct, int numAttendees, Category category, List<DocumentReference> joinRequestList) {
+    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location, DocumentReference chat, Boolean privateAct, int numAttendees, Category category, List<DocumentReference> joinRequestList) {
         this.owner = owner;
         this.participants = participants;
         this.title = title;
@@ -71,11 +71,11 @@ public class ActivityDataHolder {
         return category;
     }
 
-    public Chat getChat() {
+    public DocumentReference getChat() {
         return chat;
     }
 
-    public void setChat(Chat chat) {
+    public void setChat(DocumentReference chat) {
         this.chat = chat;
     }
 
@@ -175,7 +175,7 @@ public class ActivityDataHolder {
             //joinReqList.add(); //TODO
         }
 
-        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat,privateAct,numOfAttendees,category, joinReqList );
+        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat.getId(),privateAct,numOfAttendees,category, joinReqList );
     }
 
     public boolean hasValidData(){

@@ -26,7 +26,6 @@ public class Chat {
     }
 
     public Chat (String id, User owner2, List<User> participants2, List<Message> messages2) {
-
         this.id = id;
         this.owner2=owner2;
         this.participants2=participants2;

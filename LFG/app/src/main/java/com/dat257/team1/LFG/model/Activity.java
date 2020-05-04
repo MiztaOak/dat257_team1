@@ -30,7 +30,7 @@ public class Activity {
     private Timestamp timestamp;
     private String owner;
     private List<String> participants;
-    private Chat chat;
+    private String chatRef;
     private Boolean privateAct;
     private int numAttendees;
     private Category category;
@@ -47,7 +47,7 @@ public class Activity {
      * @param participants
      */
 
-    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp timestamp, GeoPoint location, Chat chat, Boolean privateAct, int numAttendees, Category category, List<User> joinRequestList) {
+    public Activity(String id, String owner, List<String> participants, String title, String description, Timestamp timestamp, GeoPoint location, String chatRef, Boolean privateAct, int numAttendees, Category category, List<User> joinRequestList) {
 
         this.id = id;
         this.title = title;
@@ -56,19 +56,19 @@ public class Activity {
         this.timestamp = timestamp;
         this.owner = owner;
         this.participants = participants;
-        this.chat = chat;
+        this.chatRef = chatRef;
         this.privateAct = privateAct;
         this.numAttendees = numAttendees;
         this.category = category;
         this.joinRequestList = joinRequestList;
     }
 
-    public Chat getChat() {
-        return chat;
+    public String getChatRef() {
+        return chatRef;
     }
 
-    public void setChat(Chat chat) {
-        this.chat = chat;
+    public void setChatRef(String chatRef) {
+        this.chatRef = chatRef;
     }
 
     public Boolean getPrivateAct() {
