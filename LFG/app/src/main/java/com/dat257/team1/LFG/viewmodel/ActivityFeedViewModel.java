@@ -6,19 +6,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.dat257.team1.LFG.events.ActivityEvent;
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Main;
-import com.dat257.team1.LFG.view.ActivityFeedView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
-import java.util.Objects;
 
-public class ActivityFeedViewModel extends ViewModel implements LifecycleObserver{
+public class ActivityFeedViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<List<Activity>> mutableActivityList;
 
@@ -27,14 +24,14 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
 
 
     public MutableLiveData<List<Activity>> getMutableActivityList() {
-        if(mutableActivityList == null) {
+        if (mutableActivityList == null) {
             mutableActivityList = new MutableLiveData<>();
         }
         return mutableActivityList;
     }
 
     public void updateFeed() {
-       Main.getInstance().updateActivityFeed();
+        Main.getInstance().updateActivityFeed();
     }
 
     @Subscribe
@@ -45,9 +42,13 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }
 
+    public void onCardClick(int pos) {
+        if (mutableActivityList.getValue() != null)
+            Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
+    }
 }

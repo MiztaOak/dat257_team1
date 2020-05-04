@@ -26,10 +26,6 @@ import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 
-import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
@@ -71,9 +67,9 @@ public class ActivityDescriptionView extends AppCompatActivity {
         activityDescriptionViewModel.getMutableActivity().observe(this, new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
-             //  GeoPoint location = new GeoPoint(activity.getLocation().getLatitude(), activity.getLocation().getLongitude());
-              LatLng locationTest = new LatLng(57.708870, 11.974560);
-             //   updateActivityDescriptionMap(locationTest);
+                //  GeoPoint location = new GeoPoint(activity.getLocation().getLatitude(), activity.getLocation().getLongitude());
+                LatLng locationTest = new LatLng(57.708870, 11.974560);
+                //   updateActivityDescriptionMap(locationTest);
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toString());
@@ -140,12 +136,13 @@ public class ActivityDescriptionView extends AppCompatActivity {
     private void fetchActivityLocation() {
 
     }
-
+/*
     @Override
     protected void onStart() {
         super.onStart();
         activityDescriptionViewModel.onCreate();
     }
+ */
 
     @Override
     protected void onStop() {
@@ -176,10 +173,10 @@ public class ActivityDescriptionView extends AppCompatActivity {
     }
 
     @Subscribe
-    public void handleJoinEvent(JoinActivityEvent event){
-        if(!event.isSuccess()){
-            Toast.makeText(getApplicationContext(),event.getMessage(),Toast.LENGTH_SHORT).show();
-        }else{
+    public void handleJoinEvent(JoinActivityEvent event) {
+        if (!event.isSuccess()) {
+            Toast.makeText(getApplicationContext(), event.getMessage(), Toast.LENGTH_SHORT).show();
+        } else {
             //do something maybe leave this view?
         }
     }

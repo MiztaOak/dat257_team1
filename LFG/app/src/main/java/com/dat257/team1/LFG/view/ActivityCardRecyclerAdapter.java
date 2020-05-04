@@ -44,7 +44,7 @@ public class ActivityCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         cardViewHolder.itemView.setOnClickListener(new View.OnClickListener() { //TODO Bad performance should be in constructor
             @Override
             public void onClick(View view) {
-                iCardViewHolderClickListener.onCardClicked();
+                iCardViewHolderClickListener.onCardClicked(position);
             }
         });
         ImageView imageView = ((CardViewHolder) cardViewHolder).mImageView;
