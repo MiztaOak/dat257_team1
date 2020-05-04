@@ -21,6 +21,20 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Profile</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+
+    <string name="home_second">Home Second</string>
     <string name="activity_name">Activity name</string>
     <string name="create_activity">Create activity</string>
     <string name="choose_category">Category</string>
@@ -32,5 +46,4 @@
     <string name="peoples">Peoples</string>
     <string name="date_amp_time"><![CDATA[Date & Time]]></string>
     <string name="join_notification_text">%1$s wants to join your activity %2$s.</string>
-
 </resources>

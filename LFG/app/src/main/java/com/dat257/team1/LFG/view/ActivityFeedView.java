@@ -3,11 +3,19 @@ package com.dat257.team1.LFG.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import androidx.appcompat.widget.Toolbar;
 
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -17,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+
 
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
@@ -36,6 +45,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     private ActivityFeedViewModel activityFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
+    private DrawerLayout drawerLayout;
     private ArrayList<Activity> cardsList;
 
     Button button;
@@ -90,7 +100,6 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     */
         createActivity = (Button) findViewById(R.id.createActivity);
-        menu = (Button) findViewById(R.id.menu);
         createActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,14 +107,26 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
             }
         });
 
+        /*menu = (Button) findViewById(R.id.menu);
         menu.setOnClickListener((new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                clickMenu();
+            public void onClick(View v)
+            {
+                //TODO create method invocation
             }
-        }));
+        }));*/
     }
 
+
+    @Override
+    public void onBackPressed() {
+        if(drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+  
     private void setUpRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recyclerView_feed);
         mAdapter = new ActivityCardRecyclerAdapter(this, mutableActivityList, this);
