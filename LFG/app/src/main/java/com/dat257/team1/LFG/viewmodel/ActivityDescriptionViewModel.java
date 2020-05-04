@@ -37,6 +37,8 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
         if(!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
+        mutableActivity.setValue(Main.getInstance().getFocusedActivity());
+        listener = FireStoreHelper.getInstance().loadComments(mutableActivity.getValue().getId());
     }
 
     public MutableLiveData<List<Comment>> getMutableComments() {
@@ -67,11 +69,6 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     @Subscribe
     public void handleBatchCommentEvent(BatchCommentEvent event){
         comments.setValue(event.getComments());
-    }
-
-    public void startup(){ //TODO
-        populateMutableActivity();
-        listener = FireStoreHelper.getInstance().loadComments(mutableActivity.getValue().getId());
     }
 
     public void cleanup(){

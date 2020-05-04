@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
@@ -159,6 +160,7 @@ public class FireStoreHelper {
                         activities.add(data.toActivity(doc.getId()));
                 }
                 Main.getInstance().setActivities(activities);
+                EventBus.getDefault().post(new ActivityFeedEvent(activities));
             }
         });
     }
