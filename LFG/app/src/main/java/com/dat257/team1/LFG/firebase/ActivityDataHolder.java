@@ -1,7 +1,10 @@
 package com.dat257.team1.LFG.firebase;
 
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
+import com.dat257.team1.LFG.model.User;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
@@ -23,11 +26,17 @@ public class ActivityDataHolder {
     public Timestamp time;
     public Timestamp creationDate;
     public GeoPoint location;
+    public Boolean privateAct;
+    public int numOfAttendees;
+    public Category category;
+    public Chat chat;
+    public List<DocumentReference> joinRequestList;
+
 
     public ActivityDataHolder() {
     }
 
-    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location) {
+    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location, Chat chat, Boolean privateAct, int numAttendees, Category category, List<DocumentReference> joinRequestList) {
         this.owner = owner;
         this.participants = participants;
         this.title = title;
@@ -35,6 +44,51 @@ public class ActivityDataHolder {
         this.time = time;
         this.creationDate = creationDate;
         this.location = location;
+        this.chat = chat;
+        this.privateAct = privateAct;
+        this.numOfAttendees = numAttendees;
+        this.category = category;
+        this.joinRequestList = joinRequestList;
+    }
+
+    public Boolean getPrivateAct() {
+        return privateAct;
+    }
+
+    public void setPrivateAct(Boolean privateAct) {
+        this.privateAct = privateAct;
+    }
+
+    public int getNumOfAttendees() {
+        return numOfAttendees;
+    }
+
+    public void setNumOfAttendees(int numOfAttendees) {
+        this.numOfAttendees = numOfAttendees;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public List<DocumentReference> getJoinRequestList() {
+        return joinRequestList;
+    }
+
+    public void setJoinRequestList(List<DocumentReference> joinRequestList) {
+        this.joinRequestList = joinRequestList;
     }
 
     public DocumentReference getOwner() {
@@ -104,16 +158,24 @@ public class ActivityDataHolder {
                 ", time=" + time +
                 ", creationDate=" + creationDate +
                 ", location=" + location +
+                ", chat=" + chat +
+                ", privateEvent=" + privateAct +
+                ", numOfAttendees=" + numOfAttendees +
+                ", category=" + category +
+                ", joinRequests=" + joinRequestList +
                 '}';
     }
-
     public Activity toActivity(String id){
         List<String> participantStrings = new ArrayList<>();
         for(DocumentReference ref: participants){
             participantStrings.add(ref.toString());
         }
+        List<User> joinReqList = new ArrayList<>();
+        for(DocumentReference ref: joinRequestList){
+            //joinReqList.add(); //TODO
+        }
 
-        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location);
+        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat,privateAct,numOfAttendees,category, joinReqList );
     }
 
     public boolean hasValidData(){
