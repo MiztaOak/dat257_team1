@@ -71,7 +71,7 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
      */
     void fetchCurrentLocation() {
         LatLng currentLocation = new LatLng(locationService.getLocation().getLatitude(), locationService.getLocation().getLongitude());
-        gm = new MapService(currentLocation);
+        gm = new MapService(currentLocation, this);
     }
 
     /**

@@ -1,7 +1,9 @@
 package com.dat257.team1.LFG.service;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,6 +39,8 @@ public class MapService extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap gm;
     private MapView mMapView;
+    private StringBuilder stringBuilder;
+    private Context context;
 
     public void setActivityList(List<Activity> activityList) {
         this.activityList = activityList;
@@ -46,11 +51,16 @@ public class MapService extends Fragment implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
 
-    public MapService(LatLng currentLocation) {
+    public MapService() {
+    }
+
+    public MapService(LatLng currentLocation, Context context) {
+        this.context = context;
         this.currentLocation = currentLocation;
     }
 
-    public MapService(LatLng currentLocation, List<Activity> activitiesLocations) {
+    public MapService(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
+        this.context = context;
         this.activityList = activitiesLocations;
         this.currentLocation = currentLocation;
     }
@@ -63,6 +73,14 @@ public class MapService extends Fragment implements OnMapReadyCallback {
         mMapView = (MapView) rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
         return rootView;
+    }
+
+    private Drawable fetchImageRecourse(Category category) {
+
+        String id = category.getName().trim();
+        // int resID = context.getResources().getIdentifier(id, "drawable", context.getPackageName());
+        return context.getResources().getDrawable(context.getResources().getIdentifier(id, "drawable", context.getPackageName()));
+
     }
 
 
@@ -90,6 +108,7 @@ public class MapService extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap map) {
+
         gm = map;
         //gm.setMyLocationEnabled(true);
         customStyle();
@@ -106,41 +125,6 @@ public class MapService extends Fragment implements OnMapReadyCallback {
         }
     }
 
-    public void sortActivities(Activity activity) {
-        switch (activity.getCategory()) {
-            case Football:
-                break;
-            case Tennis:
-                break;
-            case Sports:
-                break;
-            case Hiking:
-                break;
-            case Sailing:
-                break;
-            case Fishing:
-                break;
-            case Gaming:
-                break;
-            case DrinkingParty:
-                break;
-            case Conference:
-                break;
-            case Festival:
-                break;
-            case Seminar:
-                break;
-            case Networking_sessions:
-                break;
-            case Expo:
-                break;
-            case Other:
-                break;
-            default:
-                break;
-        }
-
-    }
 
     /**
      * A method that marks the location on the map

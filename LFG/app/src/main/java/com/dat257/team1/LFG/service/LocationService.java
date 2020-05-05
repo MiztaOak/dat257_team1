@@ -54,7 +54,6 @@ public class LocationService {
                                 } else {
                                     //todo
                                     location = currentLocation;
-
                                 }
                             }
                         }

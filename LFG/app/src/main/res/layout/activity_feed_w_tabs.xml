@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activityFeedTabs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.ActivityFeedView">
@@ -45,7 +46,6 @@
         app:layout_constraintVertical_bias="0.011" />
 
 
-
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_feed"
         android:layout_width="410dp"
@@ -75,12 +75,12 @@
             android:text="Activites" />
 
         <com.google.android.material.tabs.TabItem
+            android:id="@+id/actvityMapTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Maps" />
 
     </com.google.android.material.tabs.TabLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

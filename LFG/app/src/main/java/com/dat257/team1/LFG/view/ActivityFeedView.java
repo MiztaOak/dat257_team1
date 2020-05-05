@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.service.MapService;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
@@ -96,8 +98,10 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
             @Override
             public void onClick(View v) {
                 launchCreateActivity();
+                //  launchGoogleMaps();
             }
         });
+
 
         /*menu = (Button) findViewById(R.id.menu);
         menu.setOnClickListener((new View.OnClickListener() {
@@ -109,6 +113,12 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         }));*/
     }
 
+
+    void launchGoogleMaps() {
+        FragmentManager fm = getSupportFragmentManager();
+        MapService gm = new MapService();
+        fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
+    }
 
     @Override
     public void onBackPressed() {
