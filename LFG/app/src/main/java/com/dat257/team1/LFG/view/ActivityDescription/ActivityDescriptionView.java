@@ -68,9 +68,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
         activityDescriptionViewModel.getMutableActivity().observe(this, new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
-                //  GeoPoint location = new GeoPoint(activity.getLocation().getLatitude(), activity.getLocation().getLongitude());
-                LatLng locationTest = new LatLng(57.708870, 11.974560);
-                //   updateActivityDescriptionMap(locationTest);
+
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());

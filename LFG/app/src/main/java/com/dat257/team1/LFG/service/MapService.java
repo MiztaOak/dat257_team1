@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.service;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +11,9 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.model.Activity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,22 +32,29 @@ import java.util.List;
  *
  * @author : Oussama Anadani
  */
-public class Map extends Fragment implements OnMapReadyCallback {
+public class MapService extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap gm;
     private MapView mMapView;
+
+    public void setActivityList(List<Activity> activityList) {
+        this.activityList = activityList;
+    }
+
+    private List<Activity> activityList;
+    private LatLng currentLocation;
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
-    public Map() {
-    }
-/*
-    public Map(LatLng location) {
-        gm.animateCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
-        gm.addMarker(new MarkerOptions().position(location).title("Activity here"));
+
+    public MapService(LatLng currentLocation) {
+        this.currentLocation = currentLocation;
     }
 
- */
+    public MapService(LatLng currentLocation, List<Activity> activitiesLocations) {
+        this.activityList = activitiesLocations;
+        this.currentLocation = currentLocation;
+    }
+
 
     @Nullable
     @Override
@@ -100,6 +106,41 @@ public class Map extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    public void sortActivities(Activity activity) {
+        switch (activity.getCategory()) {
+            case Football:
+                break;
+            case Tennis:
+                break;
+            case Sports:
+                break;
+            case Hiking:
+                break;
+            case Sailing:
+                break;
+            case Fishing:
+                break;
+            case Gaming:
+                break;
+            case DrinkingParty:
+                break;
+            case Conference:
+                break;
+            case Festival:
+                break;
+            case Seminar:
+                break;
+            case Networking_sessions:
+                break;
+            case Expo:
+                break;
+            case Other:
+                break;
+            default:
+                break;
+        }
+
+    }
 
     /**
      * A method that marks the location on the map
@@ -170,6 +211,15 @@ public class Map extends Fragment implements OnMapReadyCallback {
         }
 
         mMapView.onSaveInstanceState(mapViewBundle);
+    }
+
+    /**
+     * A method that adds a new activity to the map
+     *
+     * @param activity the new activity
+     */
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
     }
 
     @Override
