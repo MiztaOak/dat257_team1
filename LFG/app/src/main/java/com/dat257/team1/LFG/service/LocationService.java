@@ -11,6 +11,7 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.dat257.team1.LFG.R;
@@ -22,6 +23,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
+
+import java.util.Objects;
 
 /**
  * This class is responsible for fetching the current user location
@@ -47,13 +50,13 @@ public class LocationService {
                 fusedLocationProviderClient.getLastLocation().addOnCompleteListener(
                         new OnCompleteListener<Location>() {
                             @Override
-                            public void onComplete(Task<Location> task) {
+                            public void onComplete(@NonNull Task<Location> task) {
                                 Location currentLocation = task.getResult();
                                 if (currentLocation == null) {
                                     requestNewLocationData();
                                 } else {
                                     //todo
-                                    location = currentLocation;
+                                    LocationService.this.location = currentLocation;
                                 }
                             }
                         }
@@ -78,16 +81,13 @@ public class LocationService {
     }
 
     public boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        return false;
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     public boolean isLocationEnabled() {
         LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
+        return Objects.requireNonNull(locationManager).isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
                 LocationManager.NETWORK_PROVIDER
         );
     }

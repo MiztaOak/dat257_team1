@@ -3,7 +3,6 @@ package com.dat257.team1.LFG.service;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,7 +26,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -65,6 +63,15 @@ public class MapService extends Fragment implements OnMapReadyCallback {
         this.currentLocation = currentLocation;
     }
 
+    /**
+     * A method that adds a new activity to the map
+     *
+     * @param activity the new activity
+     */
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
+    }
+
 
     @Nullable
     @Override
@@ -75,12 +82,13 @@ public class MapService extends Fragment implements OnMapReadyCallback {
         return rootView;
     }
 
-    private Drawable fetchImageRecourse(Category category) {
-
+    /**
+     * A method that fetches the int value of the category name. This helps to sort the
+     * categories on the an depending on the name
+     */
+    private int fetchImageRecourse(Category category) {
         String id = category.getName().trim();
-        // int resID = context.getResources().getIdentifier(id, "drawable", context.getPackageName());
-        return context.getResources().getDrawable(context.getResources().getIdentifier(id, "drawable", context.getPackageName()));
-
+        return this.getResources().getIdentifier(id, "id", context.getPackageName());
     }
 
 
@@ -108,36 +116,46 @@ public class MapService extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(GoogleMap map) {
-
         gm = map;
-        //gm.setMyLocationEnabled(true);
         customStyle();
         onMarkerClick();
-        //todo get activity locations from db. Now it's some test locations
+        markCurrentLocation();
+        markActivities();
+    }
+    /*
+    *    //todo get activity locations from db. Now it's some test locations
         List<LatLng> locations = new ArrayList<>();
         locations.add(new LatLng(57.60, 11.97456000));
         locations.add(new LatLng(57.65, 11.97456000));
         locations.add(new LatLng(57.70, 11.97456000));
         locations.add(new LatLng(57.75, 11.97456000));
         locations.add(new LatLng(57.80, 11.97456000));
-        for (LatLng testLocation : locations) {
-            markLocation(testLocation);
-        }
-    }
+        * */
 
 
     /**
-     * A method that marks the location on the map
-     *
-     * @param location The location that will be marked on the map
+     * A method that marks the activities locations on the map
      */
-    private void markLocation(LatLng location) {
-        gm.moveCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
-        MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
-        // markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.football));
+    public void markActivities() {
+        for (int index = 0; index < activityList.size(); index++) {
+            LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
+            int imageID = fetchImageRecourse(activityList.get(index).getCategory());
+            MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(imageID));
+            Marker marker = gm.addMarker(markerOptions);
+            animateMarker(marker);
+        }
+    }
+
+    /**
+     * A method that marks the current location on the map
+     */
+    private void markCurrentLocation() {
+        gm.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+        MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here!");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
         Marker marker = gm.addMarker(markerOptions);
         animateMarker(marker);
     }
@@ -197,14 +215,6 @@ public class MapService extends Fragment implements OnMapReadyCallback {
         mMapView.onSaveInstanceState(mapViewBundle);
     }
 
-    /**
-     * A method that adds a new activity to the map
-     *
-     * @param activity the new activity
-     */
-    public void addActivity(Activity activity) {
-        activityList.add(activity);
-    }
 
     @Override
     public void onResume() {

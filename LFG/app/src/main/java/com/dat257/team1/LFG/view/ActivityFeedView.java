@@ -22,6 +22,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.service.MapService;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.ActivityFeedViewWTabs.ActivityFeedWTabsView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -159,7 +160,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     public void launchCreateActivity() {
         Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, CreateActivityView.class);
+        Intent intent = new Intent(this, ActivityFeedWTabsView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

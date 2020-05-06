@@ -28,10 +28,19 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        locationService = new LocationService(this);
-        activities = FireStoreHelper.getInstance().getActivities();
+        initVar();
         fetchActivityLoc();
         fetchCurrentLocation();
+        tabLayoutListener();
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+    }
+
+    /**
+     * A method to initiate all instance variables
+     */
+    private void initVar() {
+        activities = FireStoreHelper.getInstance().getActivities();
+        locationService = new LocationService(this);
         setContentView(R.layout.activity_feed_w_tabs);
         tabLayout = findViewById(R.id.activity_feed_tab);
         tab1 = findViewById(R.id.recyclerView_feed);
@@ -39,6 +48,13 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager_feed);
         pageAdapter = new PageAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(pageAdapter);
+
+    }
+
+    /**
+     * A listener on swiping between the tabs
+     */
+    private void tabLayoutListener() {
         tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -60,25 +76,21 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
                 //TODO: add functionality for when tab is reselected
             }
         });
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
     }
-
-    //todo fetch current location
-    //todo fetch locations
 
     /**
      * A method that fetches the current location and sends it to the map
      */
     void fetchCurrentLocation() {
         LatLng currentLocation = new LatLng(locationService.getLocation().getLatitude(), locationService.getLocation().getLongitude());
-        gm = new MapService(currentLocation, this);
+        gm = new MapService(currentLocation, activities, this);
     }
 
     /**
      * A method that sets all activities to the map
      */
     private void fetchActivityLoc() {
-        gm.setActivityList(activities);
+        // gm.setActivityList(activities);
     }
 
     /**

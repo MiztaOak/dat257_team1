@@ -21,7 +21,7 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -30,7 +30,7 @@
         <activity android:name=".service.MapService" />
         <activity
             android:name=".view.ActivityDescription.ActivityDescriptionView"
-            android:label="Activity Description"></activity>
+            android:label="Activity Description" />
         <activity
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
