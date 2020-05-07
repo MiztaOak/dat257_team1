@@ -1,6 +1,7 @@
 package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,6 +9,7 @@ import androidx.annotation.Nullable;
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.ChatListEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
@@ -27,6 +29,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -403,5 +406,41 @@ public class FireStoreHelper {
                 idToNameDictionary = map;
             }
         });
+    }
+
+    public ListenerRegistration attachChatListListener(){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            return null;
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference userRef = db.document("/users/"+uId);
+        return db.collection("chats").whereArrayContains("participants",userRef).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<Pair<String,String>> chatInfoList = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    String chatName = "Chat with " + buildChatName((List<DocumentReference>)doc.get("participants")); // replace with real name
+                    String id = doc.getId();
+                    chatInfoList.add(new Pair<>(chatName,id));
+                }
+                EventBus.getDefault().post(new ChatListEvent(chatInfoList));
+            }
+        });
+    }
+
+    private String buildChatName(List<DocumentReference> idList){
+        StringBuilder name = new StringBuilder();
+        for(DocumentReference ref : idList){
+            name.append(idToNameDictionary.get(ref.getId()));
+            if(name.length() >= 20){
+                name.append("...");
+                return name.toString();
+            }
+            name.append(", ");
+        }
+        return name.toString();
     }
 }
