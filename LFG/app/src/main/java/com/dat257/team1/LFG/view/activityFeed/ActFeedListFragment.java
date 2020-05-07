@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,13 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.activityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
 
 import java.util.List;
 
-public class ActFeedFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
+public class ActFeedListFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
@@ -38,7 +38,10 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_feed, container, false);
-        setUpRecyclerView(rootView);
+
+        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
+        //getLifecycle().addObserver(actFeedWTabsViewModel);
+        //actFeedWTabsViewModel.onCreate();
 
         mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
@@ -47,16 +50,15 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
                 mAdapter.notifyDataSetChanged(); //TODO maybe not change everything e.g. when scrolling.
             }
         });
+
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView_feed);
+        mAdapter = new ActCardRecyclerAdapter(getContext(), mutableActivityList, this);
+        recyclerView.setAdapter(mAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         updateActFeed();
 
         return rootView;
-    }
-
-    private void setUpRecyclerView(View rootView) {
-        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView_feed);
-        mAdapter = new ActivityCardRecyclerAdapter(getContext(), mutableActivityList, this);
-        recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void updateActFeed() {

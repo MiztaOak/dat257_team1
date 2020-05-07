@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.annotation.SuppressLint;
 import android.content.res.Resources;
@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
@@ -36,7 +37,7 @@ import java.util.List;
  *
  * @author : Oussama Anadani
  */
-public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
+public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private GoogleMap gm;
@@ -48,7 +49,7 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
     private ActFeedWTabsViewModel actFeedWTabsViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
 
-    public MapFeedFragment() {
+    public ActFeedMapFragment() {
     }
 
     @Nullable
@@ -58,6 +59,10 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
         //   mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
+
+        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
+        //getLifecycle().addObserver(actFeedWTabsViewModel);
+        //actFeedWTabsViewModel.onCreate();
 
         mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {

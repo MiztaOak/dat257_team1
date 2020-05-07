@@ -1,10 +1,7 @@
-package com.dat257.team1.LFG.view.ActivityDescription;
+package com.dat257.team1.LFG.view.activityDescription;
 
-
-import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;

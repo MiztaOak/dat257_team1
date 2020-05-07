@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 
 import android.content.Context;
@@ -18,15 +18,15 @@ import com.dat257.team1.LFG.model.Activity;
 import java.util.List;
 
 
-public class ActivityCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private static final String LOG_TAG = ActivityCardRecyclerAdapter.class.getSimpleName();
+    private static final String LOG_TAG = ActCardRecyclerAdapter.class.getSimpleName();
     private final ICardViewHolderClickListener iCardViewHolderClickListener;
     private MutableLiveData<List<Activity>> activityList;
     private Context context;
 
 
-    public ActivityCardRecyclerAdapter(Context context, MutableLiveData<List<Activity>> activityMutableLiveData, ICardViewHolderClickListener iCardViewHolderClickListener) {
+    public ActCardRecyclerAdapter(Context context, MutableLiveData<List<Activity>> activityMutableLiveData, ICardViewHolderClickListener iCardViewHolderClickListener) {
         this.activityList = activityMutableLiveData;
         this.context = context;
         this.iCardViewHolderClickListener = iCardViewHolderClickListener;

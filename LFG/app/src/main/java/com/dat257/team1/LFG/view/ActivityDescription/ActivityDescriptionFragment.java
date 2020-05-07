@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityDescription;
+package com.dat257.team1.LFG.view.activityDescription;
 
 
 import android.os.Bundle;
@@ -6,19 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginPageView;
-import com.google.android.gms.maps.MapView;
 
 public class ActivityDescriptionFragment extends Fragment {
 

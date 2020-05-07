@@ -27,9 +27,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.ActivityFeedViewWTabs.MapFeedFragment" />
         <activity
-            android:name=".view.ActivityDescription.ActivityDescriptionView"
+            android:name=".view.activityDescription.ActivityDescriptionView"
             android:label="Activity Description" />
         <activity
             android:name=".view.CreateActivityView"
@@ -38,8 +37,8 @@
             android:name=".view.loginPage.LoginPageView"
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.ActivityFeedViewWTabs.ActivityFeedWTabsView" />
-        <activity android:name=".view.ActivityFeedViewWTabs.ActFeedFragment" />
+        <activity android:name=".view.activityFeed.ActFeedPageView"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.NotificationView" />
         <activity android:name=".MainActivity">
             <intent-filter>

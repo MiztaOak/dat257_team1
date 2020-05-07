@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 public interface ICardViewHolderClickListener {
 

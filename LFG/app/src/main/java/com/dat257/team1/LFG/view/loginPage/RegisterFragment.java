@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.RegisterEvent;
-import com.dat257.team1.LFG.view.ActivityFeedViewWTabs.ActFeedFragment;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedListFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -191,7 +191,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Subscribe
     public void onRegisterEvent(com.dat257.team1.LFG.events.RegisterEvent event) {
         if (event.isSuccess()) {
-            Intent intent = new Intent(getActivity(), ActFeedFragment.class);
+            Intent intent = new Intent(getActivity(), ActFeedListFragment.class);
             startActivity(intent);
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "Something went wrong in the account creation", Toast.LENGTH_SHORT).show();

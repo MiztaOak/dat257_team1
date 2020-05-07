@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.ActivityFeedViewWTabs.ActFeedFragment;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedListFragment;
 import com.dat257.team1.LFG.viewmodel.LoginPageViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -48,7 +48,7 @@ public class LoginPageView extends FragmentActivity {
         // Check if user is already registered (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null){
-            Intent intent = new Intent(this, ActFeedFragment.class);
+            Intent intent = new Intent(this, ActFeedListFragment.class);
             startActivity(intent);
         }
         //retrieveData(currentUser);

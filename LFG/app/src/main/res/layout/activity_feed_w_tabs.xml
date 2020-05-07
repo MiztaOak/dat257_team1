@@ -5,7 +5,7 @@
     android:id="@+id/activityFeedTabs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ActivityFeedViewWTabs.ActFeedFragment">
+    tools:context=".view.activityFeed.ActFeedListFragment">
 
     <Button
         android:id="@+id/menu"

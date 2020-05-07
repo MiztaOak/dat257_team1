@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -11,7 +11,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
 import com.google.android.material.tabs.TabLayout;
 
-public class ActivityFeedWTabsView extends AppCompatActivity {
+public class ActFeedPageView extends AppCompatActivity {
 
     ActFeedWTabsViewModel actFeedWTabsViewModel;
 
@@ -19,10 +19,6 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_w_tabs);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-
-        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
-        getLifecycle().addObserver(actFeedWTabsViewModel);
-        actFeedWTabsViewModel.onCreate();
 
         ActPageAdapter actPageAdapter = new ActPageAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager_feed);

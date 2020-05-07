@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.dat257.team1.LFG.model.Message;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.view.ActivityFeedViewWTabs.ActFeedFragment;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     public void openFindActivity() {
-        Intent intent = new Intent(this, ActFeedFragment.class);
+        Intent intent = new Intent(this, ActFeedPageView.class);
         startActivity(intent);
     }
 

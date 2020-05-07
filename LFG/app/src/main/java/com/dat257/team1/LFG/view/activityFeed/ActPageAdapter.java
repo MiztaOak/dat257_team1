@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.content.Context;
 
@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionFragment;
 
 public class ActPageAdapter extends FragmentPagerAdapter {
 
@@ -27,9 +26,9 @@ public class ActPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ActFeedFragment();
+                return new ActFeedListFragment();
             case 1:
-                return new MapFeedFragment();
+                return new ActFeedMapFragment();
             default:
                 return null;
         }
