@@ -22,7 +22,6 @@ public class ActFeedWTabsViewModel extends ViewModel implements LifecycleObserve
     public ActFeedWTabsViewModel() {
     }
 
-
     public MutableLiveData<List<Activity>> getMutableActivityList() {
         if (mutableActivityList == null) {
             mutableActivityList = new MutableLiveData<>();
@@ -47,7 +46,7 @@ public class ActFeedWTabsViewModel extends ViewModel implements LifecycleObserve
         }
     }
 
-    public void onCardClick(int pos) {
+    public void onItemClick(int pos) {
         if (mutableActivityList.getValue() != null)
             Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
     }

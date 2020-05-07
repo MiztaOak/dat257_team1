@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 
 
 import android.content.Context;

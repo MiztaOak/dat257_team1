@@ -27,7 +27,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".view.ActivityFeedViewWTabs.MapFragment" />
+        <activity android:name=".view.ActivityFeedViewWTabs.MapFeedFragment" />
         <activity
             android:name=".view.ActivityDescription.ActivityDescriptionView"
             android:label="Activity Description" />

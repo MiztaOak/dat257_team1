@@ -8,18 +8,6 @@
     tools:context=".view.ActivityFeedViewWTabs.ActFeedFragment">
 
     <Button
-        android:id="@+id/createActivity"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Create Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.992" />
-
-    <Button
         android:id="@+id/menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,6 +19,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.007" />
 
+    <Button
+        android:id="@+id/createActivity"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Create Activity"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.992" />
+
+
     <EditText
         android:id="@+id/search"
         android:layout_width="308dp"
@@ -41,7 +42,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.854"
-        app:layout_constraintStart_toEndOf="@+id/menu"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.011" />
 
@@ -67,21 +67,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/menu"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.101">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Activities" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/activityMapTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Maps" />
-
 
     </com.google.android.material.tabs.TabLayout>
 

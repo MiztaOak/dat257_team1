@@ -3,15 +3,13 @@ package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -21,14 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.ActivityCardRecyclerAdapter;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.view.CreateActivityView;
-import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
-import com.dat257.team1.LFG.view.NotificationView;
 import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ActFeedFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
@@ -36,93 +30,45 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
     private RecyclerView.Adapter mAdapter;
-
-    private Button createActivity;
-    private Button menu;
-    private Button logOut;
-
     private ActFeedWTabsViewModel actFeedWTabsViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    private DrawerLayout drawerLayout;
-    private ArrayList<Activity> cardsList;
-    Button button;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_feed);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        cardsList = new ArrayList<>();
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.activity_feed, container, false);
+        setUpRecyclerView(rootView);
         actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
-        getLifecycle().addObserver(actFeedWTabsViewModel);
-        actFeedWTabsViewModel.onCreate();
-
+        //getLifecycle().addObserver(actFeedWTabsViewModel); //TODO
+        //actFeedWTabsViewModel.onCreate();
         mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
-        mutableActivityList.observe(this, new Observer<List<Activity>>() {
+        mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
-            public void onChanged(List<Activity> activities) {
-                mAdapter.notifyDataSetChanged();
+            public void onChanged(List<Activity> activityList) {
+                mAdapter.notifyDataSetChanged(); //TODO maybe not change everything e.g. when scrolling.
             }
         });
-
-        setUpRecyclerView();
         updateFeed();
+
+        return rootView;
     }
 
-
-    void launchGoogleMaps() {
-        FragmentManager fm = getSupportFragmentManager();
-        MapFragment gm = new MapFragment();
-        fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    private void setUpRecyclerView() {
-        RecyclerView recyclerView = findViewById(R.id.recyclerView_feed);
-        mAdapter = new ActivityCardRecyclerAdapter(this, mutableActivityList, this);
+    private void setUpRecyclerView(View rootView) {
+        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView_feed);
+        mAdapter = new ActivityCardRecyclerAdapter(getContext(), mutableActivityList, this);
         recyclerView.setAdapter(mAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-
-
-
-    private void clickMenu() {
-        Intent intent = new Intent(this, NotificationView.class);
-        startActivity(intent);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
     private void updateFeed() {
         actFeedWTabsViewModel.updateFeed();
     }
 
-    public void launchCreateActivity() {
-        Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, CreateActivityView.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
-    public void launchActivityFeedWTabsView() {
-        Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, ActivityFeedWTabsView.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
-    }
-
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        actFeedWTabsViewModel.onCardClick(pos);
-        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        actFeedWTabsViewModel.onItemClick(pos);
+        Intent intent = new Intent(getContext(), ActivityDescriptionView.class); //TODO maybe not call directly here do from parent, not sure.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

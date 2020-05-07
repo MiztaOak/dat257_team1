@@ -1,19 +1,25 @@
 package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionFragment;
 
-public class PageAdapter extends FragmentPagerAdapter {
-    private int nbrOfTabs;
+public class ActPageAdapter extends FragmentPagerAdapter {
 
-    public PageAdapter(@NonNull FragmentManager fm, int nbrOfTabs) {
+    @StringRes
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_3, R.string.tab_text_4};
+    private final Context mContext;
+
+    public ActPageAdapter(Context context, @NonNull FragmentManager fm) {
         super(fm);
-        this.nbrOfTabs = nbrOfTabs;
-
+        mContext = context;
     }
 
     @NonNull
@@ -23,7 +29,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ActivityDescriptionFragment(); //TODO: check if it's the one shown in recyclerView feed in activity_feed
             case 1:
-                return new MapFragment();  //TODO: add map fragment
+                return new MapFeedFragment();  //TODO: add map fragment
             default:
                 return null;
         }
@@ -31,11 +37,12 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return nbrOfTabs;
+        //Two tabs shown
+        return 2;
     }
 
     @Override
-    public int getItemPosition(@NonNull Object object) {
-        return POSITION_NONE;
+    public CharSequence getPageTitle(int position) {
+        return mContext.getResources().getString(TAB_TITLES[position]);
     }
 }

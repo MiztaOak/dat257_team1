@@ -34,7 +34,7 @@ import java.util.List;
  *
  * @author : Oussama Anadani
  */
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap gm;
     private MapView mMapView;
@@ -55,21 +55,21 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public MapFragment() {
+    public MapFeedFragment() {
 
     }
 
-    public MapFragment(List<Activity> activitiesLocations, Context context) {
+    public MapFeedFragment(List<Activity> activitiesLocations, Context context) {
         locationService = new LocationService(context);
         this.activityList = activitiesLocations;
     }
 
-    public MapFragment(LatLng currentLocation, Context context) {
+    public MapFeedFragment(LatLng currentLocation, Context context) {
         this.context = context;
         this.currentLocation = currentLocation;
     }
 
-    public MapFragment(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
+    public MapFeedFragment(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
         this.context = context;
         this.activityList = activitiesLocations;
         this.currentLocation = currentLocation;
