@@ -4,16 +4,15 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
+import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 public class ActFeedPageView extends AppCompatActivity {
 
-    ActFeedWTabsViewModel actFeedWTabsViewModel;
+    ActFeedViewModel actFeedViewModel;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

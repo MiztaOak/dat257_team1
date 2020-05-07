@@ -19,7 +19,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.service.LocationService;
-import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
+import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -46,7 +46,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private LatLng currentLocation;
     private LocationService locationService;
 
-    private ActFeedWTabsViewModel actFeedWTabsViewModel;
+    private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
 
     public ActFeedMapFragment() {
@@ -56,22 +56,23 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-        //   mMapView = (MapView) rootView.findViewById(R.id.mapView);
+
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
 
-        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
-        //getLifecycle().addObserver(actFeedWTabsViewModel);
-        //actFeedWTabsViewModel.onCreate();
+        actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
+        //getLifecycle().addObserver(actFeedViewModel); //TODO
+        //actFeedViewModel.onCreate();
 
-        mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
+        mutableActivityList = actFeedViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activityList) {
-                markCurrentLocation();
+                //markCurrentLocation(); //TODO
                 markActivities(activityList);
             }
         });
+        //actFeedViewModel.updateFeed(); //TODO
         return rootView;
     }
 

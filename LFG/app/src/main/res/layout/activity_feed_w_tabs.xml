@@ -49,9 +49,9 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_feed"
         android:layout_width="410dp"
-        android:layout_height="544dp"
+        android:layout_height="600dp"
         android:scrollbars="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/createActivity"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

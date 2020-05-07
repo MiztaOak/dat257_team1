@@ -26,9 +26,9 @@ public class ActPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ActFeedListFragment();
+                return new ActFeedListFragment(); //TODO not new maybe
             case 1:
-                return new ActFeedMapFragment();
+                return new ActFeedMapFragment(); //TODO
             default:
                 return null;
         }

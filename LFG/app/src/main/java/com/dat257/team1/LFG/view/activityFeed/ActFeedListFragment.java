@@ -21,7 +21,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.activityDescription.ActivityDescriptionView;
-import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
+import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
 import java.util.List;
 
@@ -29,9 +29,8 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
-
     private RecyclerView.Adapter mAdapter;
-    private ActFeedWTabsViewModel actFeedWTabsViewModel;
+    private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
 
     @Nullable
@@ -39,11 +38,11 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_feed, container, false);
 
-        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
-        //getLifecycle().addObserver(actFeedWTabsViewModel);
-        //actFeedWTabsViewModel.onCreate();
+        actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
+        getLifecycle().addObserver(actFeedViewModel);
+        actFeedViewModel.onCreate();
 
-        mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
+        mutableActivityList = actFeedViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activityList) {
@@ -51,7 +50,7 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
             }
         });
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.recyclerView_feed);
+        RecyclerView recyclerView = rootView.findViewById(R.id.activityFeed);
         mAdapter = new ActCardRecyclerAdapter(getContext(), mutableActivityList, this);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -62,13 +61,13 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
     }
 
     private void updateActFeed() {
-        actFeedWTabsViewModel.updateFeed();
+        actFeedViewModel.updateFeed();
     }
 
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        actFeedWTabsViewModel.onItemClick(pos);
+        actFeedViewModel.onItemClick(pos);
         Intent intent = new Intent(getContext(), ActivityDescriptionView.class); //TODO maybe not call directly here do from parent, not sure.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
