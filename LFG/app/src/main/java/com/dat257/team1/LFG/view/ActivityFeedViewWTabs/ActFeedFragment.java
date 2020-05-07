@@ -29,6 +29,7 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
+
     private RecyclerView.Adapter mAdapter;
     private ActFeedWTabsViewModel actFeedWTabsViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
@@ -38,9 +39,7 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.activity_feed, container, false);
         setUpRecyclerView(rootView);
-        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
-        //getLifecycle().addObserver(actFeedWTabsViewModel); //TODO
-        //actFeedWTabsViewModel.onCreate();
+
         mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
@@ -48,7 +47,7 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
                 mAdapter.notifyDataSetChanged(); //TODO maybe not change everything e.g. when scrolling.
             }
         });
-        updateFeed();
+        updateActFeed();
 
         return rootView;
     }
@@ -60,7 +59,7 @@ public class ActFeedFragment extends Fragment implements ICardViewHolderClickLis
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
-    private void updateFeed() {
+    private void updateActFeed() {
         actFeedWTabsViewModel.updateFeed();
     }
 

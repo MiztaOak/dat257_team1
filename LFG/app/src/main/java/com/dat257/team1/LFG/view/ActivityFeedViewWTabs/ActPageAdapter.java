@@ -17,7 +17,7 @@ public class ActPageAdapter extends FragmentPagerAdapter {
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_3, R.string.tab_text_4};
     private final Context mContext;
 
-    public ActPageAdapter(Context context, @NonNull FragmentManager fm) {
+    ActPageAdapter(Context context, @NonNull FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -27,9 +27,9 @@ public class ActPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ActivityDescriptionFragment(); //TODO: check if it's the one shown in recyclerView feed in activity_feed
+                return new ActFeedFragment();
             case 1:
-                return new MapFeedFragment();  //TODO: add map fragment
+                return new MapFeedFragment();
             default:
                 return null;
         }

@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +11,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.service.LocationService;
+import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -36,54 +38,18 @@ import java.util.List;
  */
 public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private GoogleMap gm;
     private MapView mMapView;
     private StringBuilder stringBuilder;
-    private Context context;
-    private List<Activity> activityList;
     private LatLng currentLocation;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private LocationService locationService;
 
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-
-    public void setActivityList(List<Activity> activityList) {
-        this.activityList = activityList;
-    }
-
+    private ActFeedWTabsViewModel actFeedWTabsViewModel;
+    private MutableLiveData<List<Activity>> mutableActivityList;
 
     public MapFeedFragment() {
-
     }
-
-    public MapFeedFragment(List<Activity> activitiesLocations, Context context) {
-        locationService = new LocationService(context);
-        this.activityList = activitiesLocations;
-    }
-
-    public MapFeedFragment(LatLng currentLocation, Context context) {
-        this.context = context;
-        this.currentLocation = currentLocation;
-    }
-
-    public MapFeedFragment(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
-        this.context = context;
-        this.activityList = activitiesLocations;
-        this.currentLocation = currentLocation;
-    }
-
-    /**
-     * A method that adds a new activity to the map
-     *
-     * @param activity the new activity
-     */
-    public void addActivity(Activity activity) {
-        activityList.add(activity);
-    }
-
 
     @Nullable
     @Override
@@ -91,8 +57,16 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
         //   mMapView = (MapView) rootView.findViewById(R.id.mapView);
         mMapView = rootView.findViewById(R.id.mapView);
-
         initGoogleMap(savedInstanceState);
+
+        mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
+        mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
+            @Override
+            public void onChanged(List<Activity> activityList) {
+                markCurrentLocation();
+                markActivities(activityList);
+            }
+        });
         return rootView;
     }
 
@@ -104,9 +78,6 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap map) {
         gm = map;
-
-        markCurrentLocation();
-        markActivities();
         customStyle();
         onMarkerClick();
     }
@@ -117,7 +88,7 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
      */
     private int fetchImageRecourse(Category category) {
         String id = category.getName().trim();
-        return this.getResources().getIdentifier(id, "id", context.getPackageName());
+        return this.getResources().getIdentifier(id, "id", getContext().getPackageName());
     }
 
 
@@ -137,7 +108,6 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onCreate(mapViewBundle);
         mMapView.onResume();
         mMapView.getMapAsync(this);
-
     }
 
 
@@ -155,7 +125,7 @@ public class MapFeedFragment extends Fragment implements OnMapReadyCallback {
     /**
      * A method that marks the activities locations on the map
      */
-    public void markActivities() {
+    public void markActivities(List<Activity> activityList) {
         for (int index = 0; index < activityList.size(); index++) {
             LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
             int imageID = fetchImageRecourse(activityList.get(index).getCategory());
