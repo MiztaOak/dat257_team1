@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.activityDescription;
+package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
 import android.view.View;

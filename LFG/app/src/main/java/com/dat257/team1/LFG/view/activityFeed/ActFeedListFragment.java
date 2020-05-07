@@ -20,7 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.CreateActivityView;
-import com.dat257.team1.LFG.view.activityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
 import java.util.List;
