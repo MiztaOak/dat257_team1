@@ -5,7 +5,7 @@
     android:id="@+id/activityFeedTabs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.ActivityFeedView">
+    tools:context=".view.ActivityFeedViewWTabs.ActFeedFragment">
 
     <Button
         android:id="@+id/createActivity"
@@ -56,7 +56,9 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_feed_tab"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0">
+
+    </androidx.viewpager.widget.ViewPager>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/activity_feed_tab"
@@ -72,13 +74,14 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Activites" />
+            android:text="Activities" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/actvityMapTab"
+            android:id="@+id/activityMapTab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Maps" />
+
 
     </com.google.android.material.tabs.TabLayout>
 

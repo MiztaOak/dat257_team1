@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +10,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
@@ -20,15 +21,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.service.MapService;
+import com.dat257.team1.LFG.view.ActivityCardRecyclerAdapter;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
-import com.dat257.team1.LFG.view.ActivityFeedViewWTabs.ActivityFeedWTabsView;
-import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
+import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
+import com.dat257.team1.LFG.view.NotificationView;
+import com.dat257.team1.LFG.viewmodel.ActFeedWTabsViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityFeedView extends AppCompatActivity implements ICardViewHolderClickListener, LifecycleObserver {
+public class ActFeedFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
 
@@ -38,11 +41,10 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     private Button menu;
     private Button logOut;
 
-    private ActivityFeedViewModel activityFeedViewModel;
+    private ActFeedWTabsViewModel actFeedWTabsViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
     private DrawerLayout drawerLayout;
     private ArrayList<Activity> cardsList;
-
     Button button;
 
     @Override
@@ -51,73 +53,26 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         setContentView(R.layout.activity_feed);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         cardsList = new ArrayList<>();
-        activityFeedViewModel = new ViewModelProvider(this).get(ActivityFeedViewModel.class);
-        getLifecycle().addObserver(activityFeedViewModel);
-        activityFeedViewModel.onCreate();
+        actFeedWTabsViewModel = new ViewModelProvider(this).get(ActFeedWTabsViewModel.class);
+        getLifecycle().addObserver(actFeedWTabsViewModel);
+        actFeedWTabsViewModel.onCreate();
 
-        mutableActivityList = activityFeedViewModel.getMutableActivityList();
+        mutableActivityList = actFeedWTabsViewModel.getMutableActivityList();
         mutableActivityList.observe(this, new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activities) {
                 mAdapter.notifyDataSetChanged();
             }
         });
-/*
-       button = (Button) findViewById(R.id.go_to_btn);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentManager fm = getSupportFragmentManager();
-                Map gm = new Map();
-                fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
-
-            }
-        });
- */
 
         setUpRecyclerView();
         updateFeed();
-
-
-        //Move this to the menu fragment instead of having it here. Change findview to logout
-        //button instead, menu was a temporary hold.
-
-
-        /*logOut = (Button) findViewById(R.id.menu);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchLoginPage();
-                LocalUser.signOut();
-            }
-        });
-
-    */
-        createActivity = (Button) findViewById(R.id.createActivity);
-        createActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                launchCreateActivity();
-                //  launchGoogleMaps();
-            }
-        });
-
-
-        /*menu = (Button) findViewById(R.id.menu);
-        menu.setOnClickListener((new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                //TODO create method invocation
-            }
-        }));*/
     }
 
 
     void launchGoogleMaps() {
         FragmentManager fm = getSupportFragmentManager();
-        MapService gm = new MapService();
+        MapFragment gm = new MapFragment();
         fm.beginTransaction().replace(R.id.activityFeed, gm).commit();
     }
 
@@ -138,15 +93,6 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     }
 
 
-    //Move this to menu fragment.
-    /*
-    private void launchLoginPage(){
-        Intent intent = new Intent(this, LoginPageView.class);
-        startActivity(intent);
-    }
-
-
-     */
 
 
     private void clickMenu() {
@@ -155,10 +101,17 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     }
 
     private void updateFeed() {
-        activityFeedViewModel.updateFeed();
+        actFeedWTabsViewModel.updateFeed();
     }
 
     public void launchCreateActivity() {
+        Log.d(LOG_TAG, "Create activity clicked!");
+        Intent intent = new Intent(this, CreateActivityView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
+
+    public void launchActivityFeedWTabsView() {
         Log.d(LOG_TAG, "Create activity clicked!");
         Intent intent = new Intent(this, ActivityFeedWTabsView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -168,7 +121,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        activityFeedViewModel.onCardClick(pos);
+        actFeedWTabsViewModel.onCardClick(pos);
         Intent intent = new Intent(this, ActivityDescriptionView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);

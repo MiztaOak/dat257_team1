@@ -9,7 +9,6 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.service.LocationService;
-import com.dat257.team1.LFG.service.MapService;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -23,7 +22,7 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
     public PageAdapter pageAdapter;
     private List<Activity> activities;
     private LocationService locationService;
-    private MapService gm;
+    private MapFragment gm;
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +39,7 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
      */
     private void initVar() {
         activities = FireStoreHelper.getInstance().getActivities();
-        locationService = new LocationService(this);
+        //  locationService = new LocationService(this);
         setContentView(R.layout.activity_feed_w_tabs);
         tabLayout = findViewById(R.id.activity_feed_tab);
         tab1 = findViewById(R.id.recyclerView_feed);
@@ -82,8 +81,9 @@ public class ActivityFeedWTabsView extends AppCompatActivity {
      * A method that fetches the current location and sends it to the map
      */
     void fetchCurrentLocation() {
-        LatLng currentLocation = new LatLng(locationService.getLocation().getLatitude(), locationService.getLocation().getLongitude());
-        gm = new MapService(currentLocation, activities, this);
+        LatLng location = new LatLng(57.60, 11.97456000);
+
+        gm = new MapFragment(location, this);
     }
 
     /**

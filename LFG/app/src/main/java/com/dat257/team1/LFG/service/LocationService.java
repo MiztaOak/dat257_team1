@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.Looper;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -31,7 +33,7 @@ import java.util.Objects;
  *
  * @author Oussama Anadani, Jakob Ew
  */
-public class LocationService {
+public class LocationService implements LocationListener {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private int PERMISSION_ID = 12;
 
@@ -55,7 +57,6 @@ public class LocationService {
                                 if (currentLocation == null) {
                                     requestNewLocationData();
                                 } else {
-                                    //todo
                                     LocationService.this.location = currentLocation;
                                 }
                             }
@@ -123,5 +124,25 @@ public class LocationService {
 
     public void setLocation(Location location) {
         this.location = location;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onStatusChanged(String s, int i, Bundle bundle) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String s) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String s) {
+
     }
 }

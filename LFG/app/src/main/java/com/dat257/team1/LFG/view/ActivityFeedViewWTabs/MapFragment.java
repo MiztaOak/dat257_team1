@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.service;
+package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.service.LocationService;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -33,31 +34,42 @@ import java.util.List;
  *
  * @author : Oussama Anadani
  */
-public class MapService extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap gm;
     private MapView mMapView;
     private StringBuilder stringBuilder;
     private Context context;
+    private List<Activity> activityList;
+    private LatLng currentLocation;
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private LocationService locationService;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
 
     public void setActivityList(List<Activity> activityList) {
         this.activityList = activityList;
     }
 
-    private List<Activity> activityList;
-    private LatLng currentLocation;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
 
+    public MapFragment() {
 
-    public MapService() {
     }
 
-    public MapService(LatLng currentLocation, Context context) {
+    public MapFragment(List<Activity> activitiesLocations, Context context) {
+        locationService = new LocationService(context);
+        this.activityList = activitiesLocations;
+    }
+
+    public MapFragment(LatLng currentLocation, Context context) {
         this.context = context;
         this.currentLocation = currentLocation;
     }
 
-    public MapService(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
+    public MapFragment(LatLng currentLocation, List<Activity> activitiesLocations, Context context) {
         this.context = context;
         this.activityList = activitiesLocations;
         this.currentLocation = currentLocation;
@@ -77,9 +89,26 @@ public class MapService extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        //   mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView = rootView.findViewById(R.id.mapView);
+
         initGoogleMap(savedInstanceState);
         return rootView;
+    }
+
+    /**
+     * A method that marks the location on the map
+     *
+     * @param map Google map
+     */
+    @Override
+    public void onMapReady(GoogleMap map) {
+        gm = map;
+
+        markCurrentLocation();
+        markActivities();
+        customStyle();
+        onMarkerClick();
     }
 
     /**
@@ -106,22 +135,12 @@ public class MapService extends Fragment implements OnMapReadyCallback {
             mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
         mMapView.onCreate(mapViewBundle);
+        mMapView.onResume();
         mMapView.getMapAsync(this);
+
     }
 
-    /**
-     * A method that marks the location on the map
-     *
-     * @param map Google map
-     */
-    @Override
-    public void onMapReady(GoogleMap map) {
-        gm = map;
-        customStyle();
-        onMarkerClick();
-        markCurrentLocation();
-        markActivities();
-    }
+
     /*
     *    //todo get activity locations from db. Now it's some test locations
         List<LatLng> locations = new ArrayList<>();

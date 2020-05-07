@@ -1,4 +1,5 @@
 package com.dat257.team1.LFG.view.ActivityFeedViewWTabs;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,7 +23,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 return new ActivityDescriptionFragment(); //TODO: check if it's the one shown in recyclerView feed in activity_feed
             case 1:
-                return new Fragment();  //TODO: add map fragment
+                return new MapFragment();  //TODO: add map fragment
             default:
                 return null;
         }
@@ -30,7 +31,7 @@ public class PageAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 0;
+        return nbrOfTabs;
     }
 
     @Override
