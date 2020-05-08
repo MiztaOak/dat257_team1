@@ -8,14 +8,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -26,6 +29,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -38,12 +43,15 @@ public class LoginFragment extends Fragment {
     private Button loginButton;
     private EditText passwordField, emailField;
 
+    private TextView forgetPassword;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.login_fragment, container, false);
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
+        forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,6 +62,13 @@ public class LoginFragment extends Fragment {
                 //checking if the user has entered a validate form of the email and password
                 if (validateForm(email, password))
                    loginUser(email, password);
+            }
+        });
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openForgotPassword();
             }
         });
 
@@ -114,6 +129,12 @@ public class LoginFragment extends Fragment {
                     }
                 });
     }
+
+    public void openForgotPassword(){
+
+        startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
+    }
+
 
     /**
      * A method to retrieve the exciting user's data from the database

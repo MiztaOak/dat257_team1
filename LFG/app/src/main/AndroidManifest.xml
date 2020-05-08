@@ -40,6 +40,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.ActivityFeedViewWTabs.ActivityFeedWTabsView" />
         <activity android:name=".view.ActivityFeedView" />
+        <activity android:name=".view.ForgetPasswordView" />
         <activity android:name=".view.NotificationView" />
         <activity android:name=".MainActivity">
             <intent-filter>
