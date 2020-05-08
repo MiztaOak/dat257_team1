@@ -46,9 +46,4 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
             EventBus.getDefault().register(this);
         }
     }
-
-    public void onCardClick(int pos) {
-        if (mutableActivityList.getValue() != null)
-            Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
-    }
 }
