@@ -1,9 +1,11 @@
 package com.dat257.team1.LFG.viewmodel;
 
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
+import com.dat257.team1.LFG.events.CurrentActivitiesEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -21,21 +23,26 @@ public class CurrentActivitiesViewModel extends ViewModel implements LifecycleOb
     private MutableLiveData<List<Activity>> mutableOwnedActivities;
     private MutableLiveData<List<Activity>> mutableParticipatingActivities;
 
+    private ListenerRegistration listener;
+
     public CurrentActivitiesViewModel() {
         mutableOwnedActivities = new MutableLiveData<>();
         mutableParticipatingActivities = new MutableLiveData<>();
-
-        filterList(FireStoreHelper.getInstance().getActivities());
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
         if(!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
+        listener = FireStoreHelper.getInstance().loadCurrentActivities();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void onDestroy() {
+        if(listener != null) {
+            listener.remove();
+            listener = null;
+        }
         EventBus.getDefault().unregister(this);
     }
 
@@ -48,7 +55,7 @@ public class CurrentActivitiesViewModel extends ViewModel implements LifecycleOb
     }
 
     @Subscribe
-    public void handleEvent(ActivityFeedEvent event){
+    public void handleEvent(CurrentActivitiesEvent event){
         filterList(event.getActivityList());
     }
 
