@@ -6,12 +6,12 @@ import java.util.List;
 public class User {
     private String id; // since many users can have the same name
     private String name;
-    private int phoneNumber;
+    private String phoneNumber;
     private String email;
     private List<User> friendList;
 
 
-    public User(String id, String name, String email, int phoneNumber) {
+    public User(String id, String name, String email, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -19,11 +19,11 @@ public class User {
         this.friendList = new ArrayList<User>();
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

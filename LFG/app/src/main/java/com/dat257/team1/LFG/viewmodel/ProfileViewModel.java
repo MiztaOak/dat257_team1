@@ -16,24 +16,24 @@ import java.util.List;
 
 public class ProfileViewModel extends ViewModel {
 
-    private MutableLiveData<List<User>> requests;
+    private MutableLiveData<User> request;
     private ListenerRegistration listener;
 
     public ProfileViewModel() {
-        requests = new MutableLiveData<>();
+        request = new MutableLiveData<>();
 
         EventBus.getDefault().register(this);
     }
 
-    public MutableLiveData<List<User>> getRequests() {
-        if(requests == null)
-            requests = new MutableLiveData<>();
-        return requests;
+    public MutableLiveData<User> getRequest() {
+        if(request == null)
+            request = new MutableLiveData<>();
+        return request;
     }
 
     @Subscribe
     public void handleEvent(UserEvent event){
-        requests.setValue((List<User>) event.getUser());
+        request.setValue((User) event.getUser());
     }
 
     public void startup(){

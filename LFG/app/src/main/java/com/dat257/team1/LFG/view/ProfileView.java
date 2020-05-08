@@ -41,10 +41,9 @@ public class ProfileView extends AppCompatActivity {
 
         initViews();
 
-        FireStoreHelper.getInstance(); //TODO: There's no method for retrieving user information from db
+        FireStoreHelper.getInstance(); //TODO: We need a userID from the previous view, in order to compare the currentUser with the profileUser
         User currentUser = null; // You
         User profileUser = null; // User who owns the profile
-
 
         if (currentUser.getEmail().equals(profileUser.getEmail())) {
             addFriendLayout.setVisibility(View.INVISIBLE);

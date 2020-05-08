@@ -51,6 +51,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
@@ -415,21 +416,18 @@ public class FireStoreHelper {
      * @return the listener
      */
     public ListenerRegistration loadUserInformation(String id) {
-        db.collection("users").document(id).collection(String.valueOf(0)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        DocumentReference docRef = db.collection("users").document(id);
+        docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-                List<User> users = new ArrayList<>();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    User userData = doc.toObject(User.class);
-                    users.add(userData.toUser());
-                }
-                EventBus.getDefault().post(new UserEvent((User) users));
+                User userObj = new User(id, documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
+                EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
-        return null; //is this correct? 
+        return null;
     }
 }
