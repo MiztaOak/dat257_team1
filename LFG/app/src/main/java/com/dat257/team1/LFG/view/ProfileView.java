@@ -19,6 +19,7 @@ public class ProfileView extends AppCompatActivity {
 
     private TextView userName;
     private TextView profileDescription;
+
     private Button addFriendButton;
     private Button blockContactButton;
 
@@ -29,6 +30,8 @@ public class ProfileView extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         initViews();
+
+        //TODO: fetch user information from database
 
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,7 +46,6 @@ public class ProfileView extends AppCompatActivity {
                 //TODO: add functionality to blockContactButton
             }
         });
-
     }
 
     private void initViews() {
@@ -53,5 +55,6 @@ public class ProfileView extends AppCompatActivity {
         addContactImage = findViewById(R.id.add_friend_image);
         blockContactImage = findViewById(R.id.block_contact);
         profileDescription = findViewById(R.id.profile_desc);
+        userName = findViewById(R.id.user_name_profile);
     }
 }
