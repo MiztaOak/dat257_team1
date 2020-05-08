@@ -12,6 +12,7 @@ import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
+import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
@@ -19,6 +20,7 @@ import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
 
+import com.dat257.team1.LFG.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.dat257.team1.LFG.model.Message;
@@ -403,5 +405,31 @@ public class FireStoreHelper {
                 idToNameDictionary = map;
             }
         });
+    }
+
+    /**
+     *  Attaches a listener that loads information for a given userID
+     *
+     * Author: Jennie Zhou
+     * @param id the id of the user
+     * @return the listener
+     */
+    public ListenerRegistration loadUserInformation(String id) {
+        db.collection("users").document(id).collection(String.valueOf(0)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<User> users = new ArrayList<>();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    User userData = doc.toObject(User.class);
+                    users.add(userData.toUser());
+                }
+                EventBus.getDefault().post(new UserEvent((User) users));
+            }
+        });
+        return null; //is this correct? 
     }
 }

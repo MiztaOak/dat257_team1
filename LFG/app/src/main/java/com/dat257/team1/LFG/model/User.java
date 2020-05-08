@@ -65,4 +65,5 @@ public class User {
         this.friendList.remove(friend);
     }
 
+    public User toUser() { return new User(id, name, email, phoneNumber);}
 }
