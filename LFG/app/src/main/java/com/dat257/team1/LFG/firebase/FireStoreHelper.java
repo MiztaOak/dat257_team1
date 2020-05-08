@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.firebase;
 
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,6 +16,7 @@ import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
+import com.dat257.team1.LFG.view.chatList.ChatListItem;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
@@ -391,6 +391,11 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Method that loads the dictionary that associates the uIDs with their user names
+     *
+     * Author: Johan Ek
+     */
     private void loadUserNames(){
         db.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -408,6 +413,13 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Method that attaches and returns a listener that keeps track of all chats the currently
+     * logged in user are a part off.
+     *
+     * Author: Johan Ek
+     * @return the listener that is attached to the list of chats the user is part off
+     */
     public ListenerRegistration attachChatListListener(){
         if(FirebaseAuth.getInstance().getCurrentUser() == null)
             return null;
@@ -420,21 +432,37 @@ public class FireStoreHelper {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-                List<Pair<String,String>> chatInfoList = new ArrayList<>();
+                List<ChatListItem> chatInfoList = new ArrayList<>();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                    String chatName = "Chat with " + buildChatName((List<DocumentReference>)doc.get("participants")); // replace with real name
+                    List<DocumentReference> participants= (List<DocumentReference>)doc.get("participants");
+                    String chatName = buildChatName(participants,FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String id = doc.getId();
-                    chatInfoList.add(new Pair<>(chatName,id));
+                    int amountOfParticipants = participants.size();
+                    chatInfoList.add(new ChatListItem(chatName,id,amountOfParticipants));
                 }
                 EventBus.getDefault().post(new ChatListEvent(chatInfoList));
             }
         });
     }
 
-    private String buildChatName(List<DocumentReference> idList){
+    /**
+     * Method that build a chat name out of the list of participants. If the name is longer than
+     * part of the name that is build out of user names is longer than 20 characters "..." is
+     * attached at the end and the string is returned
+     *
+     * Author: Johan Ek
+     * @param idList the list of participants
+     * @return the name of the chat
+     */
+    private String buildChatName(List<DocumentReference> idList,String uID){
         StringBuilder name = new StringBuilder();
+        name.append("Chat with ");
+        String currentUserName = idToNameDictionary.get(uID);
         for(DocumentReference ref : idList){
-            name.append(idToNameDictionary.get(ref.getId()));
+            String userName = idToNameDictionary.get(ref.getId());
+            if(userName.equals(currentUserName))
+                continue;
+            name.append(userName);
             if(name.length() >= 20){
                 name.append("...");
                 return name.toString();
