@@ -22,10 +22,13 @@ public class ProfileView extends AppCompatActivity {
     private Button addFriendButton;
     private Button blockContactButton;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        initViews();
 
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,5 +43,15 @@ public class ProfileView extends AppCompatActivity {
                 //TODO: add functionality to blockContactButton
             }
         });
+
+    }
+
+    private void initViews() {
+        profileImage = findViewById(R.id.profile_photo);
+        emailImage = findViewById(R.id.email_image_view);
+        phoneImage = findViewById(R.id.phone_image_view);
+        addContactImage = findViewById(R.id.add_friend_image);
+        blockContactImage = findViewById(R.id.block_contact);
+        profileDescription = findViewById(R.id.profile_desc);
     }
 }
