@@ -150,7 +150,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     public void launchCreateActivity() {
         Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, FavouriteActivityView.class);
+        Intent intent = new Intent(this, CreateActivityView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

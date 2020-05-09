@@ -24,11 +24,11 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         FireStoreHelper.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        /*if (currentUser != null) {
+        if (currentUser != null) {
             openFindActivity();
         } else {
             openLoginPage();
-        }*/
+        }
         openFindActivity();
         //Intent intent = new Intent(this, CurrentActivityFragment.class);
         //startActivity(intent);
