@@ -51,10 +51,14 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -79,6 +83,9 @@ public class CreateActivityView extends AppCompatActivity {
     private CheckBox privateEvent;
     private CreateActivityViewModel createActivityViewModel;
 
+    private final int MIN_TITLE_LENGTH = 4;
+    private final long MAX_ATTENDEES = 999999999;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,8 +100,12 @@ public class CreateActivityView extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                createActivityViewModel.createActivity(getActTitle(), getActDesc(), getActTime(), getActLocation(), isPrivateEvent(), getNumOfAttendees(), getCategory());
-                openActivityFeed();
+                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
+                Timestamp timestamp = new Timestamp((getActTime()/1000),0);
+                if(checkFields(getActTitle(),  getActDesc(), timestamp, geoPoint, getCategory())) {
+                    createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
+                    openActivityFeed();
+                }
             }
         });
         ImageButton backButton = findViewById(R.id.backButton);
@@ -222,6 +233,33 @@ public class CreateActivityView extends AppCompatActivity {
                 //TODO maybe
             }
         });
+    }
+
+    private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
+        boolean status = true;
+        if(!(title.length() >= MIN_TITLE_LENGTH)) {
+            status = false;
+            titleTextView.setError("Your title must at least be " + MIN_TITLE_LENGTH + " characters long");
+        }
+        if(description.length() == 0) {
+            status = false;
+            descTextView.setError("You must specify a description");
+        }
+        Date currentTime = Calendar.getInstance().getTime();
+        Date date = new Date(time.getSeconds());
+        if(time.toDate().before(currentTime)) {
+            status = false;
+            //time picker error
+        }
+        if(geoPoint == null) {
+            status = false;
+            Toast.makeText(getApplicationContext(),"You must specify a location for your activity",Toast.LENGTH_SHORT).show();
+        }
+        if(category == null) {
+            status = false;
+            ((TextView)categorySpinner.getSelectedView()).setError("You must choose a category for your activity");
+        }
+        return status;
     }
 
     private void initViews() {
