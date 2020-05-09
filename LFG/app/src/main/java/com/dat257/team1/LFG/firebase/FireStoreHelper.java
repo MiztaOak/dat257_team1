@@ -61,7 +61,7 @@ public class FireStoreHelper {
     private FirebaseFirestore db;
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
-    Map<String,String> idToNameDictionary;
+    private Map<String,String> idToNameDictionary;
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
@@ -403,5 +403,9 @@ public class FireStoreHelper {
                 idToNameDictionary = map;
             }
         });
+    }
+
+    public Map<String, String> getIdToNameDictionary() {
+        return idToNameDictionary;
     }
 }

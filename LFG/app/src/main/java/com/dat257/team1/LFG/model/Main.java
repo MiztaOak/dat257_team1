@@ -37,11 +37,6 @@ public class Main {
 
     private Main() {
         activities = new ArrayList<>();
-
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("comment1", Calendar.getInstance().getTime(), "Me"));
-        comments.add(new Comment("comment2", Calendar.getInstance().getTime(), "Me"));
-        comments.add(new Comment("comment3", Calendar.getInstance().getTime(), "Me")); //TODO
         fireBaseObject = FireStoreHelper.getInstance();
     }
 
