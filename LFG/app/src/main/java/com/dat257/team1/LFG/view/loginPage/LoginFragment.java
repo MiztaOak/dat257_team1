@@ -3,6 +3,7 @@ package com.dat257.team1.LFG.view.loginPage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +19,13 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.view.ActivityFeedView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -40,10 +47,14 @@ import org.w3c.dom.Text;
  */
 public class LoginFragment extends Fragment {
 
-    private Button loginButton;
+    private Button loginButton, googleButton;
     private EditText passwordField, emailField;
 
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 0;
+
     private TextView forgetPassword;
+    //private ImageView googleSignIn;
 
     @Nullable
     @Override
@@ -52,6 +63,8 @@ public class LoginFragment extends Fragment {
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
         forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);
+        googleButton = rootView.findViewById(R.id.quick_access_google);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,9 +85,68 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        googleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.quick_access_google:
+                        googleSignIn();
+                        break;
+                }
+            }
+        });
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         return rootView;
     }
+
+    /** Sign in with google
+     */
+    private void googleSignIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, open the ActivityFeedView
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            startActivity(intent);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
+        }
+    }
+
+    /**
+     * Check for existing Google Sign In account, if the user is already signed in
+     * the GoogleSignInAccount will be non-null.
+     */
+    //@Override
+    //public void onStart() {
+    //    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+    //    updateUI(account);
+    //}
 
     /**
      * A method to check the validation of the password and the email.
