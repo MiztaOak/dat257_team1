@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.ui.home;
+package com.dat257.team1.LFG.view.home;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,17 +14,17 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.dat257.team1.LFG.R;
 
-public class HomeFragment extends Fragment {
+public class SlideshowFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private SlideshowViewModel slideshowViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-        final TextView textView = root.findViewById(R.id.text_home);
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        slideshowViewModel =
+                ViewModelProviders.of(this).get(SlideshowViewModel.class);
+        View root = inflater.inflate(R.layout.fragment_slideshow, container, false);
+        final TextView textView = root.findViewById(R.id.text_slideshow);
+        slideshowViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

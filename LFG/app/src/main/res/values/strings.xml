@@ -49,4 +49,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_activities">Current Activities</string>
+    <string name="friends">Friends</string>
+    <string name="messages">Messages</string>
+    <string name="history">History</string>
+    <string name="favorites">Favorites</string>
 </resources>

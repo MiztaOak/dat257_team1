@@ -18,7 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MenuActivity"
+            android:name=".view.home.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 

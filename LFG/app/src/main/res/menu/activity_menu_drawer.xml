@@ -7,23 +7,24 @@
         <item
             android:id="@+id/nav_current_activities"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Current Activitites" />
+            android:title="@string/current_activities" />
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_camera"
-            android:title="Friends" />
+            android:title="@string/friends" />
         <item
             android:id="@+id/nav_messages"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Messages" />
+            android:title="@string/messages" />
         <item
             android:id="@+id/nav_history"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="History" />
+            android:title="@string/history" />
 
         <item
             android:id="@+id/nav_favorites"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Favorites" />
+            android:title="@string/favorites" />
+
     </group>
 </menu>
