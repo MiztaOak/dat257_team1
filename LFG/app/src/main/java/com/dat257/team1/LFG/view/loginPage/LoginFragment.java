@@ -88,18 +88,14 @@ public class LoginFragment extends Fragment {
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.quick_access_google:
-                        googleSignIn();
-                        break;
-                }
+                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .build();
+                mGoogleSignInClient = GoogleSignIn.getClient(rootView.getContext(), gso);
+                googleSignIn();
             }
         });
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         return rootView;
     }
@@ -124,13 +120,16 @@ public class LoginFragment extends Fragment {
         }
     }
 
+    /**
+     * Handles the sign in results from the Google account sign in.
+     * @param completedTask
+     */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, open the ActivityFeedView
-            Intent intent = new Intent(getContext(), MainActivity.class);
-            startActivity(intent);
+            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
