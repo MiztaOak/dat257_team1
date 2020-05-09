@@ -83,5 +83,10 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
         FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),mutableActivity.getValue().getId());
     }
 
+    public void joinerStatus(){
+        FireStoreHelper.getInstance().addJoinStatus(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+                Main.getInstance().getFocusedActivity(), "pending");
+    }
+
 }
 

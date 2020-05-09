@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.google.android.gms.maps.MapView;
 

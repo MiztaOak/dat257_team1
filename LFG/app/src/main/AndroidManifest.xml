@@ -45,6 +45,7 @@
         <activity android:name=".view.favouriteActivities.FavouriteActivityView" />
         <activity android:name=".view.ForgetPasswordView" />
         <activity android:name=".view.NotificationView" />
+        <activity android:name=".view.MessageView" />
         <activity android:name=".view.ProfileView" />
         <activity android:name=".MainActivity">
             <intent-filter>
