@@ -13,6 +13,7 @@ import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.events.NotificationForJoinerEvent;
+import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
@@ -21,6 +22,7 @@ import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
 
 import com.dat257.team1.LFG.model.NotificationForJoiner;
+import com.dat257.team1.LFG.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 
 import com.dat257.team1.LFG.model.Message;
@@ -53,6 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
@@ -125,9 +128,7 @@ public class FireStoreHelper {
      * @param nId
      */
     public void updateJoinStatus (String status, String nId){
-
-
-
+      
         final DocumentReference docRef = db.collection("joinStatus").document(nId);
 
         db.runTransaction(new Transaction.Function<Void>() {
@@ -475,5 +476,29 @@ public class FireStoreHelper {
                 idToNameDictionary = map;
             }
         });
+    }
+
+    /**
+     *  Attaches a listener that loads information for a given userID
+     *
+     * Author: Jennie Zhou
+     * @param id the id of the user
+     * @return the listener
+     */
+    //TODO: NOT TESTED YET
+    public ListenerRegistration loadUserInformation(String id) {
+        DocumentReference docRef = db.collection("users").document(id);
+        docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                User userObj = new User(id, documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
+                EventBus.getDefault().post(new UserEvent(userObj));
+            }
+        });
+        return null; //shouldn't return null, doesn't work without a return statement yet
     }
 }
