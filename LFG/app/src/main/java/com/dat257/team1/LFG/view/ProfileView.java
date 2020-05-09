@@ -8,14 +8,21 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
+import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileView extends AppCompatActivity {
+
+    private ProfileViewModel profileViewModel;
+    private MutableLiveData<User> user;
     private ImageView profileImage;
     private ImageView emailImage;
     private ImageView phoneImage;
@@ -41,11 +48,27 @@ public class ProfileView extends AppCompatActivity {
 
         initViews();
 
-        FireStoreHelper.getInstance(); //TODO: We need a userID from the previous view, in order to compare the currentUser with the profileUser
-        User currentUser = null; // You
-        User profileUser = null; // User who owns the profile
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        getLifecycle().addObserver(profileViewModel);
+        profileViewModel.onCreate();
 
-        if (currentUser.getEmail().equals(profileUser.getEmail())) {
+        user = profileViewModel.getUserId();
+        profileViewModel.getUserId().observe(this, new Observer<User>() {
+            @Override
+            public void onChanged(User user) {
+                userName.setText(user.getName());
+                profileDescription.setText(user.getId()); //sätter profile desc som id nu, då vi inte har en user desc som kan hämtas
+                emailTextView.setText(user.getEmail());
+                phoneTextView.setText(user.getPhoneNumber());
+            }
+        });
+
+        FireStoreHelper.getInstance();
+        String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid(); // the current user
+        User profileOwner = null;
+
+        //TODO: We need a userID from profile owner, in order to compare the currentUser with the profileUser
+        if (currentUser.equals(profileOwner.getId())) {
             addFriendLayout.setVisibility(View.INVISIBLE);
             blockContactLayout.setVisibility(View.INVISIBLE);
         } else {

@@ -415,6 +415,7 @@ public class FireStoreHelper {
      * @param id the id of the user
      * @return the listener
      */
+    //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
         docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
@@ -428,6 +429,6 @@ public class FireStoreHelper {
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
-        return null;
+        return null; //shouldn't return null, doesn't work without a return statement yet
     }
 }
