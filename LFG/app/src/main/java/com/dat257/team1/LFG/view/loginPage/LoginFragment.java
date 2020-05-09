@@ -3,6 +3,7 @@ package com.dat257.team1.LFG.view.loginPage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.view.ActivityFeedView;
+import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -40,6 +43,7 @@ import org.w3c.dom.Text;
  */
 public class LoginFragment extends Fragment {
 
+    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
     private Button loginButton;
     private EditText passwordField, emailField;
 
@@ -130,7 +134,7 @@ public class LoginFragment extends Fragment {
     }
 
     public void openForgotPassword(){
-
+        Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
     }
 
