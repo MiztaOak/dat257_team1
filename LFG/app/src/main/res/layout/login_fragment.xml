@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:clickable="false"
+            android:clickable="true"
             android:fontFamily="@font/calibri_regular"
             android:text="@string/forgot_password"
             android:textAlignment="center"
