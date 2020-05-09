@@ -15,13 +15,12 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-public class ActivityFeedViewModel extends ViewModel implements LifecycleObserver {
+public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<List<Activity>> mutableActivityList;
 
-    public ActivityFeedViewModel() {
+    public ActFeedViewModel() {
     }
-
 
     public MutableLiveData<List<Activity>> getMutableActivityList() {
         if (mutableActivityList == null) {
@@ -47,7 +46,7 @@ public class ActivityFeedViewModel extends ViewModel implements LifecycleObserve
         }
     }
 
-    public void onCardClick(int pos) {
+    public void onItemClick(int pos) {
         if (mutableActivityList.getValue() != null)
             Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
     }

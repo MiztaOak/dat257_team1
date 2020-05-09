@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.view;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,6 +36,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedListFragment;
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -53,7 +53,6 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -359,7 +358,7 @@ public class CreateActivityView extends AppCompatActivity {
 
     public void openActivityFeed() {
         Log.d(LOG_TAG, "Activity created!");
-        Intent intent = new Intent(this, ActivityFeedView.class);
+        Intent intent = new Intent(this, ActFeedListFragment.class);
 
         startActivity(intent);
     }
