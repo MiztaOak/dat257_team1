@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.JoinNotification;
+import com.dat257.team1.LFG.model.NotificationForJoiner;
+import com.dat257.team1.LFG.viewmodel.NotificationViewModel;
 
 import java.util.List;
 
@@ -19,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCardAdapter.AcceptReqViewHolder>{
 
     private MutableLiveData<List<JoinNotification>> requests;
+    private MutableLiveData<NotificationForJoiner> mutableNotification;
 
     public NotificationCardAdapter(MutableLiveData<List<JoinNotification>> requests){
         this.requests = requests;
@@ -54,12 +57,14 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
             @Override
             public void onClick(View view) {
                 FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
+                FireStoreHelper.getInstance().updateJoinStatus("Accepted", mutableNotification.getValue().getnId());
             }
         });
         holder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
+                FireStoreHelper.getInstance().updateJoinStatus("Declined", mutableNotification.getValue().getnId());
             }
         });
     }
