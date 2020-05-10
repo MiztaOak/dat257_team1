@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".view.home.MenuActivity"
+            android:name=".view.MenuActivity"
             android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -48,7 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.CurrentActivitiesView" />
+        <activity android:name=".view.myActivities.CurrentActFragment" />
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.home;
+package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,8 +22,6 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

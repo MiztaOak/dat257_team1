@@ -9,37 +9,24 @@
         android:id="@+id/nav_home"
         android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/activity_feed">
-
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.dat257.team1.LFG.view.loginPage.LoginFragment"
-        android:label="@string/home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <action
-            android:id="@+id/action_nav_home_second_to_nav_home"
-            app:destination="@id/nav_home" />
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
+        tools:layout="@layout/activity_feed_w_tabs"/>
 
     <fragment
-        android:id="@+id/scrollingFragment"
-        android:name="com.dat257.team1.LFG.ScrollingFragment"
+        android:id="@+id/nav_my_activities"
+        android:name="com.dat257.team1.LFG.view.myActivities.MyActPageFragment"
+        android:label="menu_my_activities"
+        tools:layout="@layout/my_activities_page"/>
+
+    <fragment
+        android:id="@+id/nav_about"
+        android:name="com.dat257.team1.LFG.view.AboutFragment"
         android:label="fragment_scrolling"
-        tools:layout="@layout/fragment_scrolling" />
+        tools:layout="@layout/about_fragment" />
     <activity
         android:id="@+id/messageView"
         android:name="com.dat257.team1.LFG.view.MessageView"
-        android:label="MessageView" />
+        android:label="MessageView"
+        tools:layout="@layout/message_activity"/>
     <activity
         android:id="@+id/profileView"
         android:name="com.dat257.team1.LFG.view.ProfileView"

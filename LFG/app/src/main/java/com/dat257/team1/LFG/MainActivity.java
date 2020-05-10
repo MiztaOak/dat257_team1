@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.dat257.team1.LFG.model.Message;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.view.home.MenuActivity;
+import com.dat257.team1.LFG.view.MenuActivity;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;

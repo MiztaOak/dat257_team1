@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.activityFeed;
+package com.dat257.team1.LFG.view.myActivities;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,37 +8,31 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
+import com.dat257.team1.LFG.view.activityFeed.ActPageAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Objects;
-
-public class ActFeedPageFragment extends Fragment {
+public class MyActPageFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-        ActPageAdapter actPageAdapter = new ActPageAdapter(this, getParentFragmentManager());
-        ViewPager viewPager = view.findViewById(R.id.view_pager_feed);
-        viewPager.setAdapter(actPageAdapter);
-        TabLayout tabs = view.findViewById(R.id.activity_feed_tab);
+        MyActPageAdapter myActPageAdapter = new MyActPageAdapter(this, getParentFragmentManager());
+        ViewPager viewPager = view.findViewById(R.id.view_pager_activities);
+        viewPager.setAdapter(myActPageAdapter);
+        TabLayout tabs = view.findViewById(R.id.my_activities_tab);
         tabs.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
-
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_feed_w_tabs, container, false);
+        final View rootView = inflater.inflate(R.layout.my_activities_page, container, false);
         return rootView;
     }
 }

@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG;
+package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,13 +9,15 @@ import androidx.fragment.app.Fragment;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-class ScrollingFragment extends Fragment {
+import com.dat257.team1.LFG.R;
+
+class AboutFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_scrolling, container, false);
+        return inflater.inflate(R.layout.about_fragment, container, false);
     }
 }

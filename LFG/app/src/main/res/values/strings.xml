@@ -1,4 +1,4 @@
- <resources>
+<resources>
     <string name="app_name">LFG</string>
     <string name="title_activity_register_user">register_user</string>
     <string name="reg_name">Name</string>
@@ -8,6 +8,8 @@
     <string name="tab_text_2">Sign in</string>
     <string name="tab_text_3">Activities</string>
     <string name="tab_text_4">Map</string>
+    <string name="tab_text_5">Current activities</string>
+    <string name="tab_text_6">Previous activities</string>
     <string name="sign_in">Sign in</string>
     <string name="let_s_get_you_started">Let\'s get you started</string>
     <string name="login_page_view">Login page</string>
@@ -68,6 +70,6 @@
         "name:\n"
         "\n\n"
     </string>
-     <string name="about">About</string>
-     <string name="logout">Logout</string>
- </resources>
+    <string name="about">About</string>
+    <string name="logout">Logout</string>
+</resources>
