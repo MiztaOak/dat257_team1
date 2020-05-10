@@ -74,4 +74,6 @@
     </string>
     <string name="about">About</string>
     <string name="logout">Logout</string>
+    <string name="my_activities">My activities</string>
+    <string name="logout">Logout</string>
 </resources>
