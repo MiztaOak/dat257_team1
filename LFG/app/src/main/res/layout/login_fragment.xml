@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
-            android:clickable="false"
+            android:clickable="true"
             android:fontFamily="@font/calibri_regular"
             android:text="@string/forgot_password"
             android:textAlignment="center"
@@ -122,18 +122,20 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <ImageView
+
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/quick_access_google"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="100dp"
+                android:layout_height="55dp"
                 android:layout_marginEnd="20dp"
+                android:clickable="true"
                 android:contentDescription="@string/description"
-                android:src="@drawable/google" />
+                android:focusable="true" />
 
             <ImageView
                 android:id="@+id/quick_access_facebook"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="20dp"
                 android:contentDescription="@string/description"
                 android:src="@drawable/fb" />

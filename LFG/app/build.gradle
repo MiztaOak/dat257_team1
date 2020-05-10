@@ -51,4 +51,5 @@ dependencies {
     implementation 'com.android.support:design:29.1.1'
 
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
 }

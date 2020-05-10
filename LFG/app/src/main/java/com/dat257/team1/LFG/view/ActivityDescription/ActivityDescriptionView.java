@@ -117,6 +117,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 activityDescriptionViewModel.joinActivity();
+                activityDescriptionViewModel.joinerStatus();
             }
         });
 

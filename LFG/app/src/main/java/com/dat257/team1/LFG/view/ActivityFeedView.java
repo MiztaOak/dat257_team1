@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.chatList.ChatListView;
+import com.dat257.team1.LFG.view.favouriteActivities.FavouriteActivityView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -85,8 +87,8 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 launchLoginPage();
-                LocalUser.signOut();
             }
         });
 
@@ -157,7 +159,6 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        activityFeedViewModel.onCardClick(pos);
         Intent intent = new Intent(this, ActivityDescriptionView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
