@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.favouriteActivities.FavouriteActivityView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;

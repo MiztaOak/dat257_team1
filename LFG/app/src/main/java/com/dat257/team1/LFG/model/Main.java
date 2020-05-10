@@ -28,7 +28,7 @@ public class Main {
 
     private static Main main;
     private List<Activity> activities;
-    private User dummy = new User("1", "johan", "joahn", 0);
+    private User dummy = new User("1", "johan", "joahn", "0");
     private FireStoreHelper fireBaseObject;
     private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else

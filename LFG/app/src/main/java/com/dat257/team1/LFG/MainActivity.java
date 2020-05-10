@@ -4,15 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.dat257.team1.LFG.model.Message;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.ActivityFeedView;
 import com.dat257.team1.LFG.view.loginPage.LoginPageView;
@@ -34,9 +29,9 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             openLoginPage();
         }
-        //openFindActivity();
-       // Intent intent = new Intent(this, MenuActivity.class);
-       // startActivity(intent);
+        openFindActivity();
+        //Intent intent = new Intent(this, CurrentActivityFragment.class);
+        //startActivity(intent);
 
     }
 
