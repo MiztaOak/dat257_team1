@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.chatList.ChatListView;
+import com.dat257.team1.LFG.view.favouriteActivities.FavouriteActivityView;
 import com.dat257.team1.LFG.viewmodel.ActivityFeedViewModel;
 
 import java.util.ArrayList;
@@ -149,7 +151,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     public void launchCreateActivity() {
         Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, CreateActivityView.class);
+        Intent intent = new Intent(this, ChatListView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
