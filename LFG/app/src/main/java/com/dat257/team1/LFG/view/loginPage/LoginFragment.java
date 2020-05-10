@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.ActivityFeedView;
+import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -48,6 +49,7 @@ import org.w3c.dom.Text;
  */
 public class LoginFragment extends Fragment {
 
+    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
     private Button loginButton;
     private EditText passwordField, emailField;
     private SignInButton googleButton;
@@ -220,7 +222,7 @@ public class LoginFragment extends Fragment {
     }
 
     public void openForgotPassword(){
-
+        Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
     }
 

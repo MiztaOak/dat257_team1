@@ -1,39 +1,37 @@
-package com.dat257.team1.LFG.view.loginPage;
+package com.dat257.team1.LFG.view.favouriteActivities;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.dat257.team1.LFG.R;
-/**
- * A FragmentPagerAdapter that returns a fragment corresponding to
- * one of the tabs.
- *
- * @author : Jakobew
- */
-public class LoginPagerAdapter extends FragmentPagerAdapter {
+
+public class FavouriteActivitiesAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_all_act1, R.string.tab_text_all_act2};
     private final Context mContext;
 
-    public LoginPagerAdapter(Context context, FragmentManager fm) {
+    public FavouriteActivitiesAdapter(Context context, @NonNull FragmentManager fm) {
         super(fm);
         mContext = context;
     }
 
+    @NonNull
     @Override
     public Fragment getItem(int position) {
         Fragment fragment;
         switch (position) {
             case 0:
-                fragment = new RegisterFragment();
+                fragment = new AllActivitiesFragment();
                 break;
 
             case 1:
-                fragment = new LoginFragment();
+                fragment = new FavouriteActivityFragment();
                 break;
             default:
                 return null;
@@ -41,10 +39,8 @@ public class LoginPagerAdapter extends FragmentPagerAdapter {
         return fragment;
     }
 
-
     @Override
     public int getCount() {
-        // Show 2 total pages.
         return 2;
     }
 
@@ -52,5 +48,4 @@ public class LoginPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
-
 }

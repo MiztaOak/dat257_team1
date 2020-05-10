@@ -7,6 +7,7 @@ package com.dat257.team1.LFG.model;
 public enum Category {
 
     Football (Group.Sports), Tennis (Group.Sports), Sports (Group.Sports), Hiking (Group.Sports), Sailing (Group.Sports), Fishing (Group.Sports),
+    Swimming (Group.Sports),
 
     Other (Group.Other),
 
