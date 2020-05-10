@@ -182,13 +182,14 @@
             android:gravity="center_horizontal"
             android:orientation="horizontal">
 
-            <ImageView
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/quick_access_google"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="100dp"
+                android:layout_height="55dp"
                 android:layout_marginEnd="20dp"
+                android:clickable="true"
                 android:contentDescription="@string/description"
-                android:src="@drawable/google" />
+                android:focusable="true" /> />
 
             <ImageView
                 android:id="@+id/quick_access_facebook"

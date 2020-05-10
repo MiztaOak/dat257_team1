@@ -24,7 +24,6 @@ public enum Category {
     Festival(Group.Festival, "Festival"),
     Other(Group.Other, "Other");
 
-
     private Group group;
     private final String name;
 

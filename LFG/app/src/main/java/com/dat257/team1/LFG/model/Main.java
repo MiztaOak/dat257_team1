@@ -28,7 +28,7 @@ public class Main {
 
     private static Main main;
     private List<Activity> activities;
-    private User dummy = new User("1", "johan", "joahn", 0);
+    private User dummy = new User("1", "johan", "joahn", "0");
     private FireStoreHelper fireBaseObject;
     private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else
@@ -37,11 +37,6 @@ public class Main {
 
     private Main() {
         activities = new ArrayList<>();
-
-        List<Comment> comments = new ArrayList<>();
-        comments.add(new Comment("comment1", Calendar.getInstance().getTime(), "Me"));
-        comments.add(new Comment("comment2", Calendar.getInstance().getTime(), "Me"));
-        comments.add(new Comment("comment3", Calendar.getInstance().getTime(), "Me")); //TODO
         fireBaseObject = FireStoreHelper.getInstance();
     }
 

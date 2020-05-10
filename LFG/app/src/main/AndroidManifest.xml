@@ -11,11 +11,14 @@
         android:required="true" />
 
     <application
+
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme">
 
         <activity
@@ -33,13 +36,23 @@
         <activity
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".view.chatList.ChatListView" />
+        <activity android:name=".view.MessageView" />
+
         <activity
             android:name=".view.loginPage.LoginPageView"
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.activityFeed.ActFeedPageView"
+
+        <activity
+            android:name=".view.activityFeed.ActFeedPageView"
             android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".view.favouriteActivities.FavouriteActivityView" />
+        <activity android:name=".view.ForgetPasswordView" />
         <activity android:name=".view.NotificationView" />
+        <activity android:name=".view.ProfileView" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,6 +60,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".view.CurrentActivitiesView" />
     </application>
 
 </manifest>

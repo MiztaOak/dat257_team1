@@ -98,24 +98,23 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                             userData.put("friends", null);
                             userData.put("phoneNumber", phone);
                             FirebaseFirestore.getInstance().collection("users").document(user.getUid()).set(userData)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            EventBus.getDefault().post(new RegisterEvent(true));
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                EventBus.getDefault().post(new RegisterEvent(false));
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+                                        EventBus.getDefault().post(new RegisterEvent(true));
+                                    }else{
+                                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    EventBus.getDefault().post(new RegisterEvent(false));
+                                                }
+                                                //help edge case no data for user in the db but the user is still
+                                                // registered what should we do???
                                             }
-                                            //help edge case no data for user in the db but the user is still
-                                            // registered what should we do???
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
                             });
                         } else {
@@ -137,7 +136,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         String email = emailField.getText().toString(),
                 name = nameField.getText().toString(),
                 phone = phoneField.getText().toString(), pass1 = passField1.getText().toString(),
-                pass2 = passField1.getText().toString();
+                pass2 = passField2.getText().toString();
 
         if (correctData(email, name, pass1, pass2, phone)) {
             registerUser(email, pass1, name, phone);

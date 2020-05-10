@@ -23,6 +23,8 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="title_activity_maps">Map</string>
+    <string name="tab_text_all_act1">Favourite activities</string>
+    <string name="tab_text_all_act2">All activities</string>
 
     <string name="title_activity_menu">MenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -48,4 +50,7 @@
     <string name="peoples">Peoples</string>
     <string name="date_amp_time"><![CDATA[Date & Time]]></string>
     <string name="join_notification_text">%1$s wants to join your activity %2$s.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

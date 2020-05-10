@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
@@ -73,6 +74,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
                 activityImage.setImageResource(R.drawable.dog_image_activity);
+                userName.setText(FireStoreHelper.getInstance().getIdToNameDictionary().get(activity.getOwner()));
             }
         });
 
@@ -113,6 +115,7 @@ public class ActivityDescriptionView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 activityDescriptionViewModel.joinActivity();
+                activityDescriptionViewModel.joinerStatus();
             }
         });
 
