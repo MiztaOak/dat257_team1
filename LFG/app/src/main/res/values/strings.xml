@@ -25,6 +25,8 @@
     <string name="password">Password</string>
     <string name="confirm_password">Confirm password</string>
     <string name="title_activity_maps">Map</string>
+    <string name="tab_text_all_act1">Favourite activities</string>
+    <string name="tab_text_all_act2">All activities</string>
 
     <string name="title_activity_menu">MenuActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>

@@ -4,12 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.dat257.team1.LFG.model.Message;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
@@ -20,8 +17,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 
-public class MainActivity extends AppCompatActivity implements
-        NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +29,9 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             openLoginPage();
         }
-        //openFindActivity();
-       // Intent intent = new Intent(this, MenuActivity.class);
-       // startActivity(intent);
+        openFindActivity();
+        //Intent intent = new Intent(this, CurrentActivityFragment.class);
+        //startActivity(intent);
 
     }
 
@@ -49,21 +45,4 @@ public class MainActivity extends AppCompatActivity implements
         Intent intent = new Intent(this, LoginPageView.class);
         startActivity(intent);
     }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        int id = menuItem.getItemId();
-
-        if(id == R.id.nav_home){
-            startActivity(new Intent(MainActivity.this, Message.class));
-        }else if (id == R.id.nav_gallery){
-            startActivity(new Intent(MainActivity.this, Message.class));
-        }else if (id == R.id.nav_slideshow) {
-            startActivity(new Intent(MainActivity.this, Message.class));
-        }
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
 }
