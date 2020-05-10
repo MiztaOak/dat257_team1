@@ -38,7 +38,7 @@
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.ForgetPasswordView" />
-        <activity android:name=".view.activityFeed.ActFeedPageView"
+        <activity android:name=".view.activityFeed.ActFeedPageFragment"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".view.NotificationView" />
         <activity android:name=".MainActivity">

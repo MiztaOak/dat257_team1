@@ -14,9 +14,9 @@ public class ActPageAdapter extends FragmentPagerAdapter {
 
     @StringRes
     private static final int[] TAB_TITLES = new int[]{R.string.tab_text_3, R.string.tab_text_4};
-    private final Context mContext;
+    private final ActFeedPageFragment mContext;
 
-    ActPageAdapter(Context context, @NonNull FragmentManager fm) {
+    ActPageAdapter(ActFeedPageFragment context, @NonNull FragmentManager fm) {
         super(fm);
         mContext = context;
     }

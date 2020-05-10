@@ -73,6 +73,7 @@ public class FireStoreHelper {
         idToNameDictionary = new HashMap<>();
         loadUserNames();
         loadActivities();
+
     }
 
 

@@ -91,14 +91,6 @@ public class Main {
         FireStoreHelper.getInstance().addCommentToActivity(activity, comment);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public Timestamp convertToTimestamp(String time) {
-        String[] hoursAndMinutes = time.split(":");
-        LocalDateTime localDateTime = LocalDateTime.of(2020, 4, 25, Integer.parseInt(hoursAndMinutes[0]), Integer.parseInt(hoursAndMinutes[1]));
-        //Timestamp timestamp = Timestamp.valueOf(localDateTime);
-        return new Timestamp(300, 300);
-    }
-
     public void writeMessage(Chat chat, Message message) {
         FireStoreHelper.getInstance().writeMessageInChat(chat, message);
     }
