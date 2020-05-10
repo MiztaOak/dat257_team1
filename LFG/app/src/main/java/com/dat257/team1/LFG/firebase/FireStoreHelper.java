@@ -512,7 +512,7 @@ public class FireStoreHelper {
             EventBus.getDefault().post(new CurrentActivitiesEvent(currentActivities));
         });
     }
-  
+    /**
      * Method that attaches and returns a listener that keeps track of all chats the currently
      * logged in user are a part off.
      *
@@ -571,6 +571,7 @@ public class FireStoreHelper {
         return name.toString();
     }
 
+    /**
      *  Attaches a listener that loads information for a given userID
      *
      * Author: Jennie Zhou
