@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Main;
 
 import java.util.List;
 
@@ -44,6 +45,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         cardViewHolder.itemView.setOnClickListener(new View.OnClickListener() { //TODO Bad performance should be in constructor
             @Override
             public void onClick(View view) {
+                Main.getInstance().setFocusedActivity(activityList.getValue().get(position)); //moved this here to function with the current activities
                 iCardViewHolderClickListener.onCardClicked(position);
             }
         });

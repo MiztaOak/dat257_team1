@@ -9,6 +9,7 @@ import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.CurrentActivitiesEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -403,6 +405,32 @@ public class FireStoreHelper {
                 }
                 idToNameDictionary = map;
             }
+        });
+    }
+
+    /**
+     * Method that attaches and returns a listener that loads all activities that the current user
+     * is taking part in.
+     * @return the listener
+     */
+    public ListenerRegistration loadCurrentActivities(){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            return null;
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference currentUser = db.document("/users/"+uId);
+        return db.collection("activities").whereArrayContains("participants",currentUser).addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
+            }
+            List<Activity> currentActivities = new ArrayList<>();
+            for(QueryDocumentSnapshot doc : value){
+                Log.w(TAG,doc.getId());
+                ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                if (data.hasValidData())
+                    currentActivities.add(data.toActivity(doc.getId()));
+            }
+            EventBus.getDefault().post(new CurrentActivitiesEvent(currentActivities));
         });
     }
 }

@@ -50,4 +50,5 @@ public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
         if (mutableActivityList.getValue() != null)
             Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
     }
+
 }
