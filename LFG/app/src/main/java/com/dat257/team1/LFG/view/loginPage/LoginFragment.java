@@ -156,6 +156,7 @@ public class LoginFragment extends Fragment {
      * Fetches some information about the Google account that's logged in.
      * Needs to be put into the database to register the account //TODO
      */
+    /*
     GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
     //if (acct != null) {
     String personName = acct.getDisplayName();
@@ -165,6 +166,7 @@ public class LoginFragment extends Fragment {
     String personId = acct.getId();
     //Uri personPhoto = acct.getPhotoUrl();
     //}
+*/
 
     /**
      * A method to check the validation of the password and the email.

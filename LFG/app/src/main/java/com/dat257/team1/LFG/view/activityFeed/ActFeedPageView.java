@@ -1,17 +1,24 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.material.tabs.TabLayout;
 
 public class ActFeedPageView extends AppCompatActivity {
 
+    private static final String LOG_TAG = ActFeedPageView.class.getSimpleName();
+    Button createActivity;
     ActFeedViewModel actFeedViewModel;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +35,21 @@ public class ActFeedPageView extends AppCompatActivity {
 
         //tabLayoutListener();
         //viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        createActivity = (Button) findViewById(R.id.createActivity);
+        createActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCreateActivity();
+            }
+        });
+
+    }
+
+    public void launchCreateActivity() {
+        Log.d(LOG_TAG, "Create activity clicked!");
+        Intent intent = new Intent(this, CreateActivityView.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
     }
 
     /*
