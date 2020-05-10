@@ -218,25 +218,29 @@ public class FireStoreHelper {
      * Author: Johan Ek
      */
     private void loadActivities() {
-        db.collection("activities").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-
-                activities = new ArrayList<>();
-                for(QueryDocumentSnapshot doc : value){
-                    Log.w(TAG,doc.getId());
-                    ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
-                    if (data.hasValidData())
-                        activities.add(data.toActivity(doc.getId()));
-                }
-                Main.getInstance().setActivities(activities);
-                EventBus.getDefault().post(new ActivityFeedEvent(activities));
+        db.collection("activities").addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
             }
+
+            activities = new ArrayList<>();
+            for(QueryDocumentSnapshot doc : value){
+                Log.w(TAG,doc.getId());
+                ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                if (shouldActivityBeShown(data)) {
+                    activities.add(data.toActivity(doc.getId()));
+                }
+            }
+            Main.getInstance().setActivities(activities);
+            EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
+    }
+
+    private boolean shouldActivityBeShown(ActivityDataHolder data){
+        return data.hasValidData() && (data.getNumOfMaxAttendees() > data.participants.size() ||
+                data.getNumOfMaxAttendees() == 0) &&
+                !data.getOwner().getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     /**
@@ -412,9 +416,6 @@ public class FireStoreHelper {
         });
     }
 
-
-
-
     /**
      * Method that creates a join request for a user on a certain activity.
      *
@@ -512,6 +513,7 @@ public class FireStoreHelper {
             EventBus.getDefault().post(new CurrentActivitiesEvent(currentActivities));
         });
     }
+  
     /**
      * Method that attaches and returns a listener that keeps track of all chats the currently
      * logged in user are a part off.

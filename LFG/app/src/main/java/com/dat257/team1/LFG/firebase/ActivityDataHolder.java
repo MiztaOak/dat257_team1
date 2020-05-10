@@ -24,8 +24,8 @@ public class ActivityDataHolder {
     public Timestamp time;
     public Timestamp creationDate;
     public GeoPoint location;
-    public Boolean privateAct;
-    public int numOfAttendees;
+    public Boolean privateEvent;
+    public Integer numOfMaxAttendees;
     public Category category;
     public DocumentReference chat;
     public List<DocumentReference> joinRequestList;
@@ -34,7 +34,7 @@ public class ActivityDataHolder {
     public ActivityDataHolder() {
     }
 
-    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location, DocumentReference chat, Boolean privateAct, int numAttendees, Category category, List<DocumentReference> joinRequestList) {
+    public ActivityDataHolder(DocumentReference owner, List<DocumentReference> participants, String title, String desc, Timestamp time, Timestamp creationDate, GeoPoint location, DocumentReference chat, Boolean privateEvent, Integer numAttendees, Category category, List<DocumentReference> joinRequestList) {
         this.owner = owner;
         this.participants = participants;
         this.title = title;
@@ -43,26 +43,26 @@ public class ActivityDataHolder {
         this.creationDate = creationDate;
         this.location = location;
         this.chat = chat;
-        this.privateAct = privateAct;
-        this.numOfAttendees = numAttendees;
+        this.privateEvent = privateEvent;
+        this.numOfMaxAttendees = numAttendees;
         this.category = category;
         this.joinRequestList = joinRequestList;
     }
 
-    public Boolean getPrivateAct() {
-        return privateAct;
+    public Boolean getPrivateEvent() {
+        return privateEvent;
     }
 
-    public void setPrivateAct(Boolean privateAct) {
-        this.privateAct = privateAct;
+    public void setPrivateEvent(Boolean privateEvent) {
+        this.privateEvent = privateEvent;
     }
 
-    public int getNumOfAttendees() {
-        return numOfAttendees;
+    public int getNumOfMaxAttendees() {
+        return numOfMaxAttendees;
     }
 
-    public void setNumOfAttendees(int numOfAttendees) {
-        this.numOfAttendees = numOfAttendees;
+    public void setNumOfMaxAttendees(int numOfMaxAttendees) {
+        this.numOfMaxAttendees = numOfMaxAttendees;
     }
 
     public Category getCategory() {
@@ -157,8 +157,8 @@ public class ActivityDataHolder {
                 ", creationDate=" + creationDate +
                 ", location=" + location +
                 ", chat=" + chat +
-                ", privateEvent=" + privateAct +
-                ", numOfAttendees=" + numOfAttendees +
+                ", privateEvent=" + privateEvent +
+                ", numOfAttendees=" + numOfMaxAttendees +
                 ", category=" + category +
                 ", joinRequests=" + joinRequestList +
                 '}';
@@ -173,7 +173,7 @@ public class ActivityDataHolder {
             //joinReqList.add(); //TODO
         }
 
-        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat.getId(),privateAct,numOfAttendees,category, joinReqList );
+        return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat.getId(), privateEvent, numOfMaxAttendees,category, joinReqList );
     }
 
     boolean hasValidData(){
