@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.view.MessageView;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
