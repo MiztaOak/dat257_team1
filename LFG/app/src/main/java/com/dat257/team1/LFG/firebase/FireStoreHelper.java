@@ -10,6 +10,7 @@ import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
 import com.dat257.team1.LFG.events.ChatListEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
+import com.dat257.team1.LFG.events.CurrentActivitiesEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.MessageEvent;
@@ -488,6 +489,32 @@ public class FireStoreHelper {
     }
 
     /**
+     * Method that attaches and returns a listener that loads all activities that the current user
+     * is taking part in.
+     * @return the listener
+     */
+    public ListenerRegistration loadCurrentActivities(){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            return null;
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference currentUser = db.document("/users/"+uId);
+        return db.collection("activities").whereArrayContains("participants",currentUser).addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
+            }
+            List<Activity> currentActivities = new ArrayList<>();
+            for(QueryDocumentSnapshot doc : value){
+                Log.w(TAG,doc.getId());
+                ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                if (data.hasValidData())
+                    currentActivities.add(data.toActivity(doc.getId()));
+            }
+            EventBus.getDefault().post(new CurrentActivitiesEvent(currentActivities));
+        });
+    }
+  
+    /**
      * Method that attaches and returns a listener that keeps track of all chats the currently
      * logged in user are a part off.
      *
@@ -545,7 +572,7 @@ public class FireStoreHelper {
         }
         return name.toString();
     }
-  
+
     /**
      *  Attaches a listener that loads information for a given userID
      *

@@ -163,10 +163,10 @@ public class ActivityDataHolder {
                 ", joinRequests=" + joinRequestList +
                 '}';
     }
-    public Activity toActivity(String id){
+    Activity toActivity(String id){
         List<String> participantStrings = new ArrayList<>();
         for(DocumentReference ref: participants){
-            participantStrings.add(ref.toString());
+            participantStrings.add(ref.getId());
         }
         List<User> joinReqList = new ArrayList<>();
         for(DocumentReference ref: joinRequestList){
@@ -176,7 +176,7 @@ public class ActivityDataHolder {
         return new Activity(id,owner.getId(),participantStrings,title,desc,time,location, chat.getId(), privateEvent, numOfMaxAttendees,category, joinReqList );
     }
 
-    public boolean hasValidData(){
+    boolean hasValidData(){
         return owner != null && title != null && desc != null && time != null && owner != null && participants != null && creationDate != null;
     }
 }

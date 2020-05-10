@@ -87,8 +87,8 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
         logOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
                 launchLoginPage();
-                LocalUser.signOut();
             }
         });
 
@@ -151,7 +151,7 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
 
     public void launchCreateActivity() {
         Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(this, ChatListView.class);
+        Intent intent = new Intent(this, CreateActivityView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
@@ -159,7 +159,6 @@ public class ActivityFeedView extends AppCompatActivity implements ICardViewHold
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        activityFeedViewModel.onCardClick(pos);
         Intent intent = new Intent(this, ActivityDescriptionView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
