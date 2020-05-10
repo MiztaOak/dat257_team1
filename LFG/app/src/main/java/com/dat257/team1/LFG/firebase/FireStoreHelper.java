@@ -587,7 +587,7 @@ public class FireStoreHelper {
     //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
-        docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+        return docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -598,7 +598,6 @@ public class FireStoreHelper {
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
-        return null; //shouldn't return null, doesn't work without a return statement yet
     }
 }
 
