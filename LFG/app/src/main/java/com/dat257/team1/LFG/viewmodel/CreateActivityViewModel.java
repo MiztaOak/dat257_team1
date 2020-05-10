@@ -19,9 +19,7 @@ import java.util.Date;
 
 public class CreateActivityViewModel extends ViewModel {
 
-    private final int MIN_TITLE_LENGTH = 4;
 
-    private final long MAX_ATTENDEES = 999999999;
 
     //Error codes
     private final int TITLE_MISSING = 1;
@@ -42,32 +40,10 @@ public class CreateActivityViewModel extends ViewModel {
         return currentActivity;
     }
 
-    public void createActivity(String title, String description, Long time, Location location, Boolean privateEvent, int numAttendees, Category category) {
-        GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-        Timestamp timestamp = new Timestamp((time/1000),0);
-        //if (checkFields(title, description, timestamp, geoPoint, category) == 0) {
-            Main.getInstance().createActivity(title, description, timestamp, geoPoint, privateEvent, numAttendees, category, FirebaseAuth.getInstance().getUid());
-        //}
+    public void createActivity(String title, String description, Timestamp time, GeoPoint location, Boolean privateEvent, int numAttendees, Category category) {
+
+        Main.getInstance().createActivity(title, description, time, location, privateEvent, numAttendees, category, FirebaseAuth.getInstance().getUid());
     }
 
-    private int checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
-        if(!(title.length() >= MIN_TITLE_LENGTH)) {
-            return TITLE_MISSING;
-        }
-        if(description.length() == 0) {
-            return DESC_MISSING;
-        }
-        Date currentTime = Calendar.getInstance().getTime();
-        Date date = new Date(time.getSeconds());
-        if(date.before(currentTime)) {
-            return TIME_MISSING;
-        }
-        if(geoPoint == null) {
-            return LOC_MISSING;
-        }
-        if(category == null) {
-            return CAT_MISSING;
-        }
-        return 0;
-    }
+
 }

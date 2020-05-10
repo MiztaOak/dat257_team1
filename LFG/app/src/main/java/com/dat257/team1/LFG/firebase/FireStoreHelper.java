@@ -72,7 +72,7 @@ public class FireStoreHelper {
     private FirebaseFirestore db;
     private List<Activity> activities;
     private final String TAG = FirebaseFirestore.class.getSimpleName();
-    Map<String,String> idToNameDictionary;
+    private Map<String,String> idToNameDictionary;
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
@@ -488,6 +488,10 @@ public class FireStoreHelper {
         });
     }
 
+    public Map<String, String> getIdToNameDictionary() {
+        return idToNameDictionary;
+    }
+  
     /**
      * Method that attaches and returns a listener that loads all activities that the current user
      * is taking part in.
