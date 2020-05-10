@@ -15,13 +15,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.ActivityFeedView;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -38,8 +37,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import org.w3c.dom.Text;
 
 
 /**
@@ -77,7 +74,7 @@ public class LoginFragment extends Fragment {
                 String password = passwordField.getText().toString().trim();
                 //checking if the user has entered a validate form of the email and password
                 if (validateForm(email, password))
-                   loginUser(email, password);
+                    loginUser(email, password);
             }
         });
 
@@ -104,7 +101,8 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    /** Sign in with google
+    /**
+     * Sign in with google
      */
     private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -128,6 +126,7 @@ public class LoginFragment extends Fragment {
      * Handles the sign in results from the Google account sign in.
      * Throws an ApiException if the sign in fails.
      * If the sign in is successful, send the user to the ActivityFeedView.
+     *
      * @param completedTask
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -135,7 +134,7 @@ public class LoginFragment extends Fragment {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, open the ActivityFeedView
-            startActivity(new Intent(getActivity().getApplicationContext(), ActivityFeedView.class));
+            startActivity(new Intent(getActivity().getApplicationContext(), ActFeedPageView.class));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -157,15 +156,17 @@ public class LoginFragment extends Fragment {
      * Fetches some information about the Google account that's logged in.
      * Needs to be put into the database to register the account //TODO
      */
+    /*
     GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-        //if (acct != null) {
-        String personName = acct.getDisplayName();
-        String personGivenName = acct.getGivenName();
-        String personFamilyName = acct.getFamilyName();
-        String personEmail = acct.getEmail();
-        String personId = acct.getId();
-        //Uri personPhoto = acct.getPhotoUrl();
+    //if (acct != null) {
+    String personName = acct.getDisplayName();
+    String personGivenName = acct.getGivenName();
+    String personFamilyName = acct.getFamilyName();
+    String personEmail = acct.getEmail();
+    String personId = acct.getId();
+    //Uri personPhoto = acct.getPhotoUrl();
     //}
+*/
 
     /**
      * A method to check the validation of the password and the email.
@@ -221,7 +222,7 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    public void openForgotPassword(){
+    public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
     }

@@ -18,36 +18,40 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
+
+        android:theme="@style/AppTheme">
+
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".service.Map" />
         <activity
-            android:name="com.dat257.team1.LFG.view.ActivityDescription.ActivityDescriptionView"
-            android:label="Activity Description">
-        </activity>
-        <activity android:name=".view.CreateActivityView"
+            android:name=".view.ActivityDescriptionView"
+            android:label="Activity Description" />
+        <activity
+            android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".view.chatList.ChatListView" />
-        <activity android:name=".view.MessageView"/>
+        <activity android:name=".view.MessageView" />
 
         <activity
             android:name=".view.loginPage.LoginPageView"
             android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.ActivityFeedViewWTabs.ActivityFeedWTabsView" />
-        <activity android:name=".view.ActivityFeedView" />
+
+        <activity
+            android:name=".view.activityFeed.ActFeedPageView"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".view.favouriteActivities.FavouriteActivityView" />
         <activity android:name=".view.ForgetPasswordView" />
         <activity android:name=".view.NotificationView" />
-        <activity android:name=".view.MessageView" />
         <activity android:name=".view.ProfileView" />
         <activity android:name=".MainActivity">
             <intent-filter>

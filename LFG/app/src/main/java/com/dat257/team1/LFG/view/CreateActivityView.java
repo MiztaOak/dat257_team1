@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.view;
 
 import android.Manifest;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -37,6 +36,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -55,7 +55,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -101,8 +100,8 @@ public class CreateActivityView extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                Timestamp timestamp = new Timestamp((getActTime()/1000),0);
-                if(checkFields(getActTitle(),  getActDesc(), timestamp, geoPoint, getCategory())) {
+                Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
+                if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
                     openActivityFeed();
                 }
@@ -237,27 +236,27 @@ public class CreateActivityView extends AppCompatActivity {
 
     private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
         boolean status = true;
-        if(!(title.length() >= MIN_TITLE_LENGTH)) {
+        if (!(title.length() >= MIN_TITLE_LENGTH)) {
             status = false;
             titleTextView.setError("Your title must at least be " + MIN_TITLE_LENGTH + " characters long");
         }
-        if(description.length() == 0) {
+        if (description.length() == 0) {
             status = false;
             descTextView.setError("You must specify a description");
         }
         Date currentTime = Calendar.getInstance().getTime();
         Date date = new Date(time.getSeconds());
-        if(time.toDate().before(currentTime)) {
+        if (time.toDate().before(currentTime)) {
             status = false;
             //time picker error
         }
-        if(geoPoint == null) {
+        if (geoPoint == null) {
             status = false;
-            Toast.makeText(getApplicationContext(),"You must specify a location for your activity",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
         }
-        if(category == null) {
+        if (category == null) {
             status = false;
-            ((TextView)categorySpinner.getSelectedView()).setError("You must choose a category for your activity");
+            ((TextView) categorySpinner.getSelectedView()).setError("You must choose a category for your activity");
         }
         return status;
     }
@@ -397,7 +396,7 @@ public class CreateActivityView extends AppCompatActivity {
 
     public void openActivityFeed() {
         Log.d(LOG_TAG, "Activity created!");
-        Intent intent = new Intent(this, ActivityFeedView.class);
+        Intent intent = new Intent(this, ActFeedPageView.class);
 
         startActivity(intent);
     }
@@ -427,11 +426,11 @@ public class CreateActivityView extends AppCompatActivity {
     }
 
     private boolean isPrivateEvent() {
-       return privateEvent.isChecked();
+        return privateEvent.isChecked();
     }
 
     private Category getCategory() {
-       return (Category) categorySpinner.getSelectedItem();
+        return (Category) categorySpinner.getSelectedItem();
     }
 
 }

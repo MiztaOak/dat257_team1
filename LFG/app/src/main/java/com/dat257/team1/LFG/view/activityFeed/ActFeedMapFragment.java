@@ -1,8 +1,11 @@
-package com.dat257.team1.LFG.service;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,21 +14,28 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.service.LocationService;
+import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,30 +43,69 @@ import java.util.List;
  *
  * @author : Oussama Anadani
  */
-public class Map extends Fragment implements OnMapReadyCallback {
+public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
 
+    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private GoogleMap gm;
     private MapView mMapView;
-    private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private StringBuilder stringBuilder;
+    private LatLng currentLocation;
+    private LocationService locationService;
+    private ActFeedViewModel actFeedViewModel;
+    private MutableLiveData<List<Activity>> mutableActivityList;
 
-    public Map() {
+    public ActFeedMapFragment() {
     }
-/*
-    public Map(LatLng location) {
-        gm.animateCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 14));
-        gm.addMarker(new MarkerOptions().position(location).title("Activity here"));
-    }
-
- */
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-        mMapView = (MapView) rootView.findViewById(R.id.mapView);
+        mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
+        actFeedLiveData();
+
         return rootView;
+    }
+
+    /**
+     * A liveData method for activity feed ViewModel
+     */
+    private void actFeedLiveData() {
+        actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
+        getLifecycle().addObserver(actFeedViewModel); //TODO
+        actFeedViewModel.onCreate();
+        mutableActivityList = actFeedViewModel.getMutableActivityList();
+        mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
+            @Override
+            public void onChanged(List<Activity> activityList) {
+                //markCurrentLocation(); //TODO
+                markActivities(activityList);
+            }
+        });
+        actFeedViewModel.updateFeed(); //TODO
+    }
+
+    /**
+     * A method that marks the location on the map
+     *
+     * @param map Google map
+     */
+    @Override
+    public void onMapReady(GoogleMap map) {
+        gm = map;
+        customStyle();
+        onMarkerClick();
+    }
+
+    /**
+     * A method that fetches the int value of the category name. This helps to sort the
+     * categories on the an depending on the name
+     */
+    private int fetchImageRecourse(Category category) {
+        String id = category.getName().trim();
+        int resID = getResources().getIdentifier(id, "drawable", getContext().getPackageName());
+        return resID;
     }
 
 
@@ -74,45 +123,43 @@ public class Map extends Fragment implements OnMapReadyCallback {
             mapViewBundle = savedInstanceState.getBundle(MAPVIEW_BUNDLE_KEY);
         }
         mMapView.onCreate(mapViewBundle);
+        mMapView.onResume();
         mMapView.getMapAsync(this);
     }
+    
 
     /**
-     * A method that marks the location on the map
-     *
-     * @param map Google map
+     * A method that marks the activities locations on the map
      */
-    @Override
-    public void onMapReady(GoogleMap map) {
-        gm = map;
-        //gm.setMyLocationEnabled(true);
-        customStyle();
-        onMarkerClick();
-        //todo get activity locations from db. Now it's some test locations
-        List<LatLng> locations = new ArrayList<>();
-        locations.add(new LatLng(57.60, 11.97456000));
-        locations.add(new LatLng(57.65, 11.97456000));
-        locations.add(new LatLng(57.70, 11.97456000));
-        locations.add(new LatLng(57.75, 11.97456000));
-        locations.add(new LatLng(57.80, 11.97456000));
-        for (LatLng testLocation : locations) {
-            markLocation(testLocation);
+    public void markActivities(List<Activity> activityList) {
+        for (int index = 0; index < activityList.size(); index++) {
+            LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
+            int imageID = fetchImageRecourse(activityList.get(index).getCategory());
+            MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
+            Marker marker = gm.addMarker(markerOptions);
+            animateMarker(marker);
         }
     }
 
+    public static BitmapDescriptor generateBitmapDescriptorFromRes(Context context, int resId) {
+        Drawable drawable = ContextCompat.getDrawable(context, resId);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
 
     /**
-     * A method that marks the location on the map
-     *
-     * @param location The location that will be marked on the map
+     * A method that marks the current location on the map
      */
-    private void markLocation(LatLng location) {
-        gm.moveCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLng(location));
-        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
-        MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
-        // markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.football));
+    private void markCurrentLocation() {
+        gm.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+        MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here!");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
         Marker marker = gm.addMarker(markerOptions);
         animateMarker(marker);
     }
@@ -171,6 +218,7 @@ public class Map extends Fragment implements OnMapReadyCallback {
 
         mMapView.onSaveInstanceState(mapViewBundle);
     }
+
 
     @Override
     public void onResume() {
