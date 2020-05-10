@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.ChatListEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.events.JoinNotificationEvent;
@@ -17,6 +18,7 @@ import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
+import com.dat257.team1.LFG.view.chatList.ChatListItem;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
@@ -31,6 +33,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
@@ -461,6 +464,11 @@ public class FireStoreHelper {
         });
     }
 
+    /**
+     * Method that loads the dictionary that associates the uIDs with their user names
+     *
+     * Author: Johan Ek
+     */
     private void loadUserNames(){
         db.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -479,6 +487,64 @@ public class FireStoreHelper {
     }
 
     /**
+     * Method that attaches and returns a listener that keeps track of all chats the currently
+     * logged in user are a part off.
+     *
+     * Author: Johan Ek
+     * @return the listener that is attached to the list of chats the user is part off
+     */
+    public ListenerRegistration attachChatListListener(){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            return null;
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference userRef = db.document("/users/"+uId);
+        return db.collection("chats").whereArrayContains("participants",userRef).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                List<ChatListItem> chatInfoList = new ArrayList<>();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                    List<DocumentReference> participants= (List<DocumentReference>)doc.get("participants");
+                    String chatName = buildChatName(participants,FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    String id = doc.getId();
+                    int amountOfParticipants = participants.size();
+                    chatInfoList.add(new ChatListItem(chatName,id,amountOfParticipants));
+                }
+                EventBus.getDefault().post(new ChatListEvent(chatInfoList));
+            }
+        });
+    }
+
+    /**
+     * Method that build a chat name out of the list of participants. If the name is longer than
+     * part of the name that is build out of user names is longer than 20 characters "..." is
+     * attached at the end and the string is returned
+     *
+     * Author: Johan Ek
+     * @param idList the list of participants
+     * @return the name of the chat
+     */
+    private String buildChatName(List<DocumentReference> idList,String uID){
+        StringBuilder name = new StringBuilder();
+        name.append("Chat with ");
+        String currentUserName = idToNameDictionary.get(uID);
+        for(DocumentReference ref : idList){
+            String userName = idToNameDictionary.get(ref.getId());
+            if(userName.equals(currentUserName))
+                continue;
+            name.append(userName);
+            if(name.length() >= 20){
+                name.append("...");
+                return name.toString();
+            }
+            name.append(", ");
+        }
+        return name.toString();
+    }
+
      *  Attaches a listener that loads information for a given userID
      *
      * Author: Jennie Zhou
@@ -502,3 +568,4 @@ public class FireStoreHelper {
         return null; //shouldn't return null, doesn't work without a return statement yet
     }
 }
+
