@@ -36,7 +36,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Category;
-import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
 import com.dat257.team1.LFG.viewmodel.CreateActivityViewModel;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -396,8 +395,7 @@ public class CreateActivityView extends AppCompatActivity {
 
     public void openActivityFeed() {
         Log.d(LOG_TAG, "Activity created!");
-        Intent intent = new Intent(this, ActFeedPageView.class);
-
+        Intent intent = new Intent(this, MenuActivity.class);
         startActivity(intent);
     }
 
