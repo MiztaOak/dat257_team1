@@ -1,7 +1,9 @@
 package com.dat257.team1.LFG.view.loginPage;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +18,10 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.RegisterEvent;
+import com.dat257.team1.LFG.view.CurrentActivitiesView;
 import com.dat257.team1.LFG.view.activityFeed.ActFeedListFragment;
+import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -24,11 +29,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.functions.FirebaseFunctions;
+import com.google.firebase.functions.HttpsCallableResult;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,6 +47,8 @@ import java.util.Map;
  * @author : Jakobew & Johan Ek
  */
 public class RegisterFragment extends Fragment implements View.OnClickListener {
+    private static final String LOG_TAG = RegisterFragment.class.getSimpleName();
+
     private Button createButton;
     private EditText emailField;
     private EditText nameField;
@@ -84,44 +95,34 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     void registerUser(final String email, final String password, final String name,
                       final String phone) {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-
-
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Map<String, Object> userData = new HashMap<>();
-                            final FirebaseUser user = mAuth.getCurrentUser();
-                            userData.put("name", name);
-                            userData.put("email", email);
-                            userData.put("friends", null);
-                            userData.put("phoneNumber", phone);
-                            FirebaseFirestore.getInstance().collection("users").document(user.getUid()).set(userData)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        EventBus.getDefault().post(new RegisterEvent(true));
-                                    }else{
-                                        user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    EventBus.getDefault().post(new RegisterEvent(false));
-                                                }
-                                                //help edge case no data for user in the db but the user is still
-                                                // registered what should we do???
-                                            }
-                                        });
-                                    }
-                                }
-                            });
+                            writeUserData(name,phone);
+                            EventBus.getDefault().post(new RegisterEvent(true));
                         } else {
+                            Log.w(LOG_TAG,task.getException());
                             EventBus.getDefault().post(new RegisterEvent(false));
                         }
                     }
                 });
+    }
+
+    private void writeUserData(String name, String phone){
+        FirebaseFunctions mFunctions = FirebaseFunctions.getInstance();
+        Map<String, Object> data = new HashMap<>();
+        data.put("name",name);
+        data.put("phoneNumber",phone);
+        mFunctions.getHttpsCallable("addUserData").call(data).addOnCompleteListener(new OnCompleteListener<HttpsCallableResult>() {
+            @Override
+            public void onComplete(@NonNull Task<HttpsCallableResult> task) {
+                if(!task.isSuccessful()) {
+                    //do shit
+                }
+            }
+        });
     }
 
     /**
@@ -190,7 +191,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Subscribe
     public void onRegisterEvent(com.dat257.team1.LFG.events.RegisterEvent event) {
         if (event.isSuccess()) {
-            Intent intent = new Intent(getActivity(), ActFeedListFragment.class);
+            Intent intent = new Intent(getActivity(), ActFeedPageView.class);
             startActivity(intent);
         } else {
             Toast.makeText(getActivity().getApplicationContext(), "Something went wrong in the account creation", Toast.LENGTH_SHORT).show();
