@@ -120,7 +120,7 @@ public class CreateActivityView extends AppCompatActivity {
             public void onClick(View view) {
                 if (numOfAttendees < 999999) {
                     numOfAttendees++;
-                    numAttendees.setText(numOfAttendees);
+                    numAttendees.setText(String.valueOf(numOfAttendees));
                 }
             }
         });
@@ -131,7 +131,7 @@ public class CreateActivityView extends AppCompatActivity {
             public void onClick(View view) {
                 if (numOfAttendees > 0) {
                     numOfAttendees--;
-                    numAttendees.setText(numOfAttendees);
+                    numAttendees.setText(String.valueOf(numOfAttendees));
                 }
             }
         });
@@ -176,21 +176,26 @@ public class CreateActivityView extends AppCompatActivity {
         numAttendees.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                numOfAttendees = Integer.parseInt(charSequence.toString());
+                //if(!charSequence.toString().equals("")) {
+                //    numOfAttendees = Integer.parseInt(charSequence.toString().trim());
+               // }
+
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().matches("[0-9]") && editable.toString().length() > 0) {
+                if (editable.chars().allMatch(Character::isDigit) && editable.toString().length() > 0) {
                     numOfAttendees = Integer.parseInt(editable.toString());
+                } else if(editable.toString().length() == 0) {
+                    numOfAttendees = 0;
                 } else {
-                    numAttendees.setText(numOfAttendees);
                     numAttendees.setError("Only numbers allowed", getResources().getDrawable(R.drawable.ic_error_red_24dp));
+                    numAttendees.setText(String.valueOf(numOfAttendees));
+
                 }
             }
         });
