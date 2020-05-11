@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -19,12 +21,15 @@ import androidx.navigation.ui.NavigationUI;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment;
 import com.dat257.team1.LFG.view.chatList.ChatListFragment;
+import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
 import com.dat257.team1.LFG.view.myActivities.MyActPageFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private AppBarConfiguration mAppBarConfiguration;
+    private Button signOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,15 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        signOut = findViewById(R.id.btn_sign_out);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                openSignOutPage();
+            }
+        });
     }
 
     @Override
@@ -103,5 +117,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void openSignOutPage(){
+        startActivity(new Intent(this, LoginPageFragment.class));
     }
 }

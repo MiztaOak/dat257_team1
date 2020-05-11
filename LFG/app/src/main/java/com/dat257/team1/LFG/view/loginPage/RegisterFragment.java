@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.RegisterEvent;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.MenuActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -90,6 +91,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            FireStoreHelper.getInstance();
                             writeUserData(name, phone);
                             EventBus.getDefault().post(new RegisterEvent(true));
                         } else {

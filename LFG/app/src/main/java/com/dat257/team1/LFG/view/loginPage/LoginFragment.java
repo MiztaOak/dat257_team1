@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.dat257.team1.LFG.view.MenuActivity;
@@ -207,6 +208,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {  // Sign in success, update UI with the signed-in user's information
+                            FireStoreHelper.getInstance();
                             Toast.makeText(getActivity(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             retrieveData(user);

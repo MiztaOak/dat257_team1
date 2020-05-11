@@ -69,10 +69,6 @@ public class FireStoreHelper {
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(false)
-                .build();
-        db.setFirestoreSettings(settings);
         activities = new ArrayList<>();
         idToNameDictionary = new HashMap<>();
         loadUserNames();
