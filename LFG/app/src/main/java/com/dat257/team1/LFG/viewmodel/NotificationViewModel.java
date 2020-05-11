@@ -14,10 +14,13 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-public class NotificationViewModel extends ViewModel {
+public class NotificationViewModel extends ViewModel implements LifecycleObserver {
     private MutableLiveData<List<JoinNotification>> requests;
     private ListenerRegistration listener;
 
@@ -38,10 +41,12 @@ public class NotificationViewModel extends ViewModel {
         requests.setValue(event.getNotifications());
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void startup(){
         listener = FireStoreHelper.getInstance().loadNotification(FirebaseAuth.getInstance().getUid());
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void cleanup(){
         listener.remove();
     }

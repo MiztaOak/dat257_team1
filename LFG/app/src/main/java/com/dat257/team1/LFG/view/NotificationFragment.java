@@ -21,7 +21,7 @@ import com.dat257.team1.LFG.viewmodel.NotificationViewModel;
 import java.util.List;
 
 public class NotificationFragment extends Fragment {
-    MutableLiveData<List<JoinNotification>> requests;
+    private MutableLiveData<List<JoinNotification>> requests;
     private NotificationViewModel viewModel;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter reAdapter;
@@ -41,6 +41,7 @@ public class NotificationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+        getViewLifecycleOwner().getLifecycle().addObserver(viewModel);
         requests = viewModel.getRequests();
         requests.observe(getViewLifecycleOwner(), new Observer<List<JoinNotification>>() {
             @Override
@@ -55,17 +56,4 @@ public class NotificationFragment extends Fragment {
         reAdapter = new NotificationCardAdapter(requests);
         recyclerView.setAdapter(reAdapter);
     }
-
-    //TODO null if you want to call this
-    /*@Override
-    public void onStart() {
-        super.onStart();
-        viewModel.startup();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        viewModel.cleanup();
-    }*/
 }
