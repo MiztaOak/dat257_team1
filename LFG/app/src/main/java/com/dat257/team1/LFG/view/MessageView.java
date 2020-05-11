@@ -67,18 +67,9 @@ public class MessageView extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
         chatFeed = findViewById(R.id.chat_feed);
         chatFeed.setHasFixedSize(true);
         chatFeed.setLayoutManager(new LinearLayoutManager(this));
-
-
-
-
 
         messageCardsViewList = new ArrayList<>();
         messageCardsViewList.add(new MessageCard("", "This is a test", new Timestamp(System.currentTimeMillis())));

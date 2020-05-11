@@ -3,41 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_act_feed">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.dat257.team1.LFG.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
-
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
-    <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.dat257.team1.LFG.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
+        android:id="@+id/nav_act_feed"
+        android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
+        tools:layout="@layout/activity_feed_w_tabs"/>
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.dat257.team1.LFG.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_my_activities"
+        android:name="com.dat257.team1.LFG.view.myActivities.MyActPageFragment"
+        tools:layout="@layout/my_activities_page"/>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.dat257.team1.LFG.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_about"
+        android:name="com.dat257.team1.LFG.view.AboutFragment" />
+    <activity
+        android:id="@+id/nav_profileView"
+        android:name="com.dat257.team1.LFG.view.ProfileView"
+        tools:layout="@layout/activity_profile"/>
+
+    <fragment
+        android:id="@+id/nav_notifications"
+        android:name="com.dat257.team1.LFG.view.NotificationFragment"
+        android:label="NotificationFragment" />
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
+        android:label="ChatListFragment" />
+
 </navigation>

@@ -20,7 +20,7 @@ import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
-import com.dat257.team1.LFG.view.activityFeed.ActFeedPageView;
+import com.dat257.team1.LFG.view.MenuActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -47,13 +47,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class LoginFragment extends Fragment {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 0;
     private Button loginButton;
     private EditText passwordField, emailField;
     private SignInButton googleButton;
-
-    GoogleSignInClient mGoogleSignInClient;
-    int RC_SIGN_IN = 0;
-
     private TextView forgetPassword;
 
     @Nullable
@@ -134,7 +132,8 @@ public class LoginFragment extends Fragment {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, open the ActivityFeedView
-            startActivity(new Intent(getActivity().getApplicationContext(), ActFeedPageView.class));
+            startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

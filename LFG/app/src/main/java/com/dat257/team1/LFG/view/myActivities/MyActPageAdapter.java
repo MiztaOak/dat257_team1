@@ -1,6 +1,4 @@
-package com.dat257.team1.LFG.view.activityFeed;
-
-import android.content.Context;
+package com.dat257.team1.LFG.view.myActivities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -10,13 +8,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.dat257.team1.LFG.R;
 
-public class ActPageAdapter extends FragmentPagerAdapter {
-
+public class MyActPageAdapter extends FragmentPagerAdapter {
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_3, R.string.tab_text_4};
-    private final ActFeedPageFragment mContext;
+    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_5, R.string.tab_text_6};
+    private final MyActPageFragment mContext;
 
-    ActPageAdapter(ActFeedPageFragment context, @NonNull FragmentManager fm) {
+    public MyActPageAdapter(MyActPageFragment context, @NonNull FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -26,9 +23,9 @@ public class ActPageAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new ActFeedListFragment(); //TODO not new maybe
+                return new CurrentActFragment(); //TODO not new maybe
             case 1:
-                return new ActFeedMapFragment(); //TODO
+                return new PreviousActFragment(); //TODO
             default:
                 return null;
         }
@@ -45,3 +42,4 @@ public class ActPageAdapter extends FragmentPagerAdapter {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
 }
+

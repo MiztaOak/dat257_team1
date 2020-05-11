@@ -1,10 +1,15 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.myActivities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -12,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.activityFeed.ActCardRecyclerAdapter;
+import com.dat257.team1.LFG.view.ActCardRecyclerAdapter;
+import com.dat257.team1.LFG.view.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.CurrentActivitiesViewModel;
 
 import java.util.List;
 
-public class CurrentActivitiesView extends AppCompatActivity implements ICardViewHolderClickListener {
-    private static final String LOG_TAG = CurrentActivitiesView.class.getSimpleName();
+
+public class CurrentActFragment extends Fragment implements ICardViewHolderClickListener {
+    private static final String LOG_TAG = CurrentActFragment.class.getSimpleName();
 
     private CurrentActivitiesViewModel viewModel;
 
@@ -33,42 +41,51 @@ public class CurrentActivitiesView extends AppCompatActivity implements ICardVie
     private RecyclerView.Adapter participatingReAdapter;
     private RecyclerView.LayoutManager participatingReLayoutManager;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_current_activities);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        final View rootView = inflater.inflate(R.layout.activity_current_activities, container, false);
+        return rootView;
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CurrentActivitiesViewModel.class);
         getLifecycle().addObserver(viewModel);
 
         mutableOwnedActivities = viewModel.getMutableOwnedActivities();
-        mutableOwnedActivities.observe(this, activities -> {
+        mutableOwnedActivities.observe(getViewLifecycleOwner(), activities -> {
             ownedReAdapter.notifyDataSetChanged();
         });
         mutableParticipatingActivities = viewModel.getMutableParticipatingActivities();
-        mutableParticipatingActivities.observe(this, activities -> {
+        mutableParticipatingActivities.observe(getViewLifecycleOwner(), activities -> {
             participatingReAdapter.notifyDataSetChanged();
         });
 
-        ownedRecyclerView = (RecyclerView) findViewById(R.id.currentAct_owned);
+        ownedRecyclerView = (RecyclerView) view.findViewById(R.id.currentAct_owned);
         ownedRecyclerView.setHasFixedSize(false);
-        ownedReLayoutManager = new LinearLayoutManager(this);
+        ownedReLayoutManager = new LinearLayoutManager(getContext());
         ownedRecyclerView.setLayoutManager(ownedReLayoutManager);
-        ownedReAdapter = new ActCardRecyclerAdapter(getApplicationContext(), mutableOwnedActivities, this);
+
+        ownedReAdapter = new ActCardRecyclerAdapter(getContext(), mutableOwnedActivities, this);
+
         ownedRecyclerView.setAdapter(ownedReAdapter);
 
-        participatingRecyclerView = (RecyclerView) findViewById(R.id.currentAct_par);
+        participatingRecyclerView = (RecyclerView) view.findViewById(R.id.currentAct_par);
         participatingRecyclerView.setHasFixedSize(false);
-        participatingReLayoutManager = new LinearLayoutManager(this);
+        participatingReLayoutManager = new LinearLayoutManager(getContext());
         participatingRecyclerView.setLayoutManager(participatingReLayoutManager);
-        participatingReAdapter = new ActCardRecyclerAdapter(getApplicationContext(), mutableParticipatingActivities, this);
+
+        participatingReAdapter = new ActCardRecyclerAdapter(getContext(), mutableParticipatingActivities, this);
+
         participatingRecyclerView.setAdapter(participatingReAdapter);
     }
 
     @Override
     public void onCardClicked(int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        Intent intent = new Intent(this, ActivityDescriptionView.class);
+        Intent intent = new Intent(getContext(), ActivityDescriptionView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

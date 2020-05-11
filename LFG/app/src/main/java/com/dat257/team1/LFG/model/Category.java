@@ -44,5 +44,4 @@ public enum Category {
         Conference,
         Festival
     }
-
 }

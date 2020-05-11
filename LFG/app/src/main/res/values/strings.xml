@@ -8,6 +8,8 @@
     <string name="tab_text_2">Sign in</string>
     <string name="tab_text_3">Activities</string>
     <string name="tab_text_4">Map</string>
+    <string name="tab_text_5">Current activities</string>
+    <string name="tab_text_6">Previous activities</string>
     <string name="sign_in">Sign in</string>
     <string name="let_s_get_you_started">Let\'s get you started</string>
     <string name="login_page_view">Login page</string>
@@ -53,4 +55,26 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="current_activities">Current Activities</string>
+    <string name="friends">Friends</string>
+    <string name="messages">Messages</string>
+    <string name="history">History</string>
+    <string name="favorites">Favorites</string>
+    <string name="about_text">
+        "This is a group app\n\n"
+        "Authors:\n"
+        "name:\n"
+        "name:\n"
+        "name:\n"
+        "name:\n"
+        "name:\n"
+        "name:\n"
+        "name:\n"
+        "\n\n"
+    </string>
+    <string name="about">About</string>
+    <string name="my_activities">My activities</string>
+    <string name="logout">Logout</string>
+    <string name="activity_feed">Activity feed</string>
+    <string name="notifications">Notifications</string>
 </resources>
