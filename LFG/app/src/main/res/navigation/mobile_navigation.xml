@@ -8,34 +8,27 @@
     <fragment
         android:id="@+id/nav_act_feed"
         android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
-        android:label="@string/menu_home"
         tools:layout="@layout/activity_feed_w_tabs"/>
 
     <fragment
         android:id="@+id/nav_my_activities"
         android:name="com.dat257.team1.LFG.view.myActivities.MyActPageFragment"
-        android:label="menu_my_activities"
         tools:layout="@layout/my_activities_page"/>
 
     <fragment
         android:id="@+id/nav_about"
         android:name="com.dat257.team1.LFG.view.AboutFragment"
-        android:label="fragment_scrolling"
         tools:layout="@layout/about_fragment" />
     <activity
         android:id="@+id/nav_profileView"
         android:name="com.dat257.team1.LFG.view.ProfileView"
-        android:label="ProfileView"
         tools:layout="@layout/activity_profile"/>
     <activity
         android:id="@+id/nav_notifications"
         android:name="com.dat257.team1.LFG.view.NotificationView"
-        android:label="NotificationView"
         tools:layout="@layout/activity_notification"/>
     <activity
         android:id="@+id/nav_messages"
-        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
-        android:label="ChatListView"
         tools:layout="@layout/activity_chat_list"/>
 
 </navigation>

@@ -45,7 +45,7 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
         getLifecycle().addObserver(viewModel);
 
         chatListItems = viewModel.getChatListItems();
-        viewModel.getChatListItems().observe(this, new Observer<List<ChatListItem>>() {
+        viewModel.getChatListItems().observe(getViewLifecycleOwner(), new Observer<List<ChatListItem>>() {
             @Override
             public void onChanged(List<ChatListItem> chatListItems) {
                 reAdapter.notifyDataSetChanged();

@@ -30,8 +30,9 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.menu_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -69,7 +70,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
             startActivity(new Intent(this, ActFeedPageFragment.class));
         }else if (id == R.id.nav_my_activities){
             startActivity(new Intent(this, MyActPageFragment.class));
-        }else if (id == R.id.nav_messages) {
+        }else if (id == R.id.nav_friends){
+            startActivity(new Intent(this, ChatListFragment.class));
+        }else if (id == R.id.nav_messages){
+            startActivity(new Intent(this, ChatListFragment.class));
+        }else if (id == R.id.nav_messages){
             startActivity(new Intent(this, ChatListFragment.class));
         }
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

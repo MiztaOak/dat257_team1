@@ -21,7 +21,6 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity
             android:name=".view.MenuActivity"
-            android:label="@string/title_activity_menu"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -35,7 +34,6 @@
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.chatList.ChatListFragment" />
         <activity android:name=".view.MessageView"/>
 
         <activity

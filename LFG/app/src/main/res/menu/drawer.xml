@@ -3,27 +3,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="@layout/activity_feed">
 
-    <group android:checkableBehavior="single">
+    <group android:id="@+id/grp1" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_act_feed"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/my_activities" />
+            android:title="@string/activity_feed" />
+    </group>
+    <group android:id="@+id/grp2" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_my_activities"
             android:icon="@drawable/ic_menu_slideshow"
             android:title="@string/my_activities" />
+    </group>
+    <group android:id="@+id/grp3" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_friends"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/friends" />
+    </group>
+    <group android:id="@+id/grp4" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_messages"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/messages" />
+    </group>
+    <group android:id="@+id/grp5" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_notifications"
             android:icon="@drawable/ic_menu_gallery"
             android:title="@string/messages" />
+    </group>
+    <group android:id="@+id/grp6" android:checkableBehavior="single">
         <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_menu_gallery"
