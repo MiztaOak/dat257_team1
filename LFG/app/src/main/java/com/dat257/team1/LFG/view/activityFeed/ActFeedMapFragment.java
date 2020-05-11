@@ -1,7 +1,11 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,6 +14,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -24,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -45,7 +51,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private StringBuilder stringBuilder;
     private LatLng currentLocation;
     private LocationService locationService;
-
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
 
@@ -56,14 +61,20 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.activity_maps, container, false);
-
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
+        actFeedLiveData();
 
+        return rootView;
+    }
+
+    /**
+     * A liveData method for activity feed ViewModel
+     */
+    private void actFeedLiveData() {
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
-        //getLifecycle().addObserver(actFeedViewModel); //TODO
-        //actFeedViewModel.onCreate();
-
+        getLifecycle().addObserver(actFeedViewModel); //TODO
+        actFeedViewModel.onCreate();
         mutableActivityList = actFeedViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
@@ -72,8 +83,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
                 markActivities(activityList);
             }
         });
-        //actFeedViewModel.updateFeed(); //TODO
-        return rootView;
+        actFeedViewModel.updateFeed(); //TODO
     }
 
     /**
@@ -94,7 +104,8 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
      */
     private int fetchImageRecourse(Category category) {
         String id = category.getName().trim();
-        return this.getResources().getIdentifier(id, "id", getContext().getPackageName());
+        int resID = getResources().getIdentifier(id, "drawable", getContext().getPackageName());
+        return resID;
     }
 
 
@@ -115,18 +126,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onResume();
         mMapView.getMapAsync(this);
     }
-
-
-    /*
-    *    //todo get activity locations from db. Now it's some test locations
-        List<LatLng> locations = new ArrayList<>();
-        locations.add(new LatLng(57.60, 11.97456000));
-        locations.add(new LatLng(57.65, 11.97456000));
-        locations.add(new LatLng(57.70, 11.97456000));
-        locations.add(new LatLng(57.75, 11.97456000));
-        locations.add(new LatLng(57.80, 11.97456000));
-        * */
-
+    
 
     /**
      * A method that marks the activities locations on the map
@@ -136,10 +136,19 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
             int imageID = fetchImageRecourse(activityList.get(index).getCategory());
             MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(imageID));
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
             Marker marker = gm.addMarker(markerOptions);
             animateMarker(marker);
         }
+    }
+
+    public static BitmapDescriptor generateBitmapDescriptorFromRes(Context context, int resId) {
+        Drawable drawable = ContextCompat.getDrawable(context, resId);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     /**

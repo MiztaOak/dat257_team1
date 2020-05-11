@@ -47,13 +47,11 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 public class LoginFragment extends Fragment {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    GoogleSignInClient mGoogleSignInClient;
+    int RC_SIGN_IN = 0;
     private Button loginButton;
     private EditText passwordField, emailField;
     private SignInButton googleButton;
-
-    GoogleSignInClient mGoogleSignInClient;
-    int RC_SIGN_IN = 0;
-
     private TextView forgetPassword;
 
     @Nullable
@@ -74,7 +72,7 @@ public class LoginFragment extends Fragment {
                 String password = passwordField.getText().toString().trim();
                 //checking if the user has entered a validate form of the email and password
                 if (validateForm(email, password))
-                   loginUser(email, password);
+                    loginUser(email, password);
             }
         });
 
@@ -101,7 +99,8 @@ public class LoginFragment extends Fragment {
         return rootView;
     }
 
-    /** Sign in with google
+    /**
+     * Sign in with google
      */
     private void googleSignIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -125,6 +124,7 @@ public class LoginFragment extends Fragment {
      * Handles the sign in results from the Google account sign in.
      * Throws an ApiException if the sign in fails.
      * If the sign in is successful, send the user to the ActivityFeedView.
+     *
      * @param completedTask
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
@@ -133,6 +133,7 @@ public class LoginFragment extends Fragment {
 
             // Signed in successfully, open the ActivityFeedView
             startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
@@ -154,15 +155,17 @@ public class LoginFragment extends Fragment {
      * Fetches some information about the Google account that's logged in.
      * Needs to be put into the database to register the account //TODO
      */
+    /*
     GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-        //if (acct != null) {
-        String personName = acct.getDisplayName();
-        String personGivenName = acct.getGivenName();
-        String personFamilyName = acct.getFamilyName();
-        String personEmail = acct.getEmail();
-        String personId = acct.getId();
-        //Uri personPhoto = acct.getPhotoUrl();
+    //if (acct != null) {
+    String personName = acct.getDisplayName();
+    String personGivenName = acct.getGivenName();
+    String personFamilyName = acct.getFamilyName();
+    String personEmail = acct.getEmail();
+    String personId = acct.getId();
+    //Uri personPhoto = acct.getPhotoUrl();
     //}
+*/
 
     /**
      * A method to check the validation of the password and the email.
@@ -218,7 +221,7 @@ public class LoginFragment extends Fragment {
                 });
     }
 
-    public void openForgotPassword(){
+    public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
     }

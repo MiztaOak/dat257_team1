@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 
 import java.util.List;
 

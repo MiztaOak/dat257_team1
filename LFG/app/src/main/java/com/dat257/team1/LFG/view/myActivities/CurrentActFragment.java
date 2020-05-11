@@ -7,6 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.ActCardRecyclerAdapter;
@@ -16,13 +24,6 @@ import com.dat257.team1.LFG.viewmodel.CurrentActivitiesViewModel;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CurrentActFragment extends Fragment implements ICardViewHolderClickListener {
     private static final String LOG_TAG = CurrentActFragment.class.getSimpleName();
@@ -66,14 +67,18 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
         ownedRecyclerView.setHasFixedSize(false);
         ownedReLayoutManager = new LinearLayoutManager(getContext());
         ownedRecyclerView.setLayoutManager(ownedReLayoutManager);
-        ownedReAdapter = new ActCardRecyclerAdapter(getContext(),mutableOwnedActivities,this);
+
+        ownedReAdapter = new ActCardRecyclerAdapter(getContext(), mutableOwnedActivities, this);
+
         ownedRecyclerView.setAdapter(ownedReAdapter);
 
         participatingRecyclerView = (RecyclerView) view.findViewById(R.id.currentAct_par);
         participatingRecyclerView.setHasFixedSize(false);
         participatingReLayoutManager = new LinearLayoutManager(getContext());
         participatingRecyclerView.setLayoutManager(participatingReLayoutManager);
-        participatingReAdapter = new ActCardRecyclerAdapter(getContext(),mutableParticipatingActivities,this);
+
+        participatingReAdapter = new ActCardRecyclerAdapter(getContext(), mutableParticipatingActivities, this);
+
         participatingRecyclerView.setAdapter(participatingReAdapter);
     }
 

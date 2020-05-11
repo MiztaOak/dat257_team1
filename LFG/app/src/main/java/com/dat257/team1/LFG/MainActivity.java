@@ -1,18 +1,13 @@
 package com.dat257.team1.LFG;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MenuItem;
-import com.dat257.team1.LFG.model.Message;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.MenuActivity;
-import com.dat257.team1.LFG.view.loginPage.LoginPageView;
-import com.google.android.material.navigation.NavigationView;
+import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,11 +20,11 @@ public class MainActivity extends AppCompatActivity {
         FireStoreHelper.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            openFindActivity();
-        } else {
             openLoginPage();
+        } else {
+            openFindActivity();
         }
-        openFindActivity();
+        //  openFindActivity();
         //Intent intent = new Intent(this, CurrentActivityFragment.class);
         //startActivity(intent);
 
@@ -42,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void openLoginPage() {
-        Intent intent = new Intent(this, LoginPageView.class);
+        Intent intent = new Intent(this, LoginPageFragment.class);
         startActivity(intent);
     }
 }

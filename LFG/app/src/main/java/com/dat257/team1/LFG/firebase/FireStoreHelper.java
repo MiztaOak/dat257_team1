@@ -6,8 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
-import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.BatchCommentEvent;
+import com.dat257.team1.LFG.events.ChatEvent;
 import com.dat257.team1.LFG.events.ChatListEvent;
 import com.dat257.team1.LFG.events.CommentEvent;
 import com.dat257.team1.LFG.events.CurrentActivitiesEvent;
@@ -19,24 +19,18 @@ import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Chat;
-import com.dat257.team1.LFG.view.chatList.ChatListItem;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
-
-import com.dat257.team1.LFG.model.NotificationForJoiner;
-import com.dat257.team1.LFG.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-
 import com.dat257.team1.LFG.model.Message;
-
+import com.dat257.team1.LFG.model.User;
+import com.dat257.team1.LFG.view.chatList.ChatListItem;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -48,7 +42,6 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
 import com.google.firebase.firestore.Transaction;
 import com.google.firebase.firestore.WriteBatch;
 
@@ -69,10 +62,10 @@ import java.util.concurrent.Executor;
  */
 public class FireStoreHelper {
     private static FireStoreHelper instance;
+    private final String TAG = FirebaseFirestore.class.getSimpleName();
     private FirebaseFirestore db;
     private List<Activity> activities;
-    private final String TAG = FirebaseFirestore.class.getSimpleName();
-    Map<String,String> idToNameDictionary;
+    private Map<String, String> idToNameDictionary;
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
@@ -96,27 +89,27 @@ public class FireStoreHelper {
     }
 
     /**
-     *
      * Method that creates a join status in firestore
+     *
      * @param user
      * @param activity
      * @param status
      */
 
-    public void addJoinStatus (String user, Activity activity, String status){
+    public void addJoinStatus(String user, Activity activity, String status) {
         WriteBatch batch = db.batch();
 
         DocumentReference activityRef = db.collection("activities").document(activity.getId());
         DocumentReference joiner = db.document("/users/" + user);
         DocumentReference joinStatusRef = db.collection("joinStatus").document();
 
-        Map<String,Object> joinStatus  = new HashMap<>();
+        Map<String, Object> joinStatus = new HashMap<>();
 
         joinStatus.put("joiner", joiner);
         joinStatus.put("activity", activityRef);
         joinStatus.put("status", status);
 
-        batch.set(joinStatusRef,joinStatus);
+        batch.set(joinStatusRef, joinStatus);
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -129,18 +122,19 @@ public class FireStoreHelper {
 
     /**
      * A method that changes the status of a joiners notification
+     *
      * @param status
      * @param nId
      */
-    public void updateJoinStatus (String status, String nId){
-      
+    public void updateJoinStatus(String status, String nId) {
+
         final DocumentReference docRef = db.collection("joinStatus").document(nId);
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(docRef);
-                transaction.update(docRef,"joinRequestList", status);
+                transaction.update(docRef, "joinRequestList", status);
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -182,10 +176,10 @@ public class FireStoreHelper {
         List<DocumentReference> messages = new ArrayList<>();
 
         Map<String, Object> activity = new HashMap<>();
-        Map<String,Object> chatData = new HashMap<>();
+        Map<String, Object> chatData = new HashMap<>();
 
-        chatData.put("participants",participants);
-        chatData.put("messages",messages);
+        chatData.put("participants", participants);
+        chatData.put("messages", messages);
 
         activity.put("title", title);
         activity.put("desc", desc);
@@ -200,8 +194,8 @@ public class FireStoreHelper {
         activity.put("numOfMaxAttendees", numOfMaxAttendees);
         activity.put("chat", chatRef);
 
-        batch.set(chatRef,chatData);
-        batch.set(activityRef,activity);
+        batch.set(chatRef, chatData);
+        batch.set(activityRef, activity);
 
 
         batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -219,31 +213,36 @@ public class FireStoreHelper {
      * Author: Johan Ek
      */
     private void loadActivities() {
-        db.collection("activities").addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if (e != null) {
-                    Log.w(TAG, "Listen failed.", e);
-                    return;
-                }
-
-                activities = new ArrayList<>();
-                for(QueryDocumentSnapshot doc : value){
-                    Log.w(TAG,doc.getId());
-                    ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
-                    if (data.hasValidData())
-                        activities.add(data.toActivity(doc.getId()));
-                }
-                Main.getInstance().setActivities(activities);
-                EventBus.getDefault().post(new ActivityFeedEvent(activities));
+        db.collection("activities").addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
             }
+
+            activities = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : value) {
+                Log.w(TAG, doc.getId());
+                ActivityDataHolder data = doc.toObject(ActivityDataHolder.class);
+                if (shouldActivityBeShown(data)) {
+                    activities.add(data.toActivity(doc.getId()));
+                }
+            }
+            Main.getInstance().setActivities(activities);
+            EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
+    }
+
+    private boolean shouldActivityBeShown(ActivityDataHolder data) {
+        return data.hasValidData() && (data.getNumOfMaxAttendees() > data.participants.size() ||
+                data.getNumOfMaxAttendees() == 0) &&
+                !data.getOwner().getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
     }
 
     /**
      * Attaches a listener that loads all comments for a given activity
-     *
+     * <p>
      * Author: Johan Ek
+     *
      * @param id the id of the activity
      * @return the listener
      */
@@ -268,8 +267,9 @@ public class FireStoreHelper {
 
     /**
      * Method that adds a new comment to a given activity in the db
-     *
+     * <p>
      * Author: Johan Ek
+     *
      * @param activity the object representing the given activity
      * @param comment  the object representing the comment that should be posted
      */
@@ -306,15 +306,15 @@ public class FireStoreHelper {
         Map<String, Object> data = new HashMap<>();
 
         data.put("messageText", message.getContent());
-        data.put("sender", db.document("/users/"+message.getSender()));
+        data.put("sender", db.document("/users/" + message.getSender()));
         data.put("sent", message.getTime());
         db.collection("chats").document(chat.getId()).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-            @Override
-            public void onSuccess(DocumentReference documentReference) {
-                EventBus.getDefault().post(new MessageEvent(true));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        EventBus.getDefault().post(new MessageEvent(true));
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 EventBus.getDefault().post(false);
@@ -326,12 +326,12 @@ public class FireStoreHelper {
         return db.collection("chats").document(id).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
-                if(e != null){
+                if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
                 List<Message> messages = new ArrayList<>();
-                for(QueryDocumentSnapshot doc: value){
+                for (QueryDocumentSnapshot doc : value) {
                     MessageDataHolder data = doc.toObject(MessageDataHolder.class);
                     messages.add(data.toMessage());
                 }
@@ -343,13 +343,14 @@ public class FireStoreHelper {
 
     /**
      * Method that attaches a listener to all activities that are owned by the user with id uID
-     *
+     * <p>
      * Author: Johan Ek
+     *
      * @param uID id of the user that is the owner
      * @return a listener that is attached to all activities that uID owns
      */
-    public ListenerRegistration loadNotification(String uID){
-        return db.collection("activities").whereEqualTo("owner",db.document("/users/"+uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+    public ListenerRegistration loadNotification(String uID) {
+        return db.collection("activities").whereEqualTo("owner", db.document("/users/" + uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -358,19 +359,19 @@ public class FireStoreHelper {
                 }
 
                 List<JoinNotification> notifications = new ArrayList<>();
-                for(QueryDocumentSnapshot doc : value){
+                for (QueryDocumentSnapshot doc : value) {
                     String activityID = doc.getId();
                     String title = doc.getString("title");
                     List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants"); //cursed row
-                    Long max = (Long)doc.get("numOfMaxAttendees");
-                    if(max != 0 && max <= participants.size())
+                    Long max = (Long) doc.get("numOfMaxAttendees");
+                    if (max != 0 && max <= participants.size())
                         continue;
                     List<DocumentReference> waitingList = (List<DocumentReference>) doc.get("joinRequestList"); //evil row
-                    for(DocumentReference ref: waitingList){
-                        if(idToNameDictionary.containsKey(ref.getId()))
-                            notifications.add(new JoinNotification(activityID,title,ref.getId(),idToNameDictionary.get(ref.getId()))); //what to do about name, redundant data?
+                    for (DocumentReference ref : waitingList) {
+                        if (idToNameDictionary.containsKey(ref.getId()))
+                            notifications.add(new JoinNotification(activityID, title, ref.getId(), idToNameDictionary.get(ref.getId()))); //what to do about name, redundant data?
                         else
-                            notifications.add(new JoinNotification(activityID,title,ref.getId(),"name could not be found"));
+                            notifications.add(new JoinNotification(activityID, title, ref.getId(), "name could not be found"));
                     }
                 }
                 EventBus.getDefault().post(new JoinNotificationEvent(notifications));
@@ -382,22 +383,23 @@ public class FireStoreHelper {
      * Method that either accepts a join request or declines it. This is handled in a atomic transaction
      * to avoid the possibility that the user is removed from the waiting list but not added to the
      * participants
-     *
+     * <p>
      * Author: Johan Ek
-     * @param uID the id of the user that is requesting to join
+     *
+     * @param uID        the id of the user that is requesting to join
      * @param activityID id of the activity that the user is trying to join
-     * @param accept if true then the request was accepted
+     * @param accept     if true then the request was accepted
      */
-    public void handleJoinRequest(String uID, String activityID, boolean accept){
+    public void handleJoinRequest(String uID, String activityID, boolean accept) {
         final DocumentReference docRef = db.collection("activities").document(activityID);
 
         db.runTransaction(new Transaction.Function<Void>() {
             @Override
-            public Void apply(Transaction transaction) throws FirebaseFirestoreException{
+            public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(docRef);
-                transaction.update(docRef,"joinRequestList", FieldValue.arrayRemove(db.document("/users/"+uID)));
-                if(accept)
-                    transaction.update(docRef,"participants", FieldValue.arrayUnion(db.document("/users/"+uID)));
+                transaction.update(docRef, "joinRequestList", FieldValue.arrayRemove(db.document("/users/" + uID)));
+                if (accept)
+                    transaction.update(docRef, "participants", FieldValue.arrayUnion(db.document("/users/" + uID)));
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -413,37 +415,35 @@ public class FireStoreHelper {
         });
     }
 
-
-
-
     /**
      * Method that creates a join request for a user on a certain activity.
-     *
+     * <p>
      * Author: Johan Ek
-     * @param uID the user id of the user that wants to join the activity
+     *
+     * @param uID        the user id of the user that wants to join the activity
      * @param activityID the id of the activity
      */
-    public void createJoinRequest(String uID, String activityID){
+    public void createJoinRequest(String uID, String activityID) {
         final DocumentReference docRef = db.collection("activities").document(activityID);
 
         db.runTransaction(new Transaction.Function<String>() {
             @Override
-            public String apply(Transaction transaction) throws FirebaseFirestoreException{
+            public String apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(docRef);
                 String message = "An unknown error has occurred";
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     List<DocumentReference> participants = (List<DocumentReference>) snapshot.get("participants"); //cursed row
-                    Long max = (Long)snapshot.get("numOfMaxAttendees");
-                    DocumentReference userRef = db.document("/users/"+uID);
+                    Long max = (Long) snapshot.get("numOfMaxAttendees");
+                    DocumentReference userRef = db.document("/users/" + uID);
 
                     assert participants != null;
-                    if(participants.contains(userRef)){
+                    if (participants.contains(userRef)) {
                         message = "You have already joined this activity";
-                    }else if (max <= participants.size() && max != 0){
+                    } else if (max <= participants.size() && max != 0) {
                         message = "That activity is currently full.";
-                    }else{
+                    } else {
                         message = null;
-                        transaction.update(docRef,"joinRequestList", FieldValue.arrayUnion(userRef));
+                        transaction.update(docRef, "joinRequestList", FieldValue.arrayUnion(userRef));
                     }
                 }
                 return message;
@@ -451,16 +451,16 @@ public class FireStoreHelper {
         }).addOnSuccessListener(new OnSuccessListener<String>() {
             @Override
             public void onSuccess(String message) {
-                if(message == null)
+                if (message == null)
                     EventBus.getDefault().post(new JoinActivityEvent(true));
                 else
-                    EventBus.getDefault().post(new JoinActivityEvent(false,message));
+                    EventBus.getDefault().post(new JoinActivityEvent(false, message));
                 Log.d(TAG, "Transaction success!");
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                EventBus.getDefault().post(new JoinActivityEvent(false,"An unknown error has occurred"));
+                EventBus.getDefault().post(new JoinActivityEvent(false, "An unknown error has occurred"));
                 Log.w(TAG, "Transaction failure.", e);
             }
         });
@@ -468,10 +468,10 @@ public class FireStoreHelper {
 
     /**
      * Method that loads the dictionary that associates the uIDs with their user names
-     *
+     * <p>
      * Author: Johan Ek
      */
-    private void loadUserNames(){
+    private void loadUserNames() {
         db.collection("users").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -479,8 +479,8 @@ public class FireStoreHelper {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-                Map<String,String> map = new HashMap<>();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
+                Map<String, String> map = new HashMap<>();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     map.put(doc.getId(), (String) doc.get("name"));
                 }
                 idToNameDictionary = map;
@@ -488,9 +488,14 @@ public class FireStoreHelper {
         });
     }
 
+    public Map<String, String> getIdToNameDictionary() {
+        return idToNameDictionary;
+    }
+
     /**
      * Method that attaches and returns a listener that loads all activities that the current user
      * is taking part in.
+     *
      * @return the listener
      */
     public ListenerRegistration loadCurrentActivities() {
@@ -514,18 +519,20 @@ public class FireStoreHelper {
         });
     }
 
-     /** Method that attaches and returns a listener that keeps track of all chats the currently
+    /**
+     * Method that attaches and returns a listener that keeps track of all chats the currently
      * logged in user are a part off.
-     *
+     * <p>
      * Author: Johan Ek
+     *
      * @return the listener that is attached to the list of chats the user is part off
      */
-    public ListenerRegistration attachChatListListener(){
-        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+    public ListenerRegistration attachChatListListener() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
             return null;
         String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        DocumentReference userRef = db.document("/users/"+uId);
-        return db.collection("chats").whereArrayContains("participants",userRef).addSnapshotListener(new EventListener<QuerySnapshot>() {
+        DocumentReference userRef = db.document("/users/" + uId);
+        return db.collection("chats").whereArrayContains("participants", userRef).addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -533,12 +540,12 @@ public class FireStoreHelper {
                     return;
                 }
                 List<ChatListItem> chatInfoList = new ArrayList<>();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots){
-                    List<DocumentReference> participants= (List<DocumentReference>)doc.get("participants");
-                    String chatName = buildChatName(participants,FirebaseAuth.getInstance().getCurrentUser().getUid());
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants");
+                    String chatName = buildChatName(participants, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String id = doc.getId();
                     int amountOfParticipants = participants.size();
-                    chatInfoList.add(new ChatListItem(chatName,id,amountOfParticipants));
+                    chatInfoList.add(new ChatListItem(chatName, id, amountOfParticipants));
                 }
                 EventBus.getDefault().post(new ChatListEvent(chatInfoList));
             }
@@ -549,21 +556,22 @@ public class FireStoreHelper {
      * Method that build a chat name out of the list of participants. If the name is longer than
      * part of the name that is build out of user names is longer than 20 characters "..." is
      * attached at the end and the string is returned
-     *
+     * <p>
      * Author: Johan Ek
+     *
      * @param idList the list of participants
      * @return the name of the chat
      */
-    private String buildChatName(List<DocumentReference> idList,String uID){
+    private String buildChatName(List<DocumentReference> idList, String uID) {
         StringBuilder name = new StringBuilder();
         name.append("Chat with ");
         String currentUserName = idToNameDictionary.get(uID);
-        for(DocumentReference ref : idList){
+        for (DocumentReference ref : idList) {
             String userName = idToNameDictionary.get(ref.getId());
-            if(userName.equals(currentUserName))
+            if (userName.equals(currentUserName))
                 continue;
             name.append(userName);
-            if(name.length() >= 20){
+            if (name.length() >= 20) {
                 name.append("...");
                 return name.toString();
             }
@@ -572,16 +580,19 @@ public class FireStoreHelper {
         return name.toString();
     }
 
-     /**  Attaches a listener that loads information for a given userID
-     *
+     /**
+     * Attaches a listener that loads information for a given userID
+     * >>>>>>> master
+     * <p>
      * Author: Jennie Zhou
+     *
      * @param id the id of the user
      * @return the listener
      */
     //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
-        docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+        return docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
@@ -592,7 +603,6 @@ public class FireStoreHelper {
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
-        return null; //shouldn't return null, doesn't work without a return statement yet
     }
 }
 

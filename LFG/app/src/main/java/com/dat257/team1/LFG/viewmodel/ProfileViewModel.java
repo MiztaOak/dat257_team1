@@ -20,6 +20,7 @@ public class ProfileViewModel extends ViewModel implements LifecycleObserver {
 
     public ProfileViewModel() {
     }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
         if(!EventBus.getDefault().isRegistered(this)) {
@@ -27,6 +28,11 @@ public class ProfileViewModel extends ViewModel implements LifecycleObserver {
         }
         user.setValue(getUserId().getValue()); //kan vara fel
         listener = FireStoreHelper.getInstance().loadUserInformation(user.getValue().getId());
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+    public void onDestroy(){
+        listener.remove();
     }
 
 
