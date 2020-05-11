@@ -52,7 +52,7 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = new ViewModelProvider(this).get(CurrentActivitiesViewModel.class);
-        getLifecycle().addObserver(viewModel);
+        getViewLifecycleOwner().getLifecycle().addObserver(viewModel);
 
         mutableOwnedActivities = viewModel.getMutableOwnedActivities();
         mutableOwnedActivities.observe(getViewLifecycleOwner(), activities -> {
