@@ -64,6 +64,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private Location currentLocation;
     private boolean firstTimeFlag = true;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5445;
+    private Context context;
 
 
     public ActFeedMapFragment() {
@@ -90,7 +91,11 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
             int imageID = fetchImageRecourse(activityList.get(index).getCategory());
             MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
+            if (imageID != 0)
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(imageID));
+            else {
+                markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.other));
+            }
             Marker marker = gm.addMarker(markerOptions);
             animateMarker(marker);
         }
@@ -120,6 +125,13 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         return rootView;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        context = view.getContext();
+    }
+
+
     /**
      * Requesting location permission
      *
@@ -146,9 +158,9 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         LocationRequest locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         locationRequest.setInterval(3000);
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION)
                         != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(getActivity(),
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
@@ -215,8 +227,8 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
      * categories on the an depending on the name
      */
     private int fetchImageRecourse(Category category) {
-        String id = category.getName().trim();
-        int resID = getResources().getIdentifier(id, "drawable", getContext().getPackageName());
+        String id = category.getName().trim().toLowerCase();
+        int resID = getResources().getIdentifier(id, "drawable", context.getPackageName());
         return resID;
     }
 
@@ -265,7 +277,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private void customStyle() {
         gm.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                        getContext(), R.raw.style_grey));
+                        context, R.raw.style_grey));
     }
 
     /**
