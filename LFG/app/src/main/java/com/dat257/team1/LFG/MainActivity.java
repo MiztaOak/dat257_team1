@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         if (currentUser != null) {
             openFindActivity();
         } else {
-            openFindActivity();
+            openLoginPage();
         }
         //  openFindActivity();
         //Intent intent = new Intent(this, CurrentActivityFragment.class);

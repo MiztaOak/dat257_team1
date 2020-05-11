@@ -582,7 +582,6 @@ public class FireStoreHelper {
 
      /**
      * Attaches a listener that loads information for a given userID
-     * >>>>>>> master
      * <p>
      * Author: Jennie Zhou
      *
