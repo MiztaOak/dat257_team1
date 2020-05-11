@@ -51,7 +51,7 @@ import java.util.Map;
 /**
  * This class is responsible for displaying the address on google maps
  *
- * @author : Oussama Anadani, Johan Ek
+ * @author : Oussama Anadani, Johan Ek, Jakob Ew
  */
 public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
 
