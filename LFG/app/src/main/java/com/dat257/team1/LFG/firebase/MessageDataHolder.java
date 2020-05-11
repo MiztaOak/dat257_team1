@@ -9,10 +9,6 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class MessageDataHolder {
-
-
-
-
     public String messageText;
     public Timestamp sendTime;
     public DocumentReference sender;
