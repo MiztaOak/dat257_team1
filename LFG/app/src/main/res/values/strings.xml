@@ -77,4 +77,6 @@
     <string name="logout">Logout</string>
     <string name="activity_feed">Activity feed</string>
     <string name="notifications">Notifications</string>
+    <string name="name">[Name]</string>
+    <string name="time">[time]</string>
 </resources>
