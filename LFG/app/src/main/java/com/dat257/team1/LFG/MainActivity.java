@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements
         FireStoreHelper.getInstance();
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
-            openLoginPage();
+            openFindActivity();
         } else {
             openLoginPage();
         }
