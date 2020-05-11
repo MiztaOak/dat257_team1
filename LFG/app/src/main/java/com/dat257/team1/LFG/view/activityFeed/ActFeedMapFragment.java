@@ -1,17 +1,14 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -265,20 +262,10 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * A method that adds a custom style to the map
      */
-    private void customStyle() { //todo
-        try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            @SuppressLint("ResourceType") boolean success = gm.setMapStyle(new MapStyleOptions(getResources()
-                    .getString(R.raw.style_grey)));
-
-            if (!success) {
-                Log.e("MapsActivityRaw", "Style parsing failed.");
-            }
-        } catch (Resources.NotFoundException e) {
-            Log.e("MapsActivityRaw", "Can't find style.", e);
-        }
-
+    private void customStyle() {
+        gm.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                        getContext(), R.raw.style_grey));
     }
 
     /**
