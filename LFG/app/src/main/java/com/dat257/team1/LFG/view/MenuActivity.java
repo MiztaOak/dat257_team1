@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,6 +36,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        //CircularImageView imageView = new CircularImageView(this, findViewById(R.id.circleImage_profile)); todo
+
         navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -62,21 +65,41 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-       @Override
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         int id = menuItem.getItemId();
 
-        if(id == R.id.nav_act_feed){
-            startActivity(new Intent(this, ActFeedPageFragment.class));
-        }else if (id == R.id.nav_my_activities){
-            startActivity(new Intent(this, MyActPageFragment.class));
-        }else if (id == R.id.nav_friends){
-            startActivity(new Intent(this, ChatListFragment.class));
-        }else if (id == R.id.nav_messages){
-            startActivity(new Intent(this, ChatListFragment.class));
-        }else if (id == R.id.nav_messages){
-            startActivity(new Intent(this, ChatListFragment.class));
+        switch (id) {
+            case R.id.nav_act_feed:
+                startActivity(new Intent(this, ActFeedPageFragment.class));
+                ;
+                break;
+            case R.id.nav_my_activities:
+                startActivity(new Intent(this, MyActPageFragment.class));
+                ;
+                break;
+            case R.id.nav_friends:
+                startActivity(new Intent(this, ActFeedPageFragment.class));
+                ;
+                break;
+            case R.id.nav_messages:
+                startActivity(new Intent(this, ChatListFragment.class));
+                ;
+                break;
+            case R.id.nav_notifications:
+                startActivity(new Intent(this, ChatListFragment.class));
+                ;
+                break;
+            case R.id.nav_about:
+                startActivity(new Intent(this, ChatListFragment.class));
+                ;
+                break;
+            default:
+                startActivity(new Intent(this, ActFeedPageFragment.class));
+                ;
+                break;
         }
+
         DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

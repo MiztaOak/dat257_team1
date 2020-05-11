@@ -31,6 +31,9 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
 
     private MutableLiveData<List<ChatListItem>> chatListItems;
 
+    public ChatListFragment() {
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

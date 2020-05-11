@@ -76,4 +76,5 @@
     <string name="my_activities">My activities</string>
     <string name="logout">Logout</string>
     <string name="activity_feed">Activity feed</string>
+    <string name="notifications">Notifications</string>
 </resources>

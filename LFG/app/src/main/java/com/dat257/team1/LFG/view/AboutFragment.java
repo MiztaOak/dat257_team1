@@ -11,7 +11,9 @@ import androidx.annotation.Nullable;
 
 import com.dat257.team1.LFG.R;
 
-class AboutFragment extends Fragment {
+public class AboutFragment extends Fragment {
+    public AboutFragment() {
+    }
 
     @Nullable
     @Override
