@@ -2,10 +2,8 @@ package com.dat257.team1.LFG.view.activityFeed;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.Looper;
@@ -17,7 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -26,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.view.ActivityDescriptionView;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -39,19 +38,20 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class is responsible for displaying the address on google maps
  *
- * @author : Oussama Anadani
+ * @author : Oussama Anadani, Johan Ek
  */
 public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -65,6 +65,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private boolean firstTimeFlag = true;
     private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5445;
     private Context context;
+    Map<Marker, Activity> markerClick;
 
 
     public ActFeedMapFragment() {
@@ -79,24 +80,29 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap map) {
         gm = map;
         gm.setMyLocationEnabled(true);
+        attachMarker();
         customStyle();
-        onMarkerClick();
+
     }
 
     /**
      * A method that marks the activities locations on the map
      */
     public void markActivities(List<Activity> activityList) {
+        markerClick = new HashMap<>();
         for (int index = 0; index < activityList.size(); index++) {
             LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
             int imageID = fetchImageRecourse(activityList.get(index).getCategory());
-            MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
+            MarkerOptions markerOptions = new MarkerOptions().position(location).title(activityList.get(index).getTitle());
             if (imageID != 0)
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(imageID));
             else {
                 markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.other));
             }
+
             Marker marker = gm.addMarker(markerOptions);
+            markerClick.put(marker, activityList.get(index));
+            marker.setTag(activityList.get(index).getTitle());
             animateMarker(marker);
         }
     }
@@ -111,6 +117,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here!");
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.currentlocation));
         Marker marker = gm.addMarker(markerOptions);
+        marker.setTag("currentLocation");
         animateMarker(marker);
     }
 
@@ -217,6 +224,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onChanged(List<Activity> activityList) {
                 markActivities(activityList);
+                // onMarkerClick();
             }
         });
         actFeedViewModel.updateFeed(); //TODO
@@ -252,16 +260,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
-    public static BitmapDescriptor generateBitmapDescriptorFromRes(Context context, int resId) {
-        Drawable drawable = ContextCompat.getDrawable(context, resId);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        drawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
-    }
-
-
     /**
      * A method to add some animation to the marker
      *
@@ -283,15 +281,20 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * A method that has a listener when marker clicked
      */
-    private void onMarkerClick() { //todo
-        gm.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+
+    private void attachMarker() { //todo
+        gm.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                marker.showInfoWindow();
-                return true;
+            public void onInfoWindowClick(Marker marker) {
+                if (!marker.getTag().equals("currentLocation")) {
+                    Main.getInstance().setFocusedActivity(markerClick.get(marker));
+                    Intent intent = new Intent(getContext(), ActivityDescriptionView.class);
+                    startActivity(intent);
+                }
             }
         });
     }
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
