@@ -1,19 +1,25 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
@@ -23,12 +29,19 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
-import com.dat257.team1.LFG.service.LocationService;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -48,13 +61,55 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
     private GoogleMap gm;
     private MapView mMapView;
-    private StringBuilder stringBuilder;
-    private LatLng currentLocation;
-    private LocationService locationService;
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
+    private FusedLocationProviderClient fusedLocationProviderClient;
+    private Location currentLocation;
+    private boolean firstTimeFlag = true;
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5445;
+
 
     public ActFeedMapFragment() {
+    }
+
+    /**
+     * A method that marks the location on the map
+     *
+     * @param map Google map
+     */
+    @Override
+    public void onMapReady(GoogleMap map) {
+        gm = map;
+        gm.setMyLocationEnabled(true);
+        customStyle();
+        onMarkerClick();
+    }
+
+    /**
+     * A method that marks the activities locations on the map
+     */
+    public void markActivities(List<Activity> activityList) {
+        for (int index = 0; index < activityList.size(); index++) {
+            LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
+            int imageID = fetchImageRecourse(activityList.get(index).getCategory());
+            MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
+            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
+            Marker marker = gm.addMarker(markerOptions);
+            animateMarker(marker);
+        }
+    }
+
+    /**
+     * A method that marks the current location on the map
+     */
+    private void markCurrentLocation(LatLng currentLocation) {
+        gm.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+        MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here!");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.currentlocation));
+        Marker marker = gm.addMarker(markerOptions);
+        animateMarker(marker);
     }
 
     @Nullable
@@ -69,6 +124,79 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
+     * Requesting location permission
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults[0] == PackageManager.PERMISSION_DENIED)
+                Toast.makeText(getContext(), "Permission denied by uses", Toast.LENGTH_SHORT).show();
+            else if (grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                startCurrentLocationUpdates();
+        }
+    }
+
+    /**
+     * Updating the location
+     */
+    private void startCurrentLocationUpdates() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(3000);
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            return;
+        }
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, mLocationCallback, Looper.myLooper());
+    }
+
+    /**
+     * Location callback to get last location
+     */
+    private final LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            if (locationResult.getLastLocation() == null)
+                return;
+            currentLocation = locationResult.getLastLocation();
+            if (firstTimeFlag && gm != null) {
+                LatLng loc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                markCurrentLocation(loc);
+                firstTimeFlag = false;
+            }
+        }
+    };
+
+    /**
+     * Checking if google service is available
+     *
+     * @return true if it's available, false otherwise
+     */
+    private boolean isGooglePlayServicesAvailable() {
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        int status = googleApiAvailability.isGooglePlayServicesAvailable(getContext());
+        if (ConnectionResult.SUCCESS == status)
+            return true;
+        else {
+            if (googleApiAvailability.isUserResolvableError(status))
+                Toast.makeText(getContext(), "Please Install google play services to use this application", Toast.LENGTH_LONG).show();
+        }
+        return false;
+    }
+
+    /**
      * A liveData method for activity feed ViewModel
      */
     private void actFeedLiveData() {
@@ -79,23 +207,10 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activityList) {
-                //markCurrentLocation(); //TODO
                 markActivities(activityList);
             }
         });
         actFeedViewModel.updateFeed(); //TODO
-    }
-
-    /**
-     * A method that marks the location on the map
-     *
-     * @param map Google map
-     */
-    @Override
-    public void onMapReady(GoogleMap map) {
-        gm = map;
-        customStyle();
-        onMarkerClick();
     }
 
     /**
@@ -126,21 +241,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         mMapView.onResume();
         mMapView.getMapAsync(this);
     }
-    
 
-    /**
-     * A method that marks the activities locations on the map
-     */
-    public void markActivities(List<Activity> activityList) {
-        for (int index = 0; index < activityList.size(); index++) {
-            LatLng location = new LatLng(activityList.get(index).getLocation().getLatitude(), activityList.get(index).getLocation().getLongitude());
-            int imageID = fetchImageRecourse(activityList.get(index).getCategory());
-            MarkerOptions markerOptions = new MarkerOptions().position(location).title("Activity here");
-            markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
-            Marker marker = gm.addMarker(markerOptions);
-            animateMarker(marker);
-        }
-    }
 
     public static BitmapDescriptor generateBitmapDescriptorFromRes(Context context, int resId) {
         Drawable drawable = ContextCompat.getDrawable(context, resId);
@@ -151,18 +252,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    /**
-     * A method that marks the current location on the map
-     */
-    private void markCurrentLocation() {
-        gm.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        gm.animateCamera(CameraUpdateFactory.newLatLng(currentLocation));
-        gm.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
-        MarkerOptions markerOptions = new MarkerOptions().position(currentLocation).title("You are here!");
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.here));
-        Marker marker = gm.addMarker(markerOptions);
-        animateMarker(marker);
-    }
 
     /**
      * A method to add some animation to the marker
@@ -170,13 +259,13 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
      * @param marker The wanted marker to be animated
      */
     private void animateMarker(final Marker marker) {
-
+        //todo
     }
 
     /**
      * A method that adds a custom style to the map
      */
-    private void customStyle() {
+    private void customStyle() { //todo
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
@@ -195,7 +284,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     /**
      * A method that has a listener when marker clicked
      */
-    private void onMarkerClick() {
+    private void onMarkerClick() { //todo
         gm.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
@@ -204,7 +293,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -224,6 +312,15 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     public void onResume() {
         super.onResume();
         mMapView.onResume();
+        SupportMapFragment supportMapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapView);
+        if (supportMapFragment != null) {
+            supportMapFragment.getMapAsync(this);
+        }
+        if (isGooglePlayServicesAvailable()) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getActivity());
+            startCurrentLocationUpdates();
+        }
+
     }
 
     @Override
