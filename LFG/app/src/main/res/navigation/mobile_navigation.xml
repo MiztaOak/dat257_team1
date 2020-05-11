@@ -23,12 +23,13 @@
         android:name="com.dat257.team1.LFG.view.ProfileView"
         tools:layout="@layout/activity_profile"/>
 
-    <activity
-        android:id="@+id/nav_messages"
-        tools:layout="@layout/activity_chat_list"/>
     <fragment
         android:id="@+id/nav_notifications"
         android:name="com.dat257.team1.LFG.view.NotificationFragment"
         android:label="NotificationFragment" />
+    <fragment
+        android:id="@+id/nav_messages"
+        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
+        android:label="ChatListFragment" />
 
 </navigation>
