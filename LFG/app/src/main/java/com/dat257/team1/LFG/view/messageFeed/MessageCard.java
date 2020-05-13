@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.messageFeed;
 
 import androidx.appcompat.app.AppCompatActivity;
 

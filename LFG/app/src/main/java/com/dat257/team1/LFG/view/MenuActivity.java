@@ -92,8 +92,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(this, MyActPageFragment.class));
                 ;
                 break;
-            case R.id.nav_friends:
-                startActivity(new Intent(this, ActFeedPageFragment.class));
+            case R.id.nav_profile:
+                startActivity(new Intent(this, ProfileFragment.class));
                 ;
                 break;
             case R.id.nav_messages:

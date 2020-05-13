@@ -18,9 +18,10 @@
     <fragment
         android:id="@+id/nav_about"
         android:name="com.dat257.team1.LFG.view.AboutFragment" />
-    <activity
-        android:id="@+id/nav_profileView"
-        android:name="com.dat257.team1.LFG.view.ProfileView"
+
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.dat257.team1.LFG.view.ProfileFragment"
         tools:layout="@layout/activity_profile"/>
 
     <fragment

@@ -1,6 +1,5 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.messageFeed;
 
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

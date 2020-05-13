@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.messageFeed;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,12 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.Message;
-import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.dat257.team1.LFG.viewmodel.MessageViewModel;
 
-import java.security.MessageDigestSpi;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;

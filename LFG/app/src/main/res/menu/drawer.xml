@@ -17,7 +17,7 @@
     </group>
     <group android:id="@+id/grp3" android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_friends"
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/friends" />
     </group>

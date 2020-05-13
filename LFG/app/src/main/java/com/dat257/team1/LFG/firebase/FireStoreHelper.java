@@ -587,14 +587,14 @@ public class FireStoreHelper {
     //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
-        return docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+        return docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-                User userObj = new User(id, documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
+                User userObj = new User("id", documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });

@@ -36,7 +36,7 @@
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
 
-        <activity android:name=".view.MessageView" />
+        <activity android:name=".view.messageFeed.MessageView" />
 
         <activity
             android:name=".view.loginPage.LoginPageFragment"
