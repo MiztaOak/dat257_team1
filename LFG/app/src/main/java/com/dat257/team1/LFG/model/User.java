@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
+    public void setId(String id) {
+        this.id = id;
+    }
+
     private String id; // since many users can have the same name
     private String name;
     private String phoneNumber;

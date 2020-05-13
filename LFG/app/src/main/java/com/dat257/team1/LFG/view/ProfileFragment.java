@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -22,7 +21,6 @@ import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class ProfileFragment extends Fragment {
 
@@ -41,10 +39,14 @@ public class ProfileFragment extends Fragment {
 
     private Button addFriendButton;
     private Button blockContactButton;
-
     private LinearLayout addFriendLayout;
     private LinearLayout blockContactLayout;
     private User profileOwner;
+
+
+    public ProfileFragment(String user) {
+        this.profileOwner.setId(user);
+    }
 
     @Nullable
     @Override
@@ -55,6 +57,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        String userId = (String) getActivity().getIntent().getExtras().get("userId");
 
         initViews(view);
 

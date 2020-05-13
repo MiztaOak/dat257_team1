@@ -38,6 +38,7 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_chat_list, container, false);
+
     }
 
     @Override
@@ -67,6 +68,10 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
     public void onCardClicked(int pos) {
         Intent intent = new Intent(getContext(), MessageView.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", chatListItems.getValue().get(pos).getId());
+        intent.putExtras(bundle);
         startActivity(intent);
+
     }
 }
