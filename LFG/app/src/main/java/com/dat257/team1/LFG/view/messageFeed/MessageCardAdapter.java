@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class MessageCardAdapter extends RecyclerView.Adapter<MessageCardAdapter.MessageCardViewHolder> {
@@ -55,8 +57,8 @@ public class MessageCardAdapter extends RecyclerView.Adapter<MessageCardAdapter.
 
         holder.contactImage.setImageResource(R.drawable.ic_email_black_24dp); //since we don't have a src for user image yet
         holder.messageContent.setText(currentCard.getMessageContent());
-        holder.time.setText(System.currentTimeMillis() + ""); //we haven't decided how the timestamp will show
-
+        Format formatter = new SimpleDateFormat("HH:mm dd-MM-yy");
+        holder.time.setText(formatter.format(mesCardsList.get(position).getTimeStamp()));
     }
 
     @Override

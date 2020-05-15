@@ -211,7 +211,7 @@ public class LoginFragment extends Fragment {
                             FireStoreHelper.getInstance();
                             Toast.makeText(getActivity(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            retrieveData(user);
+                            FireStoreHelper.getInstance().retrieveData(user);
                             //take the user to the main page after successfully retrieving the data
                             startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
                         } else { // If sign in fails, display a message to the user.
@@ -229,30 +229,6 @@ public class LoginFragment extends Fragment {
     }
 
 
-    /**
-     * A method to retrieve the exciting user's data from the database
-     *
-     * @param currentUser The current user who's successfully logged in.
-     */
-    private void retrieveData(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
-            documentReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    //todo retrieving the data
-                    /*
-                    fullName.setText(documentSnapshot.getString("name"));
-                    email.setText(documentSnapshot.getString("email"));
-                   // get the friendList, this should be in a recyclerView form
-                    */
-
-                }
-            });
-
-        }
-    }
 
 
 }

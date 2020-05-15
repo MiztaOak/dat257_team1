@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -564,7 +565,7 @@ public class FireStoreHelper {
         String currentUserName = idToNameDictionary.get(uID);
         for (DocumentReference ref : idList) {
             String userName = idToNameDictionary.get(ref.getId());
-            if (userName.equals(currentUserName))
+            if (!userName.equals(currentUserName))
                 continue;
             name.append(userName);
             if (name.length() >= 20) {
@@ -584,7 +585,6 @@ public class FireStoreHelper {
      * @param id the id of the user
      * @return the listener
      */
-    //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
         return docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -598,6 +598,31 @@ public class FireStoreHelper {
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
+    }
+
+    /**
+     * A method to retrieve the exciting user's data from the database
+     *
+     * @param currentUser The current user who's successfully logged in.
+     */
+    public void retrieveData(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
+            documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    //todo retrieving the data
+                    /*
+                    fullName.setText(documentSnapshot.getString("name"));
+                    email.setText(documentSnapshot.getString("email"));
+                   // get the friendList, this should be in a recyclerView form
+                    */
+
+                }
+            });
+
+        }
     }
 }
 

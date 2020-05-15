@@ -21,6 +21,7 @@ import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firestore.v1.FirestoreGrpc;
 
 public class ProfileFragment extends Fragment {
 
@@ -44,8 +45,7 @@ public class ProfileFragment extends Fragment {
     private User profileOwner;
 
 
-    public ProfileFragment(String user) {
-        this.profileOwner.setId(user);
+    public ProfileFragment() {
     }
 
     @Nullable
