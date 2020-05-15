@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +20,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class ActFeedPageFragment extends Fragment {
 
@@ -42,7 +44,10 @@ public class ActFeedPageFragment extends Fragment {
         createActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchCreateActivity();
+                if(FirebaseAuth.getInstance().getCurrentUser() != null)
+                    launchCreateActivity();
+                else
+                    Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
             }
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);

@@ -55,6 +55,10 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         NavigationUI.setupWithNavController(navigationView, navController);
 
         signOut = findViewById(R.id.btn_sign_out);
+        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+            signOut.setText("Sign in");
+        else
+            signOut.setText("Sign out");
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -229,9 +229,13 @@ public class FireStoreHelper {
     }
 
     private boolean shouldActivityBeShown(ActivityDataHolder data) {
-        return data.hasValidData() && (data.getNumOfMaxAttendees() > data.participants.size() ||
-                data.getNumOfMaxAttendees() == 0) &&
+        boolean shouldLoad = data.hasValidData() && (data.getNumOfMaxAttendees() > data.participants.size() ||
+                data.getNumOfMaxAttendees() == 0);
+        if(FirebaseAuth.getInstance().getCurrentUser() != null)
+            return shouldLoad &&
                 !data.getOwner().getId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        else
+            return shouldLoad;
     }
 
     /**
