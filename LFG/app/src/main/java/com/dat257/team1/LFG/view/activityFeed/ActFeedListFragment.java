@@ -14,13 +14,14 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.CreateActivityView;
-import com.dat257.team1.LFG.view.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.ActivityDescriptionFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
@@ -67,10 +68,13 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
 
     @Override
     public void onCardClicked(View view, int pos) {
-        Log.d(LOG_TAG, "Card Clicked!");
+        /*Log.d(LOG_TAG, "Card Clicked!");
         actFeedViewModel.onItemClick(pos);
-        Intent intent = new Intent(getContext(), ActivityDescriptionView.class); //TODO maybe not call directly here do from parent, not sure.
+        Intent intent = new Intent(getContext(), ActivityDescriptionFragment.class); //TODO maybe not call directly here do from parent, not sure.
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        actFeedViewModel.onItemClick(pos);
+        Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_activityDescriptionView);
     }
 }

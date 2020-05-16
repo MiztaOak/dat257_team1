@@ -32,9 +32,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.ActivityDescriptionView"
-            android:label="Activity Description" />
-        <activity
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
 

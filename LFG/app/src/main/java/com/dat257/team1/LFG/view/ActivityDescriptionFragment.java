@@ -39,7 +39,7 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ActivityDescriptionView extends Fragment {
+public class ActivityDescriptionFragment extends Fragment {
 
     private ActivityDescriptionViewModel activityDescriptionViewModel;
     private MutableLiveData<Activity> mutableActivity;
@@ -85,7 +85,7 @@ public class ActivityDescriptionView extends Fragment {
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
-                activityImage.setImageResource(R.drawable.dog_image_activity);
+                //activityImage.setImageResource(R.drawable.dog_image_activity); //TODO
                 userName.setText(FireStoreHelper.getInstance().getIdToNameDictionary().get(activity.getOwner()));
             }
         });

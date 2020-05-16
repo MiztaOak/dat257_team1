@@ -37,7 +37,6 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_chat_list, container, false);
-
     }
 
     @Override
@@ -61,6 +60,8 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
         recyclerView.setLayoutManager(reLayoutManager);
         reAdapter = new ChatListAdapter(chatListItems, this);
         recyclerView.setAdapter(reAdapter);
+
+        viewModel.onCreate();
     }
 
     @Override
