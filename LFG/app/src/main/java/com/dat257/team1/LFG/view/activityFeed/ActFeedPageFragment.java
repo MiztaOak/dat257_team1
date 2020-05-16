@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,11 +36,22 @@ public class ActFeedPageFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         ActPageAdapter actPageAdapter = new ActPageAdapter(this, getParentFragmentManager());
-        ViewPager viewPager = view.findViewById(R.id.view_pager_feed);
+        CustomViewPager viewPager = view.findViewById(R.id.view_pager_feed);
         viewPager.setAdapter(actPageAdapter);
         TabLayout tabs = view.findViewById(R.id.activity_feed_tab);
         tabs.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
+
+        LinearLayout tabStrip = ((LinearLayout)tabs.getChildAt(0));
+        tabStrip.getChildAt(1).setOnTouchListener((view1, motionEvent) -> {
+            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+
+                view1.performClick();
+            }else{
+                Toast.makeText(getContext(),"You must be signed in to access the map",Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        });
 
         createActivity = (Button) view.findViewById(R.id.createActivity);
         createActivity.setOnClickListener(new View.OnClickListener() {

@@ -26,7 +26,7 @@ public class CustomViewPager extends ViewPager {
             return false;
         }
 
-        return true;
+        return super.onTouchEvent(event);
     }
 
     @Override
@@ -36,8 +36,7 @@ public class CustomViewPager extends ViewPager {
             return false;
         }
 
-        return true;
+        return super.onTouchEvent(event);
     }
-
 
 }
