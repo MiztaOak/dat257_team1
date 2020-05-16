@@ -4,83 +4,97 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Message;
 import com.dat257.team1.LFG.viewmodel.MessageViewModel;
+import com.google.android.material.textfield.TextInputEditText;
 
-import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MessageFragment extends Fragment {
 
-    private Button menu;
-    private Button createNewMessage;
-    private RecyclerView chatFeed;
-    private MessageCardAdapter msgAdapter;
+    private ImageButton createNewMessage;
+    private TextInputEditText msg;
+    private String chatId;
+    private MsgAdapter msgAdapter;
 
-    private ArrayList<MessageCard> messageCardsViewList;
     private MessageViewModel messageViewModel;
     private MutableLiveData<List<Message>> messages;
-    private RecyclerView.Adapter reAdapter;
+    private MutableLiveData<String> currentChatId;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.message_activity, container, false);
     }
-
+    
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            chatId = bundle.getString("chatId");
+        }
 
-        menu = view.findViewById(R.id.menu_button);
-        menu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Open menu");
-            }
-        });
+        msg = view.findViewById(R.id.etxt_chat_message);
 
         createNewMessage = view.findViewById(R.id.create_message);
         createNewMessage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Create new message");
+
+                if (msg.getText() != null) {
+                    messageViewModel.sendMessage(chatId, msg.getText().toString());
+                } else {
+                    msg.setError("empty");
+                }
             }
         });
 
-        chatFeed = view.findViewById(R.id.chat_feed);
-        chatFeed.setHasFixedSize(true);
-        chatFeed.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        messageCardsViewList = new ArrayList<>();
-        messageCardsViewList.add(new MessageCard("", "This is a test", new Timestamp(System.currentTimeMillis())));
-        msgAdapter = new MessageCardAdapter(messageCardsViewList);
-        chatFeed.setAdapter(msgAdapter);
-
         messageViewModel = new ViewModelProvider(this).get(MessageViewModel.class);
-        messages = messageViewModel.getMessages();
+        messageViewModel.onCreate();
+
+        currentChatId = messageViewModel.getMutableLiveDataChatId();
+        currentChatId.observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                messageViewModel.loadChat(s);
+            }
+        });
+
+        messages = messageViewModel.getMutableLiveDataMessages();
+        ListView listView = view.findViewById(R.id.messages_view);
+        msgAdapter = new MsgAdapter(getContext(), messages);
+        listView.setAdapter(msgAdapter);
         messages.observe(getViewLifecycleOwner(), new Observer<List<Message>>() {
             @Override
             public void onChanged(List<Message> messages) {
-                reAdapter.notifyDataSetChanged();
-
+                msgAdapter.notifyDataSetChanged();
             }
         });
+        messageViewModel.setMutableChatId(chatId);
     }
 
+    @Override
+    public void onPause() {
+        messageViewModel.cleanup();
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        messageViewModel.cleanup();
+        super.onStop();
+    }
 }
 

@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -298,14 +299,14 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessageInChat(Chat chat, Message message) {
+    public void writeMessageInChat(String chatId, String msg) {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put("messageText", message.getContent());
-        data.put("sender", db.document("/users/" + message.getSender()));
-        data.put("sent", message.getTime());
-        db.collection("chats").document(chat.getId()).collection("messages").add(data).
+        data.put("messageText", msg);
+        data.put("sender", db.document("/users/" + FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        data.put("sent", ServerValue.TIMESTAMP);
+        db.collection("chats").document(chatId).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

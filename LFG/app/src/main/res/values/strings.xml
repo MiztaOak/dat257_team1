@@ -79,4 +79,7 @@
     <string name="notifications">Notifications</string>
     <string name="name">[Name]</string>
     <string name="time">[time]</string>
+    <string name="hint">hint</string>
+    <string name="todo">TODO</string>
+    <string name="write_a_message">Write a message ...</string>
 </resources>

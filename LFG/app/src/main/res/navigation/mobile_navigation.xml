@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_act_feed">
+    app:startDestination="@id/nav_act_feed">
 
     <fragment
         android:id="@+id/nav_act_feed"
         android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
-        tools:layout="@layout/activity_feed_w_tabs"/>
+        tools:layout="@layout/act_feed_page" />
 
     <fragment
         android:id="@+id/nav_my_activities"
-        android:name="com.dat257.team1.LFG.view.myActivities.MyActPageFragment"
-        tools:layout="@layout/my_activities_page"/>
+        android:name="com.dat257.team1.LFG.view.activityFeed.MyActPageFragment"
+        tools:layout="@layout/my_activities_page" />
 
     <fragment
         android:id="@+id/nav_about"
@@ -22,15 +22,35 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.dat257.team1.LFG.view.ProfileFragment"
-        tools:layout="@layout/activity_profile"/>
+        tools:layout="@layout/profile_activity" />
 
     <fragment
         android:id="@+id/nav_notifications"
         android:name="com.dat257.team1.LFG.view.NotificationFragment"
         android:label="NotificationFragment" />
+
     <fragment
         android:id="@+id/nav_messages"
         android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
-        android:label="ChatListFragment" />
+        android:label="ChatListFragment">
+        <action
+            android:id="@+id/action_nav_messages_to_nav_messageFragment"
+            app:destination="@id/nav_messageFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim"
+            app:popExitAnim="@anim/nav_default_exit_anim" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_messageFragment"
+        android:name="com.dat257.team1.LFG.view.messageFeed.MessageFragment"
+        android:label="MessageFragment"
+        tools:layout="@layout/message_activity">
+        <argument
+            android:name="chatId"
+            app:argType="string"
+            android:defaultValue="null"/>
+    </fragment>
 
 </navigation>

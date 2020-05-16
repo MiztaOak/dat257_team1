@@ -1,20 +1,15 @@
 package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +24,7 @@ public class ForgetPasswordView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.forget_password);
+        setContentView(R.layout.auth_forgot_pwd);
 
 
         userEmail = findViewById(R.id.userEmail);

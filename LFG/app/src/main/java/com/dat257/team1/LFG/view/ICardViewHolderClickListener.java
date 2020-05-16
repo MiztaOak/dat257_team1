@@ -1,6 +1,8 @@
 package com.dat257.team1.LFG.view;
 
+import android.view.View;
+
 public interface ICardViewHolderClickListener {
 
-    void onCardClicked(int pos);
+    void onCardClicked(View view, int pos);
 }

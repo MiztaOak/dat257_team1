@@ -5,7 +5,7 @@
     android:id="@+id/my_activities_tabs"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.myActivities.MyActPageFragment">
+    tools:context=".view.activityFeed.MyActPageFragment">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_activities"

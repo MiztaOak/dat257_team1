@@ -51,7 +51,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.register_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.auth_register_fragment, container, false);
 
         super.onCreate(savedInstanceState);
         createButton = (Button) rootView.findViewById(R.id.sign_up_button);

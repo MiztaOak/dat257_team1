@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +21,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment;
 import com.dat257.team1.LFG.view.chatList.ChatListFragment;
 import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
-import com.dat257.team1.LFG.view.myActivities.MyActPageFragment;
+import com.dat257.team1.LFG.view.activityFeed.MyActPageFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,7 +33,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_menu);
+        setContentView(R.layout.menu_activity);
 
         Toolbar toolbar = findViewById(R.id.menu_toolbar);
         setSupportActionBar(toolbar);

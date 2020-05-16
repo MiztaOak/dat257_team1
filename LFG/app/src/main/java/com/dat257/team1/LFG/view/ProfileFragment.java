@@ -21,7 +21,6 @@ import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firestore.v1.FirestoreGrpc;
 
 public class ProfileFragment extends Fragment {
 
@@ -51,7 +50,7 @@ public class ProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_profile, container, false);
+        return inflater.inflate(R.layout.profile_activity, container, false);
     }
 
     @Override

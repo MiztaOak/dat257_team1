@@ -51,7 +51,7 @@ public class ActFeedPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_feed_w_tabs, container, false);
+        return inflater.inflate(R.layout.act_feed_page, container, false);
     }
 
     public void launchCreateActivity() {

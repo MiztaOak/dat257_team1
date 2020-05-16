@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.myActivities;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,7 +16,7 @@ public class PreviousActFragment extends Fragment implements ICardViewHolderClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.previous_activities_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.my_previous_act_fragment, container, false);
         return rootView;
     }
 
@@ -27,7 +27,7 @@ public class PreviousActFragment extends Fragment implements ICardViewHolderClic
 
 
     @Override
-    public void onCardClicked(int pos) {
+    public void onCardClicked(View view, int pos) {
 
     }
 }
