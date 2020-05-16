@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -16,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.CreateActivityView;
@@ -54,14 +52,11 @@ public class ActFeedPageFragment extends Fragment {
         });
 
         createActivity = (Button) view.findViewById(R.id.createActivity);
-        createActivity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(FirebaseAuth.getInstance().getCurrentUser() != null)
-                    launchCreateActivity();
-                else
-                    Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
-            }
+        createActivity.setOnClickListener(v -> {
+            if(FirebaseAuth.getInstance().getCurrentUser() != null)
+                launchCreateActivity();
+            else
+                Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
     }
