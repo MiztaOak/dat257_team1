@@ -30,9 +30,12 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -94,11 +97,12 @@ public class LoginFragment extends Fragment {
         });
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(rootView.getContext(), gso);
-
+        mAuth = FirebaseAuth.getInstance();
         return rootView;
     }
 
@@ -115,23 +119,23 @@ public class LoginFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d("GoogleActivity", "firebaseAuthWithGoogle:" + account.getId());
-                handleSignInResult(task);
+                Log.d(LOG_TAG, "firebaseAuthWithGoogle:" + account.getId());
+                handleSignInResult(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w("Error", "Google sign in failed", e);
+                Log.w(LOG_TAG, "Google sign in failed", e);
                 // ...
             }
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
-            //Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            //handleSignInResult(task);
         }
+
     }
 
     /**
@@ -139,24 +143,26 @@ public class LoginFragment extends Fragment {
      * Throws an ApiException if the sign in fails.
      * If the sign in is successful, send the user to the ActivityFeedView.
      *
-     * @param completedTask
+     * @param idToken
      */
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
+    private void handleSignInResult(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(LOG_TAG, "signInWithCredential:success");
+                            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
+                        }
 
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-            if(account != null) {
-                // Signed in successfully, open the ActivityFeedView
-                //RegisterFragment re = new RegisterFragment();
-                //re.registerUser(account.getEmail(), "password", account.getDisplayName(), "0123654");
-                startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
-            }
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
-            startActivity(null);
-        }
+                        // ...
+                    }
+                });
     }
 
     /**
