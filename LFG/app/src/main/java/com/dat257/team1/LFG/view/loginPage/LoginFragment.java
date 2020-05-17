@@ -54,6 +54,8 @@ public class LoginFragment extends Fragment {
     private EditText passwordField, emailField;
     private SignInButton googleButton;
     private TextView forgetPassword;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
     @Nullable
     @Override
@@ -114,10 +116,21 @@ public class LoginFragment extends Fragment {
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d("GoogleActivity", "firebaseAuthWithGoogle:" + account.getId());
+                handleSignInResult(task);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w("Error", "Google sign in failed", e);
+                // ...
+            }
             // The Task returned from this call is always completed, no need to attach
             // a listener.
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            //Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            //handleSignInResult(task);
         }
     }
 
@@ -130,15 +143,19 @@ public class LoginFragment extends Fragment {
      */
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
+
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
-            // Signed in successfully, open the ActivityFeedView
-            startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
-
+            if(account != null) {
+                // Signed in successfully, open the ActivityFeedView
+                //RegisterFragment re = new RegisterFragment();
+                //re.registerUser(account.getEmail(), "password", account.getDisplayName(), "0123654");
+                startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
+            }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
+            startActivity(null);
         }
     }
 
@@ -146,27 +163,30 @@ public class LoginFragment extends Fragment {
      * Check for existing Google Sign In account, if the user is already signed in
      * the GoogleSignInAccount will be non-null.
      */
-    //@Override
-    //public void onStart() {
-    //    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-    //    updateUI(account);
-    //}
+
+    /*public void onStart() {
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String uid = currentUser.getUid();
+
+    }*/
 
     /**
      * Fetches some information about the Google account that's logged in.
      * Needs to be put into the database to register the account //TODO
      */
-    /*
-    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-    //if (acct != null) {
+
+    /*GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if (acct != null) {
     String personName = acct.getDisplayName();
     String personGivenName = acct.getGivenName();
     String personFamilyName = acct.getFamilyName();
     String personEmail = acct.getEmail();
     String personId = acct.getId();
-    //Uri personPhoto = acct.getPhotoUrl();
-    //}
-*/
+    Uri personPhoto = acct.getPhotoUrl();
+    }*/
 
     /**
      * A method to check the validation of the password and the email.
