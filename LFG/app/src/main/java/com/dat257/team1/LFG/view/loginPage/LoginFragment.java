@@ -102,7 +102,7 @@ public class LoginFragment extends Fragment {
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(rootView.getContext(), gso);
-
+        mAuth = FirebaseAuth.getInstance();
         return rootView;
     }
 
