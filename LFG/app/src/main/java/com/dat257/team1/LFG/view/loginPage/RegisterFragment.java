@@ -54,7 +54,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
         final View rootView = inflater.inflate(R.layout.register_fragment, container, false);
 
         super.onCreate(savedInstanceState);
-        createButton = (Button) rootView.findViewById(R.id.sign_up_button);
+        createButton = (Button) rootView.findViewById(R.id.register_button);
         emailField = (EditText) rootView.findViewById(R.id.sign_up_email);
         nameField = (EditText) rootView.findViewById(R.id.sign_up_name);
         passField1 = (EditText) rootView.findViewById(R.id.sign_up_pwd1);

@@ -61,8 +61,8 @@ public class LoginFragment extends Fragment {
         final View rootView = inflater.inflate(R.layout.login_fragment, container, false);
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
-        forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);
-        googleButton = rootView.findViewById(R.id.quick_access_google);
+        forgetPassword = rootView.findViewById(R.id.lfForgotPass);
+      //  googleButton = rootView.findViewById(R.id.quick_access_google);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
