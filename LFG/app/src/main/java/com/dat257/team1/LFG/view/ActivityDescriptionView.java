@@ -26,6 +26,7 @@ import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -102,20 +103,30 @@ public class ActivityDescriptionView extends AppCompatActivity {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!commentText.getText().toString().equals("")) {
-                    activityDescriptionViewModel.addComment(commentText.getText().toString());
-                    commentText.setText("");
-                    commentText.clearFocus();
+                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    if (!commentText.getText().toString().equals("")) {
+                        activityDescriptionViewModel.addComment(commentText.getText().toString());
+                        commentText.setText("");
+                        commentText.clearFocus();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
                 }
-                System.out.println("Added a comment");
+
+
             }
         });
 
         joinActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                activityDescriptionViewModel.joinActivity();
-                activityDescriptionViewModel.joinerStatus();
+                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    activityDescriptionViewModel.joinActivity();
+                    activityDescriptionViewModel.joinerStatus();
+                }else {
+                    Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
