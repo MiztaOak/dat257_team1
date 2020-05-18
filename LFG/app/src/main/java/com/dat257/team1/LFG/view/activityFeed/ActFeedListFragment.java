@@ -1,8 +1,6 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.view.CreateActivityView;
-import com.dat257.team1.LFG.view.ActivityDescriptionFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
@@ -38,7 +35,7 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_feed, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_act_feed_list, container, false);
 
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
         getLifecycle().addObserver(actFeedViewModel);

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/nav_act_feed"
         android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
-        tools:layout="@layout/act_feed_page" >
+        tools:layout="@layout/fragment_act_feed_page" >
         <action
             android:id="@+id/action_nav_act_feed_to_activityDescriptionView"
             app:destination="@id/activityDescriptionView"
@@ -21,7 +21,7 @@
     <fragment
         android:id="@+id/nav_my_activities"
         android:name="com.dat257.team1.LFG.view.activityFeed.MyActPageFragment"
-        tools:layout="@layout/my_activities_page" />
+        tools:layout="@layout/fragment_my_act_page" />
 
     <fragment
         android:id="@+id/nav_about"
@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.dat257.team1.LFG.view.ProfileFragment"
-        tools:layout="@layout/profile_activity" />
+        tools:layout="@layout/activity_profile" />
 
     <fragment
         android:id="@+id/nav_notifications"
@@ -54,7 +54,7 @@
         android:id="@+id/nav_messageFragment"
         android:name="com.dat257.team1.LFG.view.messageFeed.MessageFragment"
         android:label="MessageFragment"
-        tools:layout="@layout/message_activity">
+        tools:layout="@layout/fragment_message">
         <argument
             android:name="chatId"
             app:argType="string"

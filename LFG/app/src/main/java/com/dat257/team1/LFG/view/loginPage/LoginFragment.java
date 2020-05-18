@@ -53,7 +53,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.auth_login_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_auth_login, container, false);
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
         forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);

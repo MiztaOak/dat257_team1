@@ -124,7 +124,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.act_maps, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_act_feed_maps, container, false);
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
         actFeedLiveData();

@@ -16,7 +16,7 @@ public class PreviousActFragment extends Fragment implements ICardViewHolderClic
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.my_previous_act_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_my_previous_act, container, false);
         return rootView;
     }
 

@@ -24,7 +24,7 @@ public class ForgetPasswordView extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.auth_forgot_pwd);
+        setContentView(R.layout.fragment_auth_forgot_pwd);
 
 
         userEmail = findViewById(R.id.userEmail);

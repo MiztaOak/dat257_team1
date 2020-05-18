@@ -19,7 +19,7 @@ public class FavouriteActivityFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.my_current_act_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_my_current_act, container, false);
 
         backButton = rootView.findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {

@@ -37,7 +37,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.act_card_fragment, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_act_card, parent, false);
         return new CardViewHolder(v, iCardViewHolderClickListener);
     }
 
