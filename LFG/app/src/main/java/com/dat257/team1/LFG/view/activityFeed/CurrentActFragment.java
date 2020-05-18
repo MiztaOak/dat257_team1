@@ -12,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -84,8 +85,6 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
     @Override
     public void onCardClicked(View view, int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        Intent intent = new Intent(getContext(), ActDescriptionFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Navigation.findNavController(view).navigate(R.id.action_nav_my_activities_to_activityDescriptionView3);
     }
 }
