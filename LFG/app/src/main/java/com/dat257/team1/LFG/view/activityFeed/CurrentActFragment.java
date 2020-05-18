@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.ActDescriptionFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.CurrentActivitiesViewModel;
 
