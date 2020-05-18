@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.favouriteActivities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,7 @@ public class FavouriteActivityFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.current_activities_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_my_current_act, container, false);
 
         backButton = rootView.findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {

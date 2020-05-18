@@ -5,8 +5,8 @@ import com.dat257.team1.LFG.model.Message;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 
-import java.sql.Date;
 import java.sql.Time;
+import java.util.Date;
 
 public class MessageDataHolder {
     public String messageText;
@@ -33,6 +33,6 @@ public class MessageDataHolder {
     }
 
     public Message toMessage(){
-        return new Message(messageText, sender.getId(), sendTime);
+        return new Message(messageText, sender.getId(), new Date(1), null); //TODO image
     }
 }

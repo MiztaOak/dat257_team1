@@ -31,6 +31,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -301,14 +303,14 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessageInChat(Chat chat, Message message) {
+    public void writeMessageInChat(String chatId, String msg) {
 
         Map<String, Object> data = new HashMap<>();
 
-        data.put("messageText", message.getContent());
-        data.put("sender", db.document("/users/" + message.getSender()));
-        data.put("sent", message.getTime());
-        db.collection("chats").document(chat.getId()).collection("messages").add(data).
+        data.put("messageText", msg);
+        data.put("sender", db.document("/users/" + FirebaseAuth.getInstance().getCurrentUser().getUid()));
+        data.put("sent", ServerValue.TIMESTAMP);
+        db.collection("chats").document(chatId).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
@@ -568,7 +570,7 @@ public class FireStoreHelper {
         String currentUserName = idToNameDictionary.get(uID);
         for (DocumentReference ref : idList) {
             String userName = idToNameDictionary.get(ref.getId());
-            if (userName.equals(currentUserName))
+            if (!userName.equals(currentUserName))
                 continue;
             name.append(userName);
             if (name.length() >= 20) {
@@ -588,20 +590,44 @@ public class FireStoreHelper {
      * @param id the id of the user
      * @return the listener
      */
-    //TODO: NOT TESTED YET
     public ListenerRegistration loadUserInformation(String id) {
         DocumentReference docRef = db.collection("users").document(id);
-        return docRef.addSnapshotListener((Executor) this, new EventListener<DocumentSnapshot>() {
+        return docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                 if (e != null) {
                     Log.w(TAG, "Listen failed.", e);
                     return;
                 }
-                User userObj = new User(id, documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
+                User userObj = new User("id", documentSnapshot.getString("name"), documentSnapshot.getString("email"), documentSnapshot.getString("phoneNumber"));
                 EventBus.getDefault().post(new UserEvent(userObj));
             }
         });
+    }
+
+    /**
+     * A method to retrieve the exciting user's data from the database
+     *
+     * @param currentUser The current user who's successfully logged in.
+     */
+    public void retrieveData(FirebaseUser currentUser) {
+        if (currentUser != null) {
+            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+            DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
+            documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                    //todo retrieving the data
+                    /*
+                    fullName.setText(documentSnapshot.getString("name"));
+                    email.setText(documentSnapshot.getString("email"));
+                   // get the friendList, this should be in a recyclerView form
+                    */
+
+                }
+            });
+
+        }
     }
 }
 

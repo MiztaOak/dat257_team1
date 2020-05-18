@@ -1,21 +1,14 @@
 package com.dat257.team1.LFG.model;
 
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
-import com.dat257.team1.LFG.events.MessageEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -28,12 +21,10 @@ public class Main {
 
     private static Main main;
     private List<Activity> activities;
-    private User dummy = new User("1", "johan", "joahn", "0");
     private FireStoreHelper fireBaseObject;
     private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
-    private List<Message> messages;
 
     private Main() {
         activities = new ArrayList<>();
@@ -86,11 +77,11 @@ public class Main {
         FireStoreHelper.getInstance().addCommentToActivity(activity, comment);
     }
 
-    public void writeMessage(Chat chat, Message message) {
-        FireStoreHelper.getInstance().writeMessageInChat(chat, message);
+    public void writeMessage(String chatId, String msg) {
+        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg);
     }
 
-    public List getMessages() {
-        return messages;
+    public ListenerRegistration loadChat(String chatId) {
+       return FireStoreHelper.getInstance().loadChat(chatId);
     }
 }

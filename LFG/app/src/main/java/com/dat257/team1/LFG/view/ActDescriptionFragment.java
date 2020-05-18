@@ -1,14 +1,19 @@
 package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -33,7 +38,9 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
-public class ActivityDescriptionView extends AppCompatActivity {
+import static com.facebook.FacebookSdk.getApplicationContext;
+
+public class ActDescriptionFragment extends Fragment {
 
     private ActivityDescriptionViewModel activityDescriptionViewModel;
     private MutableLiveData<Activity> mutableActivity;
@@ -54,51 +61,48 @@ public class ActivityDescriptionView extends AppCompatActivity {
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_description);
-        initViews();
-        fetchActivityLocation();
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_description, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        initViews(view);
 
         activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
         getLifecycle().addObserver(activityDescriptionViewModel);
         activityDescriptionViewModel.onCreate();
 
         mutableActivity = activityDescriptionViewModel.getMutableActivity();
-        activityDescriptionViewModel.getMutableActivity().observe(this, new Observer<Activity>() {
+        activityDescriptionViewModel.getMutableActivity().observe(getViewLifecycleOwner(), new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
 
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
-                activityImage.setImageResource(R.drawable.dog_image_activity);
+                //activityImage.setImageResource(R.drawable.dog_image_activity); //TODO
                 userName.setText(FireStoreHelper.getInstance().getIdToNameDictionary().get(activity.getOwner()));
             }
         });
 
         comments = activityDescriptionViewModel.getMutableComments();
-        activityDescriptionViewModel.getMutableComments().observe(this, new Observer<List<Comment>>() {
+        activityDescriptionViewModel.getMutableComments().observe(getViewLifecycleOwner(), new Observer<List<Comment>>() {
             @Override
             public void onChanged(List<Comment> comments) {
                 reAdapter.notifyDataSetChanged();
                 mapView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        FragmentManager fm = getSupportFragmentManager();
-                        LatLng locationTest = new LatLng(57.708870, 11.974560);
-                        //    Map gm = new Map();
-                        // gm.markLocation(locationTest);
-                        // fm.beginTransaction().replace(R.id.mapView, gm).commit();
-                        //  mapView.getMapAsync(this);
-
                     }
                 });
             }
         });
-
 
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,15 +134,15 @@ public class ActivityDescriptionView extends AppCompatActivity {
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.comment_feed);
+        recyclerView = (RecyclerView) view.findViewById(R.id.comment_feed);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
-        reLayoutManager = new LinearLayoutManager(this);
+        reLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(reLayoutManager);
         reAdapter = new CommentAdapter(comments);
         recyclerView.setAdapter(reAdapter);
 
-        //activityImage.setImageResource(R.drawable.SRC); //sets the source to image
+        //activityImage.setImageResource(R.drawable.ic); //sets the source to image
         activityTitle.setText("Activity Title");
         userName.setText("User Name");
         activitySchedule.setText("Time/Date");
@@ -147,10 +151,6 @@ public class ActivityDescriptionView extends AppCompatActivity {
         EventBus.getDefault().register(this); //if you don't like it solve the toasts without this you nerd
     }
 
-
-    private void fetchActivityLocation() {
-
-    }
 /*
     @Override
     protected void onStart() {
@@ -160,27 +160,27 @@ public class ActivityDescriptionView extends AppCompatActivity {
  */
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
         activityDescriptionViewModel.cleanup();
     }
 
-    private void initViews() {
-        activityImage = findViewById(R.id.activity_image);
-        mapView = findViewById(R.id.mapView);
-        commentFeed = findViewById(R.id.comment_feed);
-        activitySchedule = findViewById(R.id.activity_time);
-        activityDescription = findViewById(R.id.activity_description);
-        joinActivity = findViewById(R.id.join_activity);
-        addComment = findViewById(R.id.write_comment);
-        activityTitle = findViewById(R.id.activity_title);
-        userName = findViewById(R.id.user_name);
-        commentText = findViewById(R.id.description_commentTextField);
+    private void initViews(View view) {
+        activityImage = view.findViewById(R.id.activity_image);
+        mapView = view.findViewById(R.id.mapView);
+        commentFeed = view.findViewById(R.id.comment_feed);
+        activitySchedule = view.findViewById(R.id.activity_time);
+        activityDescription = view.findViewById(R.id.activity_description);
+        joinActivity = view.findViewById(R.id.join_activity);
+        addComment = view.findViewById(R.id.write_comment);
+        activityTitle = view.findViewById(R.id.activity_title);
+        userName = view.findViewById(R.id.user_name);
+        commentText = view.findViewById(R.id.description_commentTextField);
     }
 
 
-    //TODO HIGHLY ILLEGAL!
+    //TODO HIGHLY ILLEGAL! - MOVE TO VIEWMODEL!
     @Subscribe
     public void handleCommentEvent(CommentEvent event) {
         if (!event.isSuccess()) {
@@ -194,11 +194,5 @@ public class ActivityDescriptionView extends AppCompatActivity {
         if (event.isSuccess()) {
             //leave view
         }
-    }
-
-    private void updateActivityDescriptionMap(LatLng location) {
-        // display activity
-        // GoogleMaps gm = new GoogleMaps();
-        // gm.markLocation(location);
     }
 }

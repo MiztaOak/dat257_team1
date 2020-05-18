@@ -24,7 +24,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Main;
-import com.dat257.team1.LFG.view.ActivityDescriptionView;
+import com.dat257.team1.LFG.view.ActDescriptionFragment;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -124,7 +124,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_maps, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_act_feed_maps, container, false);
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
         actFeedLiveData();
@@ -288,7 +288,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 if (!marker.getTag().equals("currentLocation")) {
                     Main.getInstance().setFocusedActivity(markerClick.get(marker));
-                    Intent intent = new Intent(getContext(), ActivityDescriptionView.class);
+                    Intent intent = new Intent(getContext(), ActDescriptionFragment.class);
                     startActivity(intent);
                 }
             }

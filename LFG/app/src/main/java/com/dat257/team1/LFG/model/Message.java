@@ -1,37 +1,34 @@
 package com.dat257.team1.LFG.model;
 
-
-
-import com.google.firebase.Timestamp;
-
 import java.util.Date;
-import java.util.List;
 
 public class Message {
+
     private String content;
-    private String sender;
-    private Timestamp time;
+    private String senderId;
+    private Date timestamp;
+    private String contactImageResource;
 
-
-    public Message (String content, String sender, Timestamp time){
-        this.content=content;
-        this.sender=sender;
-        this.time=time;
-
+    public Message(String content, String senderId, Date timestamp, String contactImageResource) {
+        this.content = content;
+        this.senderId = senderId;
+        this.timestamp = timestamp;
+        this.contactImageResource = contactImageResource;
     }
 
-    public Message(){}
+    public String getContactImageResource() {
+        return contactImageResource;
+    }
 
-    public String getContent(){ return content; }
+    public String getSenderId() {
+        return senderId;
+    }
 
-    public String getSender(){return sender;}
+    public String getContent() {
+        return content;
+    }
 
-    public Timestamp getTime(){return time;}
-
-    public void setContent(String content){this.content=content;}
-
-    public void setSender(String sender){this.sender=sender;}
-
-    //TODO is it necessary for a setter for timestamp?
-
+    public Date getTime() {
+        return timestamp;
+    }
 }

@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.activityFeed;
 
 
 import android.content.Context;
@@ -37,7 +37,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_card_fragment, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_act_card, parent, false);
         return new CardViewHolder(v, iCardViewHolderClickListener);
     }
 
@@ -47,7 +47,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             @Override
             public void onClick(View view) {
                 Main.getInstance().setFocusedActivity(activityList.getValue().get(position)); //moved this here to function with the current activities
-                iCardViewHolderClickListener.onCardClicked(position);
+                iCardViewHolderClickListener.onCardClicked(view, position);
             }
         });
         ImageView imageView = ((CardViewHolder) cardViewHolder).mImageView;

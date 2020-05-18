@@ -7,13 +7,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
@@ -22,10 +20,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment;
-import com.dat257.team1.LFG.view.chatList.ChatListFragment;
 import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
-import com.dat257.team1.LFG.view.myActivities.MyActPageFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -58,10 +53,10 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if(FirebaseAuth.getInstance().getCurrentUser() == null && id != R.id.nav_act_feed && id != R.id.nav_about){
-                    Toast.makeText(getApplicationContext(),"You must be signed in to access this feature",Toast.LENGTH_SHORT).show();
+                if (FirebaseAuth.getInstance().getCurrentUser() == null && id != R.id.nav_act_feed && id != R.id.nav_about) {
+                    Toast.makeText(getApplicationContext(), "You must be signed in to access this feature", Toast.LENGTH_SHORT).show();
                     return false;
-                }else{
+                } else {
                     FragmentManager fm = getSupportFragmentManager();
                     fm.popBackStackImmediate();
                     boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
@@ -76,9 +71,8 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-
         signOut = findViewById(R.id.btn_sign_out);
-        if(FirebaseAuth.getInstance().getCurrentUser() == null)
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
             signOut.setText("Sign in");
         else
             signOut.setText("Sign out");
@@ -105,7 +99,7 @@ public class MenuActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    private void openSignOutPage(){
+    private void openSignOutPage() {
         startActivity(new Intent(this, LoginPageFragment.class));
     }
 }

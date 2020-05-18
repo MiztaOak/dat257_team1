@@ -21,7 +21,6 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
-import com.dat257.team1.LFG.view.MenuActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -30,18 +29,11 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
 
 /**
  * A simple login on an account fragment
@@ -63,7 +55,7 @@ public class LoginFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.login_fragment, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_auth_login, container, false);
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
         forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);
@@ -237,7 +229,7 @@ public class LoginFragment extends Fragment {
                             FireStoreHelper.getInstance();
                             Toast.makeText(getActivity(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            retrieveData(user);
+                            FireStoreHelper.getInstance().retrieveData(user);
                             //take the user to the main page after successfully retrieving the data
                             startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
                         } else { // If sign in fails, display a message to the user.
@@ -252,32 +244,6 @@ public class LoginFragment extends Fragment {
     public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
-    }
-
-
-    /**
-     * A method to retrieve the exciting user's data from the database
-     *
-     * @param currentUser The current user who's successfully logged in.
-     */
-    private void retrieveData(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
-            documentReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    //todo retrieving the data
-                    /*
-                    fullName.setText(documentSnapshot.getString("name"));
-                    email.setText(documentSnapshot.getString("email"));
-                   // get the friendList, this should be in a recyclerView form
-                    */
-
-                }
-            });
-
-        }
     }
 
 
