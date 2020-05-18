@@ -26,7 +26,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -52,7 +51,7 @@ public class LoginFragment extends Fragment {
     int RC_SIGN_IN = 0;
     private Button loginButton;
     private EditText passwordField, emailField;
-    private SignInButton googleButton;
+    // private SignInButton googleButton;
     private TextView forgetPassword;
 
     @Nullable
@@ -62,7 +61,7 @@ public class LoginFragment extends Fragment {
 
         loginButton = rootView.findViewById(R.id.sign_in_button);
         forgetPassword = rootView.findViewById(R.id.lfForgotPass);
-      //  googleButton = rootView.findViewById(R.id.quick_access_google);
+        //  googleButton = rootView.findViewById(R.id.quick_access_google);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,14 +82,14 @@ public class LoginFragment extends Fragment {
                 openForgotPassword();
             }
         });
-
+/*
         googleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 googleSignIn();
             }
         });
-
+*/
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
                 .build();

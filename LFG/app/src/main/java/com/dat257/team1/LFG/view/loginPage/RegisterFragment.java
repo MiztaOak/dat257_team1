@@ -128,7 +128,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private void handleCreateUser() {
         String email = emailField.getText().toString(),
                 name = nameField.getText().toString(),
-                phone = phoneField.getText().toString(), pass1 = passField1.getText().toString(),
+                phone = phoneField.getText().toString(),
+                pass1 = passField1.getText().toString(),
                 pass2 = passField2.getText().toString();
 
         if (correctData(email, name, pass1, pass2, phone)) {
@@ -157,7 +158,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             status = false;
         }
         if (!pass1.equals(pass2)) {
-            passField1.setError("Your passwords most match");
+            passField2.setError("Your passwords most match");
             status = false;
         }
         if (phone.equals("")) {

@@ -13,6 +13,11 @@ import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
 
+/**
+ * A view that is responsible for holding the welcome page's components
+ *
+ * @author Oussama Anadani
+ */
 public class WelcomeFragment extends Fragment {
 
     private Button loginButton;
@@ -22,9 +27,7 @@ public class WelcomeFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.welcome_page, container, false);
-
-        return rootView;
+        return inflater.inflate(R.layout.welcome_page, container, false);
     }
 
     @Override
