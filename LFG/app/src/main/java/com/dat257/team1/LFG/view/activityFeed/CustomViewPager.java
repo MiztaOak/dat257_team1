@@ -25,8 +25,8 @@ public class CustomViewPager extends ViewPager {
             // Always return false to disable user swipes
             return false;
         }
-
-        return super.onTouchEvent(event);
+        return false;
+        //return super.onTouchEvent(event);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class CustomViewPager extends ViewPager {
             // Always return false to disable user swipes
             return false;
         }
-
-        return super.onTouchEvent(event);
+        return false;
+        //return super.onTouchEvent(event);
     }
 
 }
