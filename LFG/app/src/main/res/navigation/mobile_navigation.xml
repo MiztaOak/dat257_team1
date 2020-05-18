@@ -62,7 +62,7 @@
     </fragment>
     <fragment
         android:id="@+id/activityDescriptionView"
-        android:name="com.dat257.team1.LFG.view.ActivityDescriptionFragment"
+        android:name="com.dat257.team1.LFG.view.ActDescriptionFragment"
         android:label="ActivityDescriptionView" />
 
 </navigation>

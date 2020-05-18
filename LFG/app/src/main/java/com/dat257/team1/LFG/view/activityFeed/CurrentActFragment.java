@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.ActivityDescriptionFragment;
+import com.dat257.team1.LFG.view.ActDescriptionFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.CurrentActivitiesViewModel;
 
@@ -84,7 +84,7 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
     @Override
     public void onCardClicked(View view, int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        Intent intent = new Intent(getContext(), ActivityDescriptionFragment.class);
+        Intent intent = new Intent(getContext(), ActDescriptionFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }

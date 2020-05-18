@@ -40,7 +40,7 @@ import java.util.List;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class ActivityDescriptionFragment extends Fragment {
+public class ActDescriptionFragment extends Fragment {
 
     private ActivityDescriptionViewModel activityDescriptionViewModel;
     private MutableLiveData<Activity> mutableActivity;
