@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.992" />
 
-    <androidx.viewpager.widget.ViewPager
+    <com.dat257.team1.LFG.view.activityFeed.CustomViewPager
         android:id="@+id/view_pager_feed"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -28,7 +28,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_feed_tab">
 
-    </androidx.viewpager.widget.ViewPager>
+    </com.dat257.team1.LFG.view.activityFeed.CustomViewPager>
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/activity_feed_tab"
