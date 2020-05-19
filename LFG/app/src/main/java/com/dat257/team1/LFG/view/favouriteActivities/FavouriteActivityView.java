@@ -6,7 +6,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class FavouriteActivityView extends FragmentActivity {

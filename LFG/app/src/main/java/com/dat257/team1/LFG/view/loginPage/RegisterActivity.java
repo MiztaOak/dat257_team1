@@ -3,9 +3,7 @@ package com.dat257.team1.LFG.view.loginPage;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -13,7 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.events.RegisterEvent;
@@ -37,8 +35,8 @@ import java.util.Map;
  *
  * @author : Jakobew & Johan Ek
  */
-public class RegisterFragment extends Fragment implements View.OnClickListener {
-    private static final String LOG_TAG = RegisterFragment.class.getSimpleName();
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+    private static final String LOG_TAG = RegisterActivity.class.getSimpleName();
 
     private Button createButton;
     private EditText emailField;
@@ -48,27 +46,25 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private EditText phoneField;
     private CheckBox termsBox;
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_auth_register, container, false);
+
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        createButton = (Button) rootView.findViewById(R.id.sign_up_button);
-        emailField = (EditText) rootView.findViewById(R.id.sign_up_email);
-        nameField = (EditText) rootView.findViewById(R.id.sign_up_name);
-        passField1 = (EditText) rootView.findViewById(R.id.sign_up_pwd1);
-        passField2 = (EditText) rootView.findViewById(R.id.sign_up_pwd2);
-        phoneField = (EditText) rootView.findViewById(R.id.sign_up_phone);
-        termsBox = (CheckBox) rootView.findViewById(R.id.terms_conditions_checkbox);
+        setContentView(R.layout.activity_auth_register);
+        createButton = (Button) findViewById(R.id.register_button);
+        emailField = (EditText) findViewById(R.id.sign_up_email);
+        nameField = (EditText) findViewById(R.id.sign_up_name);
+        passField1 = (EditText) findViewById(R.id.sign_up_pwd1);
+        passField2 = (EditText) findViewById(R.id.sign_up_pwd2);
+        phoneField = (EditText) findViewById(R.id.sign_up_phone);
+        termsBox = (CheckBox) findViewById(R.id.terms_conditions_checkbox);
 
         createButton.setOnClickListener(this);
 
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-
-        return rootView;
     }
 
     /**
@@ -87,7 +83,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
                       final String phone) {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -128,7 +124,8 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     private void handleCreateUser() {
         String email = emailField.getText().toString(),
                 name = nameField.getText().toString(),
-                phone = phoneField.getText().toString(), pass1 = passField1.getText().toString(),
+                phone = phoneField.getText().toString(),
+                pass1 = passField1.getText().toString(),
                 pass2 = passField2.getText().toString();
 
         if (correctData(email, name, pass1, pass2, phone)) {
@@ -157,7 +154,7 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
             status = false;
         }
         if (!pass1.equals(pass2)) {
-            passField1.setError("Your passwords most match");
+            passField2.setError("Your passwords most match");
             status = false;
         }
         if (phone.equals("")) {
@@ -183,10 +180,10 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     @Subscribe
     public void onRegisterEvent(com.dat257.team1.LFG.events.RegisterEvent event) {
         if (event.isSuccess()) {
-            Intent intent = new Intent(getActivity(), MenuActivity.class);
+            Intent intent = new Intent(this, MenuActivity.class);
             startActivity(intent);
         } else {
-            Toast.makeText(getActivity().getApplicationContext(), "Something went wrong in the account creation", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getApplicationContext(), "Something went wrong in the account creation", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -194,4 +191,6 @@ public class RegisterFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         handleCreateUser();
     }
+
+
 }
