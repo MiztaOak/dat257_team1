@@ -16,6 +16,13 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_nav_act_feed_to_nav_createActivityFragment"
+            app:destination="@id/nav_createActivityFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -72,5 +79,18 @@
         android:id="@+id/activityDescriptionView"
         android:name="com.dat257.team1.LFG.view.ActDescriptionFragment"
         android:label="ActivityDescriptionView" />
+    <fragment
+        android:id="@+id/nav_createActivityFragment"
+        android:name="com.dat257.team1.LFG.view.CreateActFragment"
+        android:label="fragment_create_act"
+        tools:layout="@layout/fragment_create_act" >
+        <action
+            android:id="@+id/action_nav_createActivityFragment_to_nav_act_feed"
+            app:destination="@id/nav_act_feed"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
 </navigation>

@@ -31,6 +31,7 @@ public class MessageFragment extends Fragment {
     private MessageViewModel messageViewModel;
     private MutableLiveData<List<Message>> messages;
     private MutableLiveData<String> currentChatId;
+    private MutableLiveData<Boolean> isMessageSent;
 
     @Nullable
     @Override
@@ -83,6 +84,17 @@ public class MessageFragment extends Fragment {
             }
         });
         messageViewModel.setMutableChatId(chatId);
+
+        isMessageSent = messageViewModel.getMutableLiveDataIsMessageSent();
+        isMessageSent.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+                    @Override
+                    public void onChanged(Boolean aBoolean) {
+                        if(msg.getText() != null && aBoolean) {
+                            msg.getText().clear();
+                        }
+                    }
+                }
+        );
     }
 
     @Override

@@ -11,7 +11,7 @@
         android:id="@+id/createActivity"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Create Activity"
+        android:text="@string/create_activity"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -22,11 +22,12 @@
     <com.dat257.team1.LFG.view.activityFeed.CustomViewPager
         android:id="@+id/view_pager_feed"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:scrollbars="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_feed_tab">
+        app:layout_constraintTop_toTopOf="@+id/activity_feed_tab"
+        app:layout_constraintBottom_toBottomOf="parent">
 
     </com.dat257.team1.LFG.view.activityFeed.CustomViewPager>
 

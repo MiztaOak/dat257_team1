@@ -27,6 +27,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<String> mutableChatId;
     private MutableLiveData<List<Message>> messages;
+    private MutableLiveData<Boolean> isMessageSent;
     private ListenerRegistration listener;
 
 
@@ -49,6 +50,12 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
         if (messages == null)
             messages = new MutableLiveData<>();
         return messages;
+    }
+
+    public MutableLiveData<Boolean> getMutableLiveDataIsMessageSent() {
+        if (isMessageSent == null)
+            isMessageSent = new MutableLiveData<>();
+        return isMessageSent;
     }
 
     public void sendMessage(String chatId,String msg) {

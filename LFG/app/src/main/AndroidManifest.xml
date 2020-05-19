@@ -32,7 +32,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.CreateActivityView"
+            android:name=".view.CreateActFragment"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity

@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
@@ -26,7 +26,7 @@ import java.util.List;
 
 public class ActFeedListFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
 
-    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
 
     private RecyclerView.Adapter mAdapter;
     private ActFeedViewModel actFeedViewModel;

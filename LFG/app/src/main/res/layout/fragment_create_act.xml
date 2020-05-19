@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CreateActivityView" >
+    tools:context=".view.CreateActFragment" >
 
 
     <LinearLayout
@@ -13,38 +13,6 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:orientation="horizontal">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent">
-
-                <ImageButton
-                    android:id="@+id/backButton"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:background="@android:color/transparent"
-                    app:srcCompat="?attr/actionModeCloseDrawable" />
-
-                <TextView
-                    android:id="@string/create_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/gotham_regular"
-                    android:gravity="center_horizontal"
-                    android:text="@string/create_activity"
-                    android:textColor="#000000"
-                    android:textSize="25sp" />
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,12 +66,11 @@
 
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/image_btn_get_location"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/description"
-                    android:onClick="getLocationOnClick"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_my_location_white_24dp"
                     android:theme="@style/my_location_button_style" />
