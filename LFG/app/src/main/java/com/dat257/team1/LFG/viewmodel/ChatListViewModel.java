@@ -42,7 +42,7 @@ public class ChatListViewModel extends ViewModel implements LifecycleObserver {
 
     @Subscribe
     public void handleEvent(ChatListEvent event){
-        chatListItems.setValue(event.getChatInfoList());
+        chatListItems.postValue(event.getChatInfoList());
     }
 
     public MutableLiveData<List<ChatListItem>> getChatListItems() {

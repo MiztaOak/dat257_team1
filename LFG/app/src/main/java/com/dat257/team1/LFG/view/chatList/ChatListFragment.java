@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.chatList;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +11,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
-import com.dat257.team1.LFG.view.MessageView;
 import com.dat257.team1.LFG.viewmodel.ChatListViewModel;
 
 import java.util.List;
@@ -61,12 +60,25 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
         recyclerView.setLayoutManager(reLayoutManager);
         reAdapter = new ChatListAdapter(chatListItems, this);
         recyclerView.setAdapter(reAdapter);
+
+        viewModel.onCreate();
     }
 
     @Override
-    public void onCardClicked(int pos) {
-        Intent intent = new Intent(getContext(), MessageView.class);
+    public void onCardClicked(View view, int pos) {
+        /*Intent intent = new Intent(getContext(), MessageFragment.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Bundle bundle = new Bundle();
+        bundle.putString("userId", chatListItems.getValue().get(pos).getId());
+        intent.putExtras(bundle);
         startActivity(intent);
+        FragmentManager fm = getFragmentManager();
+        fm.beginTransaction().replace(R.id.mapView, fm).commit();
+         */
+
+        Bundle bundle = new Bundle();
+        bundle.putString("chatId", chatListItems.getValue().get(pos).getId());
+        Navigation.findNavController(view).navigate(R.id.action_nav_messages_to_nav_messageFragment, bundle);
     }
+
 }

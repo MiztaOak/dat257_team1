@@ -6,11 +6,15 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
+import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
+import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class ProfileViewModel extends ViewModel implements LifecycleObserver {
 
@@ -21,13 +25,22 @@ public class ProfileViewModel extends ViewModel implements LifecycleObserver {
     public ProfileViewModel() {
     }
 
+    @Subscribe
+    public void handleUserEvent(UserEvent userEvent) {
+        getUserId(); //TODO
+        user.postValue(userEvent.getUser());
+    }
+
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
         if(!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        user.setValue(getUserId().getValue()); //kan vara fel
-        listener = FireStoreHelper.getInstance().loadUserInformation(user.getValue().getId());
+        //listener = FireStoreHelper.getInstance().loadUserInformation(user.getValue().getId());
+    }
+
+    public void updateUserData(String userId) {
+        FireStoreHelper.getInstance().loadUserInformation(userId);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)

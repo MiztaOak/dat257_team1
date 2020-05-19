@@ -6,6 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context=".view.myActivities.MyActPageFragment">
+    tools:context=".view.activityFeed.MyActPageFragment">
 
 </androidx.recyclerview.widget.RecyclerView>

@@ -15,6 +15,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
+/**
+ *
+ *
+ * @author Jakobew
+ */
 public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<List<Activity>> mutableActivityList;

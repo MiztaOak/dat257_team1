@@ -23,6 +23,7 @@ import androidx.lifecycle.ViewModel;
 public class NotificationViewModel extends ViewModel implements LifecycleObserver {
     private MutableLiveData<List<JoinNotification>> requests;
     private ListenerRegistration listener;
+    private MutableLiveData<List<NotificationForJoiner>> status;
 
     public NotificationViewModel() {
         requests = new MutableLiveData<>();
@@ -34,6 +35,12 @@ public class NotificationViewModel extends ViewModel implements LifecycleObserve
         if(requests == null)
             requests = new MutableLiveData<>();
         return requests;
+    }
+
+    public MutableLiveData<List<NotificationForJoiner>> getStatus() {
+        if(status == null)
+            status = new MutableLiveData<>();
+        return status;
     }
 
     @Subscribe

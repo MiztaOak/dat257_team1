@@ -19,7 +19,6 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.CreateActivityView;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
-import com.dat257.team1.LFG.view.MenuActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,15 +26,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
+import com.google.firebase.auth.GoogleAuthProvider;
 
 /**
  * A simple login on an account fragment
@@ -51,12 +46,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordField, emailField;
     // private SignInButton googleButton;
     private TextView forgetPassword;
+    private FirebaseAuth mAuth;
+    private FirebaseUser user;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_auth_login);
         loginButton = findViewById(R.id.sign_in_button);
         forgetPassword = findViewById(R.id.lfForgotPass);
         //  googleButton = rootView.findViewById(R.id.quick_access_google);
@@ -89,10 +86,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 */
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        mAuth = FirebaseAuth.getInstance();
+
     }
 
 
@@ -110,12 +110,23 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
-            // The Task returned from this call is always completed, no need to attach
-            // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            handleSignInResult(task);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.d(LOG_TAG, "firebaseAuthWithGoogle:" + account.getId());
+                handleSignInResult(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(LOG_TAG, "Google sign in failed", e);
+                // ...
+            }
         }
+
     }
 
     /**
@@ -123,47 +134,57 @@ public class LoginActivity extends AppCompatActivity {
      * Throws an ApiException if the sign in fails.
      * If the sign in is successful, send the user to the ActivityFeedView.
      *
-     * @param completedTask
+     * @param idToken
      */
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
-            // Signed in successfully, open the ActivityFeedView
-            startActivity(new Intent(this.getApplicationContext(), MenuActivity.class));
+    private void handleSignInResult(String idToken) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(LOG_TAG, "signInWithCredential:success");
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
+                        }
 
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.w("Error", "signInResult:failed code=" + e.getStatusCode());
-        }
+                        // ...
+                    }
+                });
     }
 
     /**
      * Check for existing Google Sign In account, if the user is already signed in
      * the GoogleSignInAccount will be non-null.
      */
-    //@Override
-    //public void onStart() {
-    //    GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-    //    updateUI(account);
-    //}
+
+    /*public void onStart() {
+        super.onStart();
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        updateUI(account);
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        String uid = currentUser.getUid();
+
+    }*/
 
     /**
      * Fetches some information about the Google account that's logged in.
      * Needs to be put into the database to register the account //TODO
      */
-    /*
-    GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-    //if (acct != null) {
+
+    /*GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
+        if (acct != null) {
     String personName = acct.getDisplayName();
     String personGivenName = acct.getGivenName();
     String personFamilyName = acct.getFamilyName();
     String personEmail = acct.getEmail();
     String personId = acct.getId();
-    //Uri personPhoto = acct.getPhotoUrl();
-    //}
-*/
+    Uri personPhoto = acct.getPhotoUrl();
+    }*/
 
     /**
      * A method to check the validation of the password and the email.
@@ -208,7 +229,7 @@ public class LoginActivity extends AppCompatActivity {
                             FireStoreHelper.getInstance();
                             Toast.makeText(getApplicationContext(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            retrieveData(user);
+                            FireStoreHelper.getInstance().retrieveData(user);
                             //take the user to the main page after successfully retrieving the data
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else { // If sign in fails, display a message to the user.
@@ -223,32 +244,6 @@ public class LoginActivity extends AppCompatActivity {
     public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(this.getApplicationContext(), ForgetPasswordView.class));
-    }
-
-
-    /**
-     * A method to retrieve the exciting user's data from the database
-     *
-     * @param currentUser The current user who's successfully logged in.
-     */
-    private void retrieveData(FirebaseUser currentUser) {
-        if (currentUser != null) {
-            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-            DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
-            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
-                    //todo retrieving the data
-                    /*
-                    fullName.setText(documentSnapshot.getString("name"));
-                    email.setText(documentSnapshot.getString("email"));
-                   // get the friendList, this should be in a recyclerView form
-                    */
-
-                }
-            });
-
-        }
     }
 
 

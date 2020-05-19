@@ -15,10 +15,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:largeHeap="true"
+        android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <activity android:name=".view.WelcomeActivity" />
+        <activity android:name=".view.loginPage.WelcomeActivity" />
         <activity android:name=".view.loginPage.LoginActivity" />
         <activity android:name=".view.loginPage.RegisterActivity" />
 
@@ -34,13 +36,8 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.ActivityDescriptionView"
-            android:label="Activity Description" />
-        <activity
             android:name=".view.CreateActivityView"
             android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity android:name=".view.MessageView" />
 
         <activity android:name=".view.favouriteActivities.FavouriteActivityView" />
         <activity android:name=".view.ForgetPasswordView" />
@@ -53,7 +50,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".view.myActivities.CurrentActFragment" />
+        <activity android:name=".view.activityFeed.CurrentActFragment" />
 
     </application>
 

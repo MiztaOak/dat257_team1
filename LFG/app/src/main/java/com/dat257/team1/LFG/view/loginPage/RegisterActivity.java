@@ -47,9 +47,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox termsBox;
 
     @Override
+
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_auth_register);
         createButton = (Button) findViewById(R.id.register_button);
         emailField = (EditText) findViewById(R.id.sign_up_email);
         nameField = (EditText) findViewById(R.id.sign_up_name);

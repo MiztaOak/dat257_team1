@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.myActivities;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,7 +32,7 @@ public class MyActPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.my_activities_page, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_my_act_page, container, false);
         return rootView;
     }
 }

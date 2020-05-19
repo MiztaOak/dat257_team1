@@ -1,13 +1,17 @@
 package com.dat257.team1.LFG.view;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,9 +21,8 @@ import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
-public class ProfileView extends AppCompatActivity {
+public class ProfileFragment extends Fragment {
 
     private ProfileViewModel profileViewModel;
     private MutableLiveData<User> user;
@@ -36,24 +39,33 @@ public class ProfileView extends AppCompatActivity {
 
     private Button addFriendButton;
     private Button blockContactButton;
-
     private LinearLayout addFriendLayout;
     private LinearLayout blockContactLayout;
+    private User profileOwner;
 
+
+    public ProfileFragment() {
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_profile, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        String userId = (String) getActivity().getIntent().getExtras().get("userId");
 
-        initViews();
+        initViews(view);
 
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
-        getLifecycle().addObserver(profileViewModel);
+        getViewLifecycleOwner().getLifecycle().addObserver(profileViewModel);
         profileViewModel.onCreate();
 
         user = profileViewModel.getUserId();
-        profileViewModel.getUserId().observe(this, new Observer<User>() {
+        user.observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 userName.setText(user.getName());
@@ -65,15 +77,19 @@ public class ProfileView extends AppCompatActivity {
 
         FireStoreHelper.getInstance();
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid(); // the current user
-        User profileOwner = null;
+        profileOwner = new User("rIJR06a6qcSGKIJqxpF8ulgZMvK2", "Alex", "alexta@student.chalmers.se", "0702343553");
 
         //TODO: We need a userID from profile owner, in order to compare the currentUser with the profileUser
-        if (currentUser.equals(profileOwner.getId())) {
+        if (currentUser.equals("rIJR06a6qcSGKIJqxpF8ulgZMvK2")) {
+            addFriendLayout.setClickable(false);
             addFriendLayout.setVisibility(View.INVISIBLE);
+            blockContactLayout.setClickable(false);
             blockContactLayout.setVisibility(View.INVISIBLE);
         } else {
-            addFriendLayout.setVisibility(View.VISIBLE);
-            blockContactLayout.setVisibility(View.VISIBLE);
+            addFriendLayout.setClickable(true);
+            addFriendLayout.setVisibility(View.INVISIBLE);
+            blockContactLayout.setClickable(true);
+            blockContactLayout.setVisibility(View.INVISIBLE);
         }
 
         addFriendButton.setOnClickListener(new View.OnClickListener() {
@@ -89,19 +105,23 @@ public class ProfileView extends AppCompatActivity {
                 //TODO: add functionality to blockContactButton
             }
         });
+
+        profileViewModel.updateUserData(currentUser);
     }
 
-    private void initViews() {
-        profileImage = findViewById(R.id.profile_photo);
-        emailImage = findViewById(R.id.email_image_view);
-        phoneImage = findViewById(R.id.phone_image_view);
-        addContactImage = findViewById(R.id.add_friend_image);
-        blockContactImage = findViewById(R.id.block_contact);
-        profileDescription = findViewById(R.id.profile_desc);
-        userName = findViewById(R.id.user_name_profile);
-        emailTextView = findViewById(R.id.email_text_view);
-        phoneTextView = findViewById(R.id.phone_text_view);
-        addFriendLayout = findViewById(R.id.linearLayout3);
-        blockContactLayout = findViewById(R.id.linearLayout4);
+    private void initViews(View view) {
+        profileImage = view.findViewById(R.id.profile_photo);
+        emailImage = view.findViewById(R.id.email_image_view);
+        phoneImage = view.findViewById(R.id.phone_image_view);
+        addContactImage = view.findViewById(R.id.add_friend_image);
+        blockContactImage = view.findViewById(R.id.block_contact);
+        profileDescription = view.findViewById(R.id.profile_desc);
+        userName = view.findViewById(R.id.user_name_profile);
+        emailTextView = view.findViewById(R.id.email_text_view);
+        phoneTextView = view.findViewById(R.id.phone_text_view);
+        addFriendLayout = view.findViewById(R.id.linearLayout3);
+        blockContactLayout = view.findViewById(R.id.linearLayout4);
+        addFriendButton = view.findViewById(R.id.add_friend_button);
+        blockContactButton = view.findViewById(R.id.block_contact_button);
     }
 }

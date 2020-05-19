@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:showIn="@layout/activity_feed">
+    tools:showIn="@layout/fragment_act_feed_list">
 
     <group android:id="@+id/grp1" android:checkableBehavior="single">
         <item
@@ -17,7 +17,7 @@
     </group>
     <group android:id="@+id/grp3" android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_friends"
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/friends" />
     </group>

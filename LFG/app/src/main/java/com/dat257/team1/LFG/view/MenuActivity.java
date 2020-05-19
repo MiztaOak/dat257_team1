@@ -5,27 +5,27 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment;
-import com.dat257.team1.LFG.view.chatList.ChatListFragment;
-import com.dat257.team1.LFG.view.loginPage.LoginActivity;
-import com.dat257.team1.LFG.view.myActivities.MyActPageFragment;
+import com.dat257.team1.LFG.view.loginPage.WelcomeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+public class MenuActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private Button signOut;
@@ -42,7 +42,6 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = findViewById(R.id.nav_view);
         //CircularImageView imageView = new CircularImageView(this, findViewById(R.id.circleImage_profile)); todo
 
-        navigationView.setNavigationItemSelectedListener(this);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -51,9 +50,33 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if (FirebaseAuth.getInstance().getCurrentUser() == null && id != R.id.nav_act_feed && id != R.id.nav_about) {
+                    Toast.makeText(getApplicationContext(), "You must be signed in to access this feature", Toast.LENGTH_SHORT).show();
+                    return false;
+                } else {
+                    FragmentManager fm = getSupportFragmentManager();
+                    fm.popBackStackImmediate();
+                    boolean handled = NavigationUI.onNavDestinationSelected(item, navController);
+                    if (handled) {
+                        ViewParent parent = navigationView.getParent();
+                        if (parent instanceof DrawerLayout) {
+                            ((DrawerLayout) parent).closeDrawer(navigationView);
+                        }
+                    }
+                    return handled;
+                }
+            }
+        });
 
         signOut = findViewById(R.id.btn_sign_out);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+            signOut.setText("Sign in");
+        else
+            signOut.setText("Sign out");
         signOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,47 +101,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        int id = menuItem.getItemId();
-
-        switch (id) {
-            case R.id.nav_act_feed:
-                startActivity(new Intent(this, ActFeedPageFragment.class));
-                ;
-                break;
-            case R.id.nav_my_activities:
-                startActivity(new Intent(this, MyActPageFragment.class));
-                ;
-                break;
-            case R.id.nav_friends:
-                startActivity(new Intent(this, ActFeedPageFragment.class));
-                ;
-                break;
-            case R.id.nav_messages:
-                startActivity(new Intent(this, ChatListFragment.class));
-                ;
-                break;
-            case R.id.nav_notifications:
-                startActivity(new Intent(this, ChatListFragment.class));
-                ;
-                break;
-            case R.id.nav_about:
-                startActivity(new Intent(this, ChatListFragment.class));
-                ;
-                break;
-            default:
-                startActivity(new Intent(this, ActFeedPageFragment.class));
-                ;
-                break;
-        }
-
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     private void openSignOutPage() {
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, WelcomeActivity.class));
+
     }
 }

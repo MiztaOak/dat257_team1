@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="130dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="4dp">
+
+        <TextView
+            android:id="@+id/joinstatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Join Status"
+            android:textSize="24dp"
+            android:textAlignment="center"
+            />
+
+        <TextView
+            android:id="@+id/joinstatusInfoText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/joinstatus"
+            android:layout_marginBottom="-33dp"
+            android:text="your status for the activity [activity name] is: "
+            android:textAlignment="center" />
+
+        <TextView
+            android:id="@+id/statusOfRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/joinstatus"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
+            android:textSize="24dp"
+
+
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"
+
+            android:text="Status" />
+
+    </RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

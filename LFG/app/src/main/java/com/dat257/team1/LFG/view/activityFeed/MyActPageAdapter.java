@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view.myActivities;
+package com.dat257.team1.LFG.view.activityFeed;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;

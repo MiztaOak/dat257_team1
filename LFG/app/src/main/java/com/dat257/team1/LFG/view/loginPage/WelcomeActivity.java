@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.loginPage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginActivity;
-import com.dat257.team1.LFG.view.loginPage.RegisterActivity;
+import com.dat257.team1.LFG.view.MenuActivity;
 
 /**
  * A view that is responsible for holding the welcome page's components
@@ -27,7 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_welcome_page);
+        setContentView(R.layout.activity_auth_welcome_page);
         loginButton = findViewById(R.id.login);
         registerButton = findViewById(R.id.register);
         goButton = findViewById(R.id.go);

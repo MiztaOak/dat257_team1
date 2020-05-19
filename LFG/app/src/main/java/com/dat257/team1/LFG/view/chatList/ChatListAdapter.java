@@ -48,7 +48,7 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ChatLi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cardViewHolderClickListener.onCardClicked(position);
+                cardViewHolderClickListener.onCardClicked(view,position);
             }
         });
     }
