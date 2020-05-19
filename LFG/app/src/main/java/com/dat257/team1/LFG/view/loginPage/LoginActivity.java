@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,7 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
@@ -44,7 +42,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
  *
  * @author : Jakobew, Oussama Anadani, Johan Ek, gabjav
  */
-public class LoginFragment extends Fragment {
+public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
     GoogleSignInClient mGoogleSignInClient;
@@ -54,21 +52,21 @@ public class LoginFragment extends Fragment {
     // private SignInButton googleButton;
     private TextView forgetPassword;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.login_fragment, container, false);
 
-        loginButton = rootView.findViewById(R.id.sign_in_button);
-        forgetPassword = rootView.findViewById(R.id.lfForgotPass);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        loginButton = findViewById(R.id.sign_in_button);
+        forgetPassword = findViewById(R.id.lfForgotPass);
         //  googleButton = rootView.findViewById(R.id.quick_access_google);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailField = rootView.findViewById(R.id.sign_in_email);
+                emailField = findViewById(R.id.sign_in_email);
                 String email = emailField.getText().toString().trim();
-                passwordField = rootView.findViewById(R.id.sign_in_pwd);
+                passwordField = findViewById(R.id.sign_in_pwd);
                 String password = passwordField.getText().toString().trim();
                 //checking if the user has entered a validate form of the email and password
                 if (validateForm(email, password))
@@ -94,10 +92,9 @@ public class LoginFragment extends Fragment {
                 .requestEmail()
                 .build();
 
-        mGoogleSignInClient = GoogleSignIn.getClient(rootView.getContext(), gso);
-
-        return rootView;
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
     }
+
 
     /**
      * Sign in with google
@@ -106,6 +103,7 @@ public class LoginFragment extends Fragment {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -132,7 +130,7 @@ public class LoginFragment extends Fragment {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, open the ActivityFeedView
-            startActivity(new Intent(getActivity().getApplicationContext(), MenuActivity.class));
+            startActivity(new Intent(this.getApplicationContext(), MenuActivity.class));
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -203,18 +201,18 @@ public class LoginFragment extends Fragment {
     public void loginUser(final String email, final String password) {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {  // Sign in success, update UI with the signed-in user's information
                             FireStoreHelper.getInstance();
-                            Toast.makeText(getActivity(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             retrieveData(user);
                             //take the user to the main page after successfully retrieving the data
-                            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else { // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Login failed! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Login failed! ", Toast.LENGTH_SHORT).show();
                             //   retrieveData(null);
                         }
 
@@ -224,7 +222,7 @@ public class LoginFragment extends Fragment {
 
     public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
-        startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
+        startActivity(new Intent(this.getApplicationContext(), ForgetPasswordView.class));
     }
 
 
@@ -237,7 +235,7 @@ public class LoginFragment extends Fragment {
         if (currentUser != null) {
             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
             DocumentReference documentReference = firestore.collection("users").document(currentUser.getUid());
-            documentReference.addSnapshotListener(getActivity(), new EventListener<DocumentSnapshot>() {
+            documentReference.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
                 public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
                     //todo retrieving the data

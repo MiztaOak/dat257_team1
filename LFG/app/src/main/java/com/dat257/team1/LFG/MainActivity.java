@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.MenuActivity;
-import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
+import com.dat257.team1.LFG.view.WelcomeActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,8 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void openLoginPage() {
-        Intent intent = new Intent(this, LoginPageFragment.class);
+        Intent intent = new Intent(this, WelcomeActivity.class);
         startActivity(intent);
-
     }
 }

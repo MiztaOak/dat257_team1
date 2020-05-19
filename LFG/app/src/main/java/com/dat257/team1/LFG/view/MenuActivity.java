@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment;
 import com.dat257.team1.LFG.view.chatList.ChatListFragment;
-import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
+import com.dat257.team1.LFG.view.loginPage.LoginActivity;
 import com.dat257.team1.LFG.view.myActivities.MyActPageFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -119,7 +118,7 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    private void openSignOutPage(){
-        startActivity(new Intent(this, LoginPageFragment.class));
+    private void openSignOutPage() {
+        startActivity(new Intent(this, LoginActivity.class));
     }
 }

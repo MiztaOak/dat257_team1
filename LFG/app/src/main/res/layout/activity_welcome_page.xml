@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_pic"
     android:focusableInTouchMode="true"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    >
 
 
     <LinearLayout
@@ -14,8 +15,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384">
 
 
         <TextView
@@ -29,7 +34,7 @@
             android:textSize="25sp" />
 
         <Button
-            android:id="@+id/goButton"
+            android:id="@+id/go"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,7 +43,7 @@
             android:background="@drawable/go_button" />
 
         <Button
-            android:id="@+id/loginButton"
+            android:id="@+id/login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -47,7 +52,7 @@
             android:background="@drawable/login_button" />
 
         <Button
-            android:id="@+id/registerButton"
+            android:id="@+id/register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -84,5 +89,5 @@
     </LinearLayout>
 
 
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

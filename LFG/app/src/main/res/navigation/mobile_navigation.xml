@@ -33,7 +33,7 @@
         android:label="ChatListFragment" />
     <fragment
         android:id="@+id/nav_welcomeFragment"
-        android:name="com.dat257.team1.LFG.view.WelcomeFragment"
+        android:name="com.dat257.team1.LFG.view.WelcomeActivity"
         android:label="WelcomeFragment" >
         <action
             android:id="@+id/action_welcomeFragment_to_loginFragment"
@@ -59,11 +59,11 @@
     </fragment>
     <fragment
         android:id="@+id/nav_loginFragment"
-        android:name="com.dat257.team1.LFG.view.loginPage.LoginFragment"
+        android:name="com.dat257.team1.LFG.view.loginPage.LoginActivity"
         android:label="LoginFragment" />
     <fragment
         android:id="@+id/nav_registerFragment"
-        android:name="com.dat257.team1.LFG.view.loginPage.RegisterFragment"
+        android:name="com.dat257.team1.LFG.view.loginPage.RegisterActivity"
         android:label="RegisterFragment" />
 
 </navigation>

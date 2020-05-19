@@ -12,8 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.activityFeed.ActPageAdapter;
-import com.dat257.team1.LFG.view.loginPage.LoginPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 public class MyActPageFragment extends Fragment {
