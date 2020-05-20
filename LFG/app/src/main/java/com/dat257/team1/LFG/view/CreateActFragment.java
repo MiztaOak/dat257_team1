@@ -15,8 +15,9 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -29,10 +30,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Category;
@@ -60,12 +64,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class CreateActivityView extends AppCompatActivity {
+import static com.dat257.team1.LFG.view.messageFeed.MessageFragment.hideSoftKeyboard;
 
-    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+public class CreateActFragment extends Fragment {
 
+    private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
+    private final int MIN_TITLE_LENGTH = 4;
+    private final long MAX_ATTENDEES = 999999999;
     int PERMISSION_ID = 12;
-
     private FusedLocationProviderClient fusedLocationProviderClient;
     private PlacesClient placesClient;
     private Geocoder geocoder;
@@ -76,24 +82,38 @@ public class CreateActivityView extends AppCompatActivity {
     private TextView titleTextView;
     private TextView descTextView;
     private TimePicker timePicker;
+    private ImageButton imageBtnMyLoc;
     private CalendarView calendarView;
     private Spinner categorySpinner;
     private CheckBox privateEvent;
     private CreateActivityViewModel createActivityViewModel;
+    private LocationCallback locationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            //Location lastLocation = locationResult.getLastLocation();
+            //autocompleteFragment.setText(extrapolateLocation(lastLocation));
+            //TODO
+        }
+    };
 
-    private final int MIN_TITLE_LENGTH = 4;
-    private final long MAX_ATTENDEES = 999999999;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_create_act, container, false);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_create_act);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
-        initViews();
+        initViews(view);
 
-        Button createActivityButton = (Button) findViewById(R.id.createActivityButton);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Create activity");
+
+        Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
@@ -102,19 +122,13 @@ public class CreateActivityView extends AppCompatActivity {
                 Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
                 if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
-                    openActivityFeed();
+                    Log.d(LOG_TAG, "Activity created!");
+                    Navigation.findNavController(view).navigate(R.id.action_nav_createActivityFragment_to_nav_act_feed);
                 }
             }
         });
-        ImageButton backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivityFeed();
-            }
-        });
 
-        ImageButton incNumAttendees = findViewById(R.id.increaseNumAttendees);
+        ImageButton incNumAttendees = view.findViewById(R.id.increaseNumAttendees);
         incNumAttendees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -125,7 +139,7 @@ public class CreateActivityView extends AppCompatActivity {
             }
         });
 
-        ImageButton decNumAttendees = findViewById(R.id.decreaseNumAttendees);
+        ImageButton decNumAttendees = view.findViewById(R.id.decreaseNumAttendees);
         decNumAttendees.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +149,14 @@ public class CreateActivityView extends AppCompatActivity {
                 }
             }
         });
+
+        imageBtnMyLoc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getUserLocation();
+            }
+        });
+
         titleTextView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -151,6 +173,8 @@ public class CreateActivityView extends AppCompatActivity {
                 if (titleTextView.getText().toString().length() <= 0) {
                     titleTextView.setError("Enter title", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
+                hideSoftKeyboard(getActivity());
+                titleTextView.clearFocus();
             }
         });
 
@@ -170,6 +194,8 @@ public class CreateActivityView extends AppCompatActivity {
                 if (descTextView.getText().toString().length() <= 0) {
                     descTextView.setError("Enter description", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
+                hideSoftKeyboard(getActivity());
+                descTextView.clearFocus();
             }
         });
 
@@ -178,7 +204,7 @@ public class CreateActivityView extends AppCompatActivity {
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 //if(!charSequence.toString().equals("")) {
                 //    numOfAttendees = Integer.parseInt(charSequence.toString().trim());
-               // }
+                // }
 
             }
 
@@ -190,29 +216,33 @@ public class CreateActivityView extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 if (editable.chars().allMatch(Character::isDigit) && editable.toString().length() > 0) {
                     numOfAttendees = Integer.parseInt(editable.toString());
-                } else if(editable.toString().length() == 0) {
+                } else if (editable.toString().length() == 0) {
                     numOfAttendees = 0;
                 } else {
                     numAttendees.setError("Only numbers allowed", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                     numAttendees.setText(String.valueOf(numOfAttendees));
 
                 }
+                hideSoftKeyboard(getActivity());
+                numAttendees.clearFocus();
             }
         });
 
         // Initialize the AutocompleteSupportFragment.
         autocompleteFragment = (AutocompleteSupportFragment)
-                getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+                getChildFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
         // Specify the types of place data to return.
         autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
         // Set up a PlaceSelectionListener to handle the response.
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                location.setLatitude(place.getLatLng().latitude);
-                location.setLatitude(place.getLatLng().longitude);
+                if (place != null) {
+                    location = new Location(place.getAddress());
+                }
+
                 // TODO
                 //editAddress.setText(place.getAddress());
             }
@@ -256,7 +286,7 @@ public class CreateActivityView extends AppCompatActivity {
         }
         if (geoPoint == null) {
             status = false;
-            Toast.makeText(getApplicationContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
         }
         if (category == null) {
             status = false;
@@ -265,49 +295,42 @@ public class CreateActivityView extends AppCompatActivity {
         return status;
     }
 
-    private void initViews() {
-        categorySpinner = findViewById(R.id.categoryspinner); //Category
+    private void initViews(View view) {
+        categorySpinner = view.findViewById(R.id.categoryspinner); //Category
         addCategoriesToSpinner();
 
-        Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_key)); //Location
-        placesClient = Places.createClient(this);
-        geocoder = new Geocoder(this, Locale.getDefault());
+        Places.initialize(getContext(), getResources().getString(R.string.google_maps_key)); //Location
+        placesClient = Places.createClient(getContext());
+        geocoder = new Geocoder(getContext(), Locale.getDefault());
 
-        titleTextView = ((EditText) findViewById(R.id.editTitle)); //Title
+        imageBtnMyLoc = view.findViewById(R.id.image_btn_get_location);
 
-        descTextView = ((EditText) findViewById(R.id.editDesc)); //Description
+        titleTextView = ((EditText) view.findViewById(R.id.editTitle)); //Title
 
-        privateEvent = findViewById(R.id.privateCheckBox); //private event
+        descTextView = ((EditText) view.findViewById(R.id.editDesc)); //Description
+
+        privateEvent = view.findViewById(R.id.privateCheckBox); //private event
 
         numOfAttendees = 0;
-        numAttendees = findViewById(R.id.numAttendeesEditTxtView); //Number of attendees
+        numAttendees = view.findViewById(R.id.numAttendeesEditTxtView); //Number of attendees
 
-        timePicker = findViewById(R.id.timePicker); //time && date
+        timePicker = view.findViewById(R.id.timePicker); //time && date
         timePicker.setIs24HourView(true);
         timePicker.setHour(0);
         timePicker.setMinute(0);
-        calendarView = findViewById(R.id.calendarView);
+        calendarView = view.findViewById(R.id.calendarView);
     }
 
-    private LocationCallback locationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            Location lastLocation = locationResult.getLastLocation();
-            autocompleteFragment.setText(extrapolateLocation(lastLocation));
-            //TODO
-        }
-    };
-
     private boolean checkPermissions() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
         return false;
     }
 
     private boolean isLocationEnabled() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
                 LocationManager.NETWORK_PROVIDER
         );
@@ -316,7 +339,7 @@ public class CreateActivityView extends AppCompatActivity {
     private void requestPermissions() {
 
         ActivityCompat.requestPermissions(
-                this,
+                getActivity(),
                 new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
                 PERMISSION_ID
         );
@@ -339,18 +362,18 @@ public class CreateActivityView extends AppCompatActivity {
                         new OnCompleteListener<Location>() {
                             @Override
                             public void onComplete(Task<Location> task) {
-                                Location location = task.getResult();
-                                if (location == null) {
+                                Location loc = task.getResult();
+                                if (loc == null) {
                                     requestNewLocationData();
                                 } else {
-                                    CreateActivityView.this.location = location;
+                                    location = loc;
                                     autocompleteFragment.setText(extrapolateLocation(location));
                                 }
                             }
                         }
                 );
             } else {
-                Toast.makeText(this, "Turn on location", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Turn on location", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 startActivity(intent);
             }
@@ -367,20 +390,11 @@ public class CreateActivityView extends AppCompatActivity {
         locationRequest.setFastestInterval(0);
         locationRequest.setNumUpdates(1);
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
         fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest, locationCallback,
                 Looper.myLooper()
         );
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (checkPermissions()) {
-            getUserLocation();
-        }
 
     }
 
@@ -395,17 +409,7 @@ public class CreateActivityView extends AppCompatActivity {
     }
 
     private void addCategoriesToSpinner() {
-        categorySpinner.setAdapter(new ArrayAdapter<Category>(this, android.R.layout.simple_spinner_dropdown_item, Category.values()));
-    }
-
-    public void openActivityFeed() {
-        Log.d(LOG_TAG, "Activity created!");
-        Intent intent = new Intent(this, MenuActivity.class);
-        startActivity(intent);
-    }
-
-    public void getLocationOnClick(View view) {
-        getUserLocation();
+        categorySpinner.setAdapter(new ArrayAdapter<Category>(getContext(), android.R.layout.simple_spinner_dropdown_item, Category.values()));
     }
 
     private String getActTitle() {
@@ -424,6 +428,7 @@ public class CreateActivityView extends AppCompatActivity {
         return (calendarView.getDate() + (timePicker.getMinute() * 60000) + (timePicker.getHour() * 3600000));
     }
 
+
     private int getNumOfAttendees() {
         return numOfAttendees;
     }
@@ -434,6 +439,19 @@ public class CreateActivityView extends AppCompatActivity {
 
     private Category getCategory() {
         return (Category) categorySpinner.getSelectedItem();
+    }
+
+    @Override
+    public void onPause() {
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onStop();
     }
 
 }

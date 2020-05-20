@@ -82,7 +82,8 @@ public class ActDescriptionFragment extends Fragment {
         activityDescriptionViewModel.getMutableActivity().observe(getViewLifecycleOwner(), new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
-
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(activity.getTitle());
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
@@ -116,8 +117,6 @@ public class ActDescriptionFragment extends Fragment {
                 } else {
                     Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 
@@ -159,12 +158,6 @@ public class ActDescriptionFragment extends Fragment {
     }
  */
 
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-        activityDescriptionViewModel.cleanup();
-    }
 
     private void initViews(View view) {
         activityImage = view.findViewById(R.id.activity_image);
@@ -195,4 +188,20 @@ public class ActDescriptionFragment extends Fragment {
             //leave view
         }
     }
+
+    @Override
+    public void onPause() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        EventBus.getDefault().unregister(this);
+        activityDescriptionViewModel.cleanup();
+    }
+
+
 }

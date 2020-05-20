@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,7 +40,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
  */
 public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 0;
     private Button loginButton;
