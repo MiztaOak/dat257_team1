@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
+        <activity android:name=".view.loginPage.WelcomeActivity" />
+        <activity android:name=".view.loginPage.LoginActivity" />
+        <activity android:name=".view.loginPage.RegisterActivity" />
+
         <activity
             android:name=".view.MenuActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -33,11 +37,6 @@
 
         <activity
             android:name=".view.CreateActFragment"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".view.loginPage.LoginPageFragment"
-            android:label="@string/login_page_view"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".view.favouriteActivities.FavouriteActivityView" />
