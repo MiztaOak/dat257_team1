@@ -110,18 +110,24 @@ public class CreateActFragment extends Fragment {
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
         initViews(view);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Create activity");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Create activity");
 
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                 Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
-                if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
-                    createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
+                if (checkFields(getActTitle(), getActDesc(), timestamp, getCategory())) {
+                    createActivityViewModel.createActivity(
+                            getActTitle(), 
+                            getActDesc(),
+                            timestamp,
+                            new GeoPoint(location.getLatitude(), location.getLongitude()),
+                            isPrivateEvent(),
+                            getNumOfAttendees(),
+                            getCategory());
                     Log.d(LOG_TAG, "Activity created!");
                     Navigation.findNavController(view).navigate(R.id.action_nav_createActivityFragment_to_nav_act_feed);
                 }
@@ -268,7 +274,7 @@ public class CreateActFragment extends Fragment {
         });
     }
 
-    private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
+    private boolean checkFields(String title, String description, Timestamp time, Category category) { //TODO more checks
         boolean status = true;
         if (!(title.length() >= MIN_TITLE_LENGTH)) {
             status = false;
@@ -284,7 +290,7 @@ public class CreateActFragment extends Fragment {
             status = false;
             //time picker error
         }
-        if (geoPoint == null) {
+        if (location == null) {
             status = false;
             Toast.makeText(getContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
         }
@@ -444,13 +450,13 @@ public class CreateActFragment extends Fragment {
     @Override
     public void onPause() {
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onStop();
     }
 
