@@ -8,7 +8,9 @@ import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -77,8 +79,8 @@ public class Main {
         FireStoreHelper.getInstance().addCommentToActivity(activity, comment);
     }
 
-    public void writeMessage(String chatId, String msg) {
-        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg);
+    public void writeMessage(String chatId, String msg, Date date) {
+        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg, date);
     }
 
     public ListenerRegistration loadChat(String chatId) {

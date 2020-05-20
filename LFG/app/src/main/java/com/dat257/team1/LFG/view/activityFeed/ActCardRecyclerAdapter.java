@@ -2,12 +2,14 @@ package com.dat257.team1.LFG.view.activityFeed;
 
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
@@ -88,6 +90,36 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.mTitle = itemView.findViewById(R.id.titleText);
             this.mDescription = itemView.findViewById(R.id.DescriptionText);
 
+        }
+    }
+
+    static class RecyclerViewMargin extends RecyclerView.ItemDecoration {
+        private final int columns;
+        private int margin;
+
+        public RecyclerViewMargin(@IntRange(from = 0) int margin, @IntRange(from = 0) int columns) {
+            this.margin = margin;
+            this.columns = columns;
+
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view,
+                                   RecyclerView parent, RecyclerView.State state) {
+
+            int position = parent.getChildLayoutPosition(view);
+            //set right margin to all
+            outRect.right = margin;
+            //set bottom margin to all
+            outRect.bottom = margin;
+            //we only add top margin to the first row
+            if (position < columns) {
+                outRect.top = margin;
+            }
+            //add left margin only to the first column
+            if (position % columns == 0) {
+                outRect.left = margin;
+            }
         }
     }
 }
