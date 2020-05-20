@@ -64,6 +64,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.dat257.team1.LFG.view.messageFeed.MessageFragment.hideSoftKeyboard;
+
 public class CreateActFragment extends Fragment {
 
     private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
@@ -171,6 +173,8 @@ public class CreateActFragment extends Fragment {
                 if (titleTextView.getText().toString().length() <= 0) {
                     titleTextView.setError("Enter title", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
+                hideSoftKeyboard(getActivity());
+                titleTextView.clearFocus();
             }
         });
 
@@ -190,6 +194,8 @@ public class CreateActFragment extends Fragment {
                 if (descTextView.getText().toString().length() <= 0) {
                     descTextView.setError("Enter description", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
+                hideSoftKeyboard(getActivity());
+                descTextView.clearFocus();
             }
         });
 
@@ -217,6 +223,8 @@ public class CreateActFragment extends Fragment {
                     numAttendees.setText(String.valueOf(numOfAttendees));
 
                 }
+                hideSoftKeyboard(getActivity());
+                numAttendees.clearFocus();
             }
         });
 

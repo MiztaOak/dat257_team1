@@ -117,8 +117,6 @@ public class ActDescriptionFragment extends Fragment {
                 } else {
                     Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
                 }
-
-
             }
         });
 

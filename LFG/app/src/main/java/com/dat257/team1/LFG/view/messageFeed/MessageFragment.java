@@ -1,7 +1,6 @@
 package com.dat257.team1.LFG.view.messageFeed;
 
 import android.app.Activity;
-import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +37,14 @@ public class MessageFragment extends Fragment {
     private MutableLiveData<String> currentChatId;
     private MutableLiveData<Boolean> isMessageSent;
 
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,8 +62,8 @@ public class MessageFragment extends Fragment {
 
         msg = view.findViewById(R.id.etxt_chat_message);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(chatName);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(chatName);
 
         createNewMessage = view.findViewById(R.id.create_message);
         createNewMessage.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +104,10 @@ public class MessageFragment extends Fragment {
         isMessageSent.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
                     @Override
                     public void onChanged(Boolean aBoolean) {
-                        if(msg.getText() != null && aBoolean) {
+                        if (msg.getText() != null && aBoolean) {
                             msg.getText().clear();
                             hideSoftKeyboard(getActivity());
+                            msg.clearFocus();
                         }
                     }
                 }
@@ -108,24 +116,16 @@ public class MessageFragment extends Fragment {
         messageViewModel.setMutableChatId(chatId);
     }
 
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getCurrentFocus().getWindowToken(), 0);
-    }
-
     @Override
     public void onPause() {
         messageViewModel.cleanup();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         messageViewModel.cleanup();
         super.onStop();
     }

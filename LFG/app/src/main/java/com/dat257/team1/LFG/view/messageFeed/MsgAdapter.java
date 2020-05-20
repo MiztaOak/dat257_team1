@@ -2,6 +2,7 @@ package com.dat257.team1.LFG.view.messageFeed;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,8 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.lifecycle.MutableLiveData;
+import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Message;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
@@ -67,12 +70,16 @@ public class MsgAdapter extends BaseAdapter {
             assert layoutInflater != null;
             view = layoutInflater.inflate(R.layout.message_others, null);
             msgViewHolder.imageViewProfile = view.findViewById(R.id.msg_receive_profile_pic);
+            Bundle bundle = new Bundle();
+            bundle.putString("userId", message.getSenderId());
+            msgViewHolder.imageViewProfile.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_nav_messageFragment_to_nav_profile, bundle));
             msgViewHolder.txtViewMsg = view.findViewById(R.id.msg_receive_content);
             msgViewHolder.txtViewSenderName = view.findViewById(R.id.msg_receive_name);
             view.setTag(msgViewHolder);
             msgViewHolder.txtViewMsg.setText(message.getContent());
             //msgViewHolder.imageViewProfile.setImageDrawable(); //TODO
-            msgViewHolder.txtViewSenderName.setText(message.getSenderId());
+            String userName = FireStoreHelper.getInstance().getIdToNameDictionary().get(message.getSenderId());
+            msgViewHolder.txtViewSenderName.setText(userName);
         }
         return view;
     }
