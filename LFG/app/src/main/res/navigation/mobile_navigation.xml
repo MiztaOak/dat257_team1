@@ -54,8 +54,7 @@
 
     <fragment
         android:id="@+id/nav_messages"
-        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
-        android:label="ChatListFragment">
+        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment">
         <action
             android:id="@+id/action_nav_messages_to_nav_messageFragment"
             app:destination="@id/nav_messageFragment"
@@ -68,7 +67,6 @@
     <fragment
         android:id="@+id/nav_messageFragment"
         android:name="com.dat257.team1.LFG.view.messageFeed.MessageFragment"
-        android:label="MessageFragment"
         tools:layout="@layout/fragment_message">
         <argument
             android:name="chatId"

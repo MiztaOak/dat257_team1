@@ -32,6 +32,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -106,6 +107,9 @@ public class CreateActFragment extends Fragment {
 
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
         initViews(view);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Create activity");
 
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
@@ -427,6 +431,19 @@ public class CreateActFragment extends Fragment {
 
     private Category getCategory() {
         return (Category) categorySpinner.getSelectedItem();
+    }
+
+    @Override
+    public void onPause() {
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onStop();
     }
 
 }

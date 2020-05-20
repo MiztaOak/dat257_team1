@@ -68,6 +68,7 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
     public void onCardClicked(View view, int pos) {
         Bundle bundle = new Bundle();
         bundle.putString("chatId", chatListItems.getValue().get(pos).getId());
+        bundle.putString("chatName", chatListItems.getValue().get(pos).getTitle());
         Navigation.findNavController(view).navigate(R.id.action_nav_messages_to_nav_messageFragment, bundle);
     }
 

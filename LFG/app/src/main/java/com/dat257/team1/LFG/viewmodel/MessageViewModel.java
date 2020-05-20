@@ -79,7 +79,10 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     @Subscribe
     public void handleMessageEvent(MessageEvent messageEvent) {
         if(messageEvent.isSuccess()) {
+            isMessageSent.postValue(true);
             Main.getInstance().loadChat(mutableChatId.getValue());
+        } else {
+            isMessageSent.postValue(false);
         }
     }
 

@@ -36,6 +36,7 @@
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/activity_feed_tab"
                 android:layout_width="match_parent"
+                app:tabTextColor="#FFFFFF"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="exitUntilCollapsed">

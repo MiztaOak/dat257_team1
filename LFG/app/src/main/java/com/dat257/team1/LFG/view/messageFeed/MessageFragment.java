@@ -1,14 +1,18 @@
 package com.dat257.team1.LFG.view.messageFeed;
 
+import android.app.Activity;
+import android.inputmethodservice.Keyboard;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
 import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -26,6 +30,7 @@ public class MessageFragment extends Fragment {
     private ImageButton createNewMessage;
     private TextInputEditText msg;
     private String chatId;
+    private String chatName;
     private MsgAdapter msgAdapter;
 
     private MessageViewModel messageViewModel;
@@ -45,9 +50,13 @@ public class MessageFragment extends Fragment {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             chatId = bundle.getString("chatId");
+            chatName = bundle.getString("chatName");
         }
 
         msg = view.findViewById(R.id.etxt_chat_message);
+
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(chatName);
 
         createNewMessage = view.findViewById(R.id.create_message);
         createNewMessage.setOnClickListener(new View.OnClickListener() {
@@ -83,7 +92,6 @@ public class MessageFragment extends Fragment {
                 msgAdapter.notifyDataSetChanged();
             }
         });
-        messageViewModel.setMutableChatId(chatId);
 
         isMessageSent = messageViewModel.getMutableLiveDataIsMessageSent();
         isMessageSent.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
@@ -91,20 +99,33 @@ public class MessageFragment extends Fragment {
                     public void onChanged(Boolean aBoolean) {
                         if(msg.getText() != null && aBoolean) {
                             msg.getText().clear();
+                            hideSoftKeyboard(getActivity());
                         }
                     }
                 }
         );
+
+        messageViewModel.setMutableChatId(chatId);
+    }
+
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override
     public void onPause() {
         messageViewModel.cleanup();
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onPause();
     }
 
     @Override
     public void onStop() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         messageViewModel.cleanup();
         super.onStop();
     }
