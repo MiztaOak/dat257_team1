@@ -2,11 +2,15 @@ package com.dat257.team1.LFG.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -29,6 +34,9 @@ public class MenuActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private Button signOut;
+    private RelativeLayout menuProfileRelativeLayout;
+    private ImageView menuProfilePic;
+    private TextView menuProfileText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +48,12 @@ public class MenuActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        //CircularImageView imageView = new CircularImageView(this, findViewById(R.id.circleImage_profile)); todo
+
+        View headerView = LayoutInflater.from(this).inflate(R.layout.menu_nav_header,navigationView,false);
+        navigationView.addHeaderView(headerView);
+        menuProfileRelativeLayout = headerView.findViewById(R.id.menu_profile_pic);
+        menuProfilePic = headerView.findViewById(R.id.circleImage_profile);
+        menuProfileText = headerView.findViewById(R.id.menu_icon_text);
 
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -84,6 +97,10 @@ public class MenuActivity extends AppCompatActivity {
                 openSignOutPage();
             }
         });
+
+        //NavigationUI.setupWithNavController(menuProfileRelativeLayout,navController,);
+        //menuProfileRelativeLayout.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_toProfile));
+
     }
 
     @Override
@@ -103,6 +120,15 @@ public class MenuActivity extends AppCompatActivity {
 
     private void openSignOutPage() {
         startActivity(new Intent(this, WelcomeActivity.class));
-
     }
+
+    /*
+    private void openProfile() {
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.container,YOUR_FRAGMENT_NAME,YOUR_FRAGMENT_STRING_TAG);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+     */
 }

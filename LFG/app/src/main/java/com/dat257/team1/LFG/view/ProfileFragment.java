@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
@@ -56,7 +57,9 @@ public class ProfileFragment extends Fragment {
         if (bundle != null) {
             profileOwner = bundle.getString("userId");
         }
-        //String userId = (String) getActivity().getIntent().getExtras().get("userId");
+        if (profileOwner == null) {
+            profileOwner = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        }
 
         initViews(view);
 
@@ -68,6 +71,9 @@ public class ProfileFragment extends Fragment {
         user.observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user.getName() + "s" + " profile");
+
                 userName.setText(user.getName());
                 profileDescription.setText(user.getId()); //sätter profile desc som id nu, då vi inte har en user desc som kan hämtas
                 emailTextView.setText(user.getEmail());
@@ -77,16 +83,10 @@ public class ProfileFragment extends Fragment {
 
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid(); // the current user
 
-        //TODO: We need a userID from profile owner, in order to compare the currentUser with the profileUser
         if (currentUser.equals(profileOwner)) {
             addFriendLayout.setClickable(false);
             addFriendLayout.setVisibility(View.INVISIBLE);
             blockContactLayout.setClickable(false);
-            blockContactLayout.setVisibility(View.INVISIBLE);
-        } else {
-            addFriendLayout.setClickable(true);
-            addFriendLayout.setVisibility(View.INVISIBLE);
-            blockContactLayout.setClickable(true);
             blockContactLayout.setVisibility(View.INVISIBLE);
         }
 
@@ -121,5 +121,18 @@ public class ProfileFragment extends Fragment {
         blockContactLayout = view.findViewById(R.id.linearLayout4);
         addFriendButton = view.findViewById(R.id.add_friend_button);
         blockContactButton = view.findViewById(R.id.block_contact_button);
+    }
+
+
+    @Override
+    public void onPause() {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        super.onStop();
     }
 }

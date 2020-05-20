@@ -1,9 +1,11 @@
 package com.dat257.team1.LFG.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -30,7 +32,6 @@ import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.view.commentFeed.CommentAdapter;
 import com.dat257.team1.LFG.viewmodel.ActivityDescriptionViewModel;
 import com.google.android.gms.maps.MapView;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,7 +62,6 @@ public class ActDescriptionFragment extends Fragment {
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,8 +82,8 @@ public class ActDescriptionFragment extends Fragment {
         activityDescriptionViewModel.getMutableActivity().observe(getViewLifecycleOwner(), new Observer<Activity>() {
             @Override
             public void onChanged(Activity activity) {
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-                ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(activity.getTitle());
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(activity.getTitle());
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
@@ -108,11 +108,12 @@ public class ActDescriptionFragment extends Fragment {
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     if (!commentText.getText().toString().equals("")) {
                         activityDescriptionViewModel.addComment(commentText.getText().toString());
                         commentText.setText("");
                         commentText.clearFocus();
+                        hideSoftKeyboard(getActivity());
                     }
                 } else {
                     Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
@@ -123,13 +124,12 @@ public class ActDescriptionFragment extends Fragment {
         joinActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     activityDescriptionViewModel.joinActivity();
                     activityDescriptionViewModel.joinerStatus();
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
@@ -150,15 +150,6 @@ public class ActDescriptionFragment extends Fragment {
         EventBus.getDefault().register(this); //if you don't like it solve the toasts without this you nerd
     }
 
-/*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        activityDescriptionViewModel.onCreate();
-    }
- */
-
-
     private void initViews(View view) {
         activityImage = view.findViewById(R.id.activity_image);
         mapView = view.findViewById(R.id.mapView);
@@ -170,6 +161,14 @@ public class ActDescriptionFragment extends Fragment {
         activityTitle = view.findViewById(R.id.activity_title);
         userName = view.findViewById(R.id.user_name);
         commentText = view.findViewById(R.id.description_commentTextField);
+    }
+
+    public static void hideSoftKeyboard(android.app.Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        android.app.Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
     }
 
 
@@ -191,17 +190,15 @@ public class ActDescriptionFragment extends Fragment {
 
     @Override
     public void onPause() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         EventBus.getDefault().unregister(this);
         activityDescriptionViewModel.cleanup();
     }
-
-
 }
