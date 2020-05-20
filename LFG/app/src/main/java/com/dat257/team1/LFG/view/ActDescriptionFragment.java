@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -37,7 +35,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -46,6 +46,7 @@ public class ActDescriptionFragment extends Fragment {
     private ActivityDescriptionViewModel activityDescriptionViewModel;
     private MutableLiveData<Activity> mutableActivity;
     private MutableLiveData<List<Comment>> comments;
+    private MutableLiveData<Map<String, Integer>> colorUserMap;
 
     private ImageView activityImage;
     private TextView activityTitle;
@@ -61,6 +62,14 @@ public class ActDescriptionFragment extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
+
+    public static void hideSoftKeyboard(android.app.Activity activity) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) activity.getSystemService(
+                        android.app.Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(
+                activity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
+    }
 
     @Nullable
     @Override
@@ -92,10 +101,12 @@ public class ActDescriptionFragment extends Fragment {
             }
         });
 
+
         comments = activityDescriptionViewModel.getMutableComments();
         activityDescriptionViewModel.getMutableComments().observe(getViewLifecycleOwner(), new Observer<List<Comment>>() {
             @Override
             public void onChanged(List<Comment> comments) {
+                updateUserColor(comments);
                 reAdapter.notifyDataSetChanged();
                 mapView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -133,21 +144,37 @@ public class ActDescriptionFragment extends Fragment {
             }
         });
 
+
+        colorUserMap = new MutableLiveData<>();
+        Map<String, Integer> map = new HashMap<>();
+        colorUserMap.postValue(map);
         recyclerView = (RecyclerView) view.findViewById(R.id.comment_feed);
         //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         reLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(reLayoutManager);
-        reAdapter = new CommentAdapter(comments);
+        reAdapter = new CommentAdapter(comments, colorUserMap);
         recyclerView.setAdapter(reAdapter);
 
-        //activityImage.setImageResource(R.drawable.ic); //sets the source to image
-        activityTitle.setText("Activity Title");
-        userName.setText("User Name");
-        activitySchedule.setText("Time/Date");
-        activityDescription.setText("Activity Description");
-
         EventBus.getDefault().register(this); //if you don't like it solve the toasts without this you nerd
+    }
+
+    private void updateUserColor(List<Comment> comments) {
+        int i = 0;
+        Map<String, Integer> map = colorUserMap.getValue();
+        if(map == null) {
+            map = new HashMap<String, Integer>();
+        }
+        for (Comment comment : comments) {
+            if (map.get(comment.getCommenterRef()) == null) {
+                if (i > getContext().getResources().getIntArray(R.array.rainbow).length) {
+                    i = 0;
+                }
+                map.put(comment.getCommenterRef(), getContext().getResources().getIntArray(R.array.rainbow)[i]);
+                i++;
+            }
+        }
+        colorUserMap.postValue(map);
     }
 
     private void initViews(View view) {
@@ -163,16 +190,6 @@ public class ActDescriptionFragment extends Fragment {
         commentText = view.findViewById(R.id.description_commentTextField);
     }
 
-    public static void hideSoftKeyboard(android.app.Activity activity) {
-        InputMethodManager inputMethodManager =
-                (InputMethodManager) activity.getSystemService(
-                        android.app.Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(
-                activity.getWindow().getDecorView().getRootView().getWindowToken(), 0);
-    }
-
-
-    //TODO HIGHLY ILLEGAL! - MOVE TO VIEWMODEL!
     @Subscribe
     public void handleCommentEvent(CommentEvent event) {
         if (!event.isSuccess()) {

@@ -6,4 +6,33 @@
     <color name="textInputLayout">#0E0E0E</color>
     <color name="white">#FFFFFF</color>
     <color name="darkgray">#A9A9A9</color>
+    <color name="bright_pink">#FF007F</color>
+    <color name="red">#FF0000</color>
+    <color name="orange">#FF7F00</color>
+    <color name="chartreuse">#7FFF00</color>
+    <color name="spring_green">#00522F</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="azure">#007FFF</color>
+    <color name="blue">#0000FF</color>
+    <color name="violet">#7F00FF</color>
+    <color name="magenta">#FF00FF</color>
+
+    <array name="rainbow">
+        <item>@color/bright_pink</item>
+        <item>@color/red</item>
+        <item>@color/orange</item>
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimaryDark</item>
+        <item>@color/textInputLayout</item>
+        <item>@color/darkgray</item>
+        <item>@android:color/holo_red_dark</item>
+        <item>@android:color/black</item>
+        <item>@color/chartreuse</item>
+        <item>@color/spring_green</item>
+        <item>@color/cyan</item>
+        <item>@color/azure</item>
+        <item>@color/blue</item>
+        <item>@color/violet</item>
+        <item>@color/magenta</item>
+    </array>
 </resources>

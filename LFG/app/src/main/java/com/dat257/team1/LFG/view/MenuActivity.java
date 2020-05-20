@@ -2,7 +2,6 @@ package com.dat257.team1.LFG.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -49,8 +47,7 @@ public class MenuActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        View headerView = LayoutInflater.from(this).inflate(R.layout.menu_nav_header,navigationView,false);
-        navigationView.addHeaderView(headerView);
+        View headerView = navigationView.getHeaderView(0);
         menuProfileRelativeLayout = headerView.findViewById(R.id.menu_profile_pic);
         menuProfilePic = headerView.findViewById(R.id.circleImage_profile);
         menuProfileText = headerView.findViewById(R.id.menu_icon_text);
@@ -98,9 +95,13 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        //NavigationUI.setupWithNavController(menuProfileRelativeLayout,navController,);
-        //menuProfileRelativeLayout.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_toProfile));
-
+        menuProfileRelativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navController.navigate(R.id.nav_profile);
+                drawer.closeDrawers();
+            }
+        });
     }
 
     @Override
@@ -122,7 +123,12 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(new Intent(this, WelcomeActivity.class));
     }
 
-    /*
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        
+    }
+/*
     private void openProfile() {
         FragmentManager manager = getSupportFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
