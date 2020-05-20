@@ -72,4 +72,10 @@ public class ActFeedPageFragment extends Fragment {
         Log.d(LOG_TAG, "Create activity clicked!");
         Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_nav_createActivityFragment);
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        actFeedViewModel.updateFeed();
+    }
 }
