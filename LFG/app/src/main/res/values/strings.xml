@@ -84,4 +84,5 @@
     <string name="hint">hint</string>
     <string name="todo">TODO</string>
     <string name="write_a_message">Write a message ...</string>
+    <string name="search">Search</string>
 </resources>

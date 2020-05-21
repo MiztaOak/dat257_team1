@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 
@@ -26,11 +26,13 @@ import java.util.List;
 
 public class ActFeedListFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
 
-    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
 
     private RecyclerView.Adapter mAdapter;
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
+    private final int ITEM_MARGIN = 4;
+    private final int NUM_COLUMNS = 1;
 
     @Nullable
     @Override
@@ -53,6 +55,8 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
         mAdapter = new ActCardRecyclerAdapter(getContext(), mutableActivityList, this);
         recyclerView.setAdapter(mAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        ActCardRecyclerAdapter.RecyclerViewMargin decoration = new ActCardRecyclerAdapter.RecyclerViewMargin(ITEM_MARGIN, NUM_COLUMNS);
+        recyclerView.addItemDecoration(decoration);
 
         updateActFeed();
 
@@ -65,12 +69,6 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
 
     @Override
     public void onCardClicked(View view, int pos) {
-        /*Log.d(LOG_TAG, "Card Clicked!");
-        actFeedViewModel.onItemClick(pos);
-        Intent intent = new Intent(getContext(), ActivityDescriptionFragment.class); //TODO maybe not call directly here do from parent, not sure.
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);*/
-
         actFeedViewModel.onItemClick(pos);
         Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_activityDescriptionView);
     }

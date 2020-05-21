@@ -20,9 +20,10 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginPageFragment;
+import com.dat257.team1.LFG.view.loginPage.WelcomeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -99,7 +100,9 @@ public class MenuActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
     private void openSignOutPage() {
-        startActivity(new Intent(this, LoginPageFragment.class));
+        startActivity(new Intent(this, WelcomeActivity.class));
+
     }
 }

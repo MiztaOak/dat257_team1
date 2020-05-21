@@ -41,22 +41,22 @@ public class ProfileFragment extends Fragment {
     private Button blockContactButton;
     private LinearLayout addFriendLayout;
     private LinearLayout blockContactLayout;
-    private User profileOwner;
-
-
-    public ProfileFragment() {
-    }
+    private String profileOwner;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_profile, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String userId = (String) getActivity().getIntent().getExtras().get("userId");
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            profileOwner = bundle.getString("userId");
+        }
+        //String userId = (String) getActivity().getIntent().getExtras().get("userId");
 
         initViews(view);
 
@@ -75,12 +75,10 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        FireStoreHelper.getInstance();
         String currentUser = FirebaseAuth.getInstance().getCurrentUser().getUid(); // the current user
-        profileOwner = new User("rIJR06a6qcSGKIJqxpF8ulgZMvK2", "Alex", "alexta@student.chalmers.se", "0702343553");
 
         //TODO: We need a userID from profile owner, in order to compare the currentUser with the profileUser
-        if (currentUser.equals("rIJR06a6qcSGKIJqxpF8ulgZMvK2")) {
+        if (currentUser.equals(profileOwner)) {
             addFriendLayout.setClickable(false);
             addFriendLayout.setVisibility(View.INVISIBLE);
             blockContactLayout.setClickable(false);
@@ -106,7 +104,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        profileViewModel.updateUserData(currentUser);
+        profileViewModel.updateUserData(profileOwner);
     }
 
     private void initViews(View view) {

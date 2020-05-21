@@ -1,5 +1,6 @@
 package com.dat257.team1.LFG.firebase;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -53,6 +54,7 @@ import com.google.firebase.firestore.WriteBatch;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -233,6 +235,7 @@ public class FireStoreHelper {
                     activities.add(data.toActivity(doc.getId()));
                 }
             }
+
             Main.getInstance().setActivities(activities);
             EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
@@ -311,13 +314,13 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessageInChat(String chatId, String msg) {
+    public void writeMessageInChat(String chatId, String msg, Date date) {
 
         Map<String, Object> data = new HashMap<>();
 
         data.put("messageText", msg);
         data.put("sender", db.document("/users/" + FirebaseAuth.getInstance().getCurrentUser().getUid()));
-        data.put("sent", ServerValue.TIMESTAMP);
+        data.put("sent", new Timestamp(date));
         db.collection("chats").document(chatId).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
@@ -663,6 +666,8 @@ public class FireStoreHelper {
                 List<ChatListItem> chatInfoList = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants");
+                    if(participants.size() <= 1)
+                        continue;
                     String chatName = buildChatName(participants, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String id = doc.getId();
                     int amountOfParticipants = participants.size();
@@ -689,7 +694,7 @@ public class FireStoreHelper {
         String currentUserName = idToNameDictionary.get(uID);
         for (DocumentReference ref : idList) {
             String userName = idToNameDictionary.get(ref.getId());
-            if (!userName.equals(currentUserName))
+            if (userName.equals(currentUserName))
                 continue;
             name.append(userName);
             if (name.length() >= 20) {

@@ -15,9 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -54,9 +55,9 @@ public class ActFeedPageFragment extends Fragment {
         createActivity = (Button) view.findViewById(R.id.createActivity);
         createActivity.setOnClickListener(v -> {
             if(FirebaseAuth.getInstance().getCurrentUser() != null)
-                launchCreateActivity();
+                launchCreateActivity(view);
             else
-                Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"You must be signed in to create an activity",Toast.LENGTH_SHORT).show();
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
     }
@@ -67,10 +68,14 @@ public class ActFeedPageFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_act_feed_page, container, false);
     }
 
-    public void launchCreateActivity() {
+    public void launchCreateActivity(View view) {
         Log.d(LOG_TAG, "Create activity clicked!");
-        Intent intent = new Intent(getContext(), CreateActivityView.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_nav_createActivityFragment);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        actFeedViewModel.updateFeed();
     }
 }

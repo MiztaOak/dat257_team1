@@ -66,18 +66,9 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
 
     @Override
     public void onCardClicked(View view, int pos) {
-        /*Intent intent = new Intent(getContext(), MessageFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        Bundle bundle = new Bundle();
-        bundle.putString("userId", chatListItems.getValue().get(pos).getId());
-        intent.putExtras(bundle);
-        startActivity(intent);
-        FragmentManager fm = getFragmentManager();
-        fm.beginTransaction().replace(R.id.mapView, fm).commit();
-         */
-
         Bundle bundle = new Bundle();
         bundle.putString("chatId", chatListItems.getValue().get(pos).getId());
+        bundle.putString("chatName", chatListItems.getValue().get(pos).getTitle());
         Navigation.findNavController(view).navigate(R.id.action_nav_messages_to_nav_messageFragment, bundle);
     }
 

@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +11,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.view.ActDescriptionFragment;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.dat257.team1.LFG.viewmodel.CurrentActivitiesViewModel;
 
@@ -84,8 +83,6 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
     @Override
     public void onCardClicked(View view, int pos) {
         Log.d(LOG_TAG, "Card Clicked!");
-        Intent intent = new Intent(getContext(), ActDescriptionFragment.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);
+        Navigation.findNavController(view).navigate(R.id.action_nav_my_activities_to_activityDescriptionView3);
     }
 }

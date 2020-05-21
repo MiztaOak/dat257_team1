@@ -41,7 +41,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        app:srcCompat="@drawable/dog_image_activity" />
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="409dp"

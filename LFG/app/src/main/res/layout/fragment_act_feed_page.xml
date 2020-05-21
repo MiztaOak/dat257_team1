@@ -1,44 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activityFeedTabs"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".view.activityFeed.ActFeedListFragment">
-
-    <Button
-        android:id="@+id/createActivity"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Create Activity"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.992" />
+    android:layout_height="match_parent">
 
     <com.dat257.team1.LFG.view.activityFeed.CustomViewPager
         android:id="@+id/view_pager_feed"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:scrollbars="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_feed_tab">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toTopOf="@id/createActivity"
+        app:layout_constraintEnd_toEndOf="@+id/appbar"
+        app:layout_constraintStart_toStartOf="@id/appbar"
+        app:layout_constraintTop_toBottomOf="@+id/appbar">
 
     </com.dat257.team1.LFG.view.activityFeed.CustomViewPager>
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/activity_feed_tab"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="35dp">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:contentScrim="?attr/colorPrimary"
+            app:expandedTitleGravity="top"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:toolbarId="@+id/toolbar">
+
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/activity_feed_tab"
+                android:layout_width="match_parent"
+                app:tabTextColor="#FFFFFF"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:layout_scrollFlags="exitUntilCollapsed">
+
+            </com.google.android.material.tabs.TabLayout>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <Button
+        android:id="@+id/createActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="@string/create_activity"
+        android:layout_gravity="bottom"
+        android:background="@drawable/buttonshapewhitebg"
+        android:fontFamily="@font/calibri_regular"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </com.google.android.material.tabs.TabLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
