@@ -68,7 +68,7 @@ public class Activity {
 
     public String getAddressFromLocation(Context context) {
         Geocoder geocoder;
-        List<Address> addresses = null;
+        List<Address> addresses = new ArrayList<>();
         geocoder = new Geocoder(context, Locale.getDefault());
         // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         try {
@@ -76,7 +76,13 @@ public class Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String address = addresses.get(0).getAddressLine(0);
+        String address;
+        if(!addresses.isEmpty()){
+            address = addresses.get(0).getAddressLine(0);
+        } else{
+            address = "no location found";
+        }
+
         return address;
     }
 

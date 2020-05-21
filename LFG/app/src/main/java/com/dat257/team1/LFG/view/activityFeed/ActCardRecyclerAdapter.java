@@ -65,12 +65,15 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView mLocation = ((CardViewHolder) cardViewHolder).mLocation;
         TextView mCategory = ((CardViewHolder) cardViewHolder).mCategory;
         TextView mAttendees = ((CardViewHolder) cardViewHolder).mAttendees;
-        cardViewHolder.itemView.setBackground(context.getDrawable(R.drawable.gradient_1));
+        //cardViewHolder.itemView.setBackground(context.getDrawable(R.drawable.gradient_1));
         mTitle.setText(activityList.getValue().get(position).getTitle());
         mDescription.setText(activityList.getValue().get(position).getDescription());
         mCategory.setText(activityList.getValue().get(position).getCategory().getName());
-        mAttendees.setText("Participants: " + activityList.getValue().get(position).getParticipants().size()
+        if(activityList.getValue().get(position).getNumAttendees() != 0)
+            mAttendees.setText("Participants: " + activityList.getValue().get(position).getParticipants().size()
                             +" / " + activityList.getValue().get(position).getNumAttendees());
+        else
+            mAttendees.setText("Participants: " + activityList.getValue().get(position).getParticipants().size());
 
         if(FirebaseAuth.getInstance().getCurrentUser() != null) {
             mLocation.setText(activityList.getValue().get(position).getAddressFromLocation(context));
