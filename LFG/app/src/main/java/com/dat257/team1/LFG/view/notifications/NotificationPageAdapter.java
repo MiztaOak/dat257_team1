@@ -9,8 +9,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginFragment;
-import com.dat257.team1.LFG.view.loginPage.RegisterFragment;
 
 public class NotificationPageAdapter extends FragmentPagerAdapter {
 

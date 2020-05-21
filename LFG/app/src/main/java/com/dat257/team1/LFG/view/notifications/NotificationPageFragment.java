@@ -8,16 +8,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager.widget.ViewPager;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.loginPage.LoginPagerAdapter;
-import com.dat257.team1.LFG.viewmodel.LoginPageViewModel;
 import com.dat257.team1.LFG.viewmodel.NotificationViewModel;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class NotificationPageFragment extends Fragment {
 
