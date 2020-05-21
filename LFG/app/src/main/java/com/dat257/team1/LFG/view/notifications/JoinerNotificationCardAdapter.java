@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.notifications;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.JoinNotification;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
+import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public class JoinerNotificationCardAdapter extends RecyclerView.Adapter <JoinerN
 
 
     private MutableLiveData<List<NotificationForJoiner>> status;
+    private String actId;
+    private String actName;
 
     public JoinerNotificationCardAdapter(MutableLiveData<List<NotificationForJoiner>> status){
         this.status = status;
@@ -48,9 +51,13 @@ public class JoinerNotificationCardAdapter extends RecyclerView.Adapter <JoinerN
     @Override
     public void onBindViewHolder(@NonNull JoinerNotificationCardAdapter.StatusViewHolder holder, int position) {
         NotificationForJoiner notificationForJoiner = status.getValue().get(position);
-        holder.infoText.setText(" Your status for the activity"+ notificationForJoiner.getActivityID() + "is:");
-        holder.statusText.setText(notificationForJoiner.getStatus());
 
+
+        String a = FireStoreHelper.getInstance().getActivityTitle(notificationForJoiner.getActivity());
+
+        holder.infoText.setText(" Your status for the activity "+ a + " is:");
+
+        holder.statusText.setText(notificationForJoiner.getStatus());
     }
 
 

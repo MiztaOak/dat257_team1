@@ -1,4 +1,4 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.notifications;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,45 +15,65 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.model.JoinNotification;
+import com.dat257.team1.LFG.model.NotificationForJoiner;
+import com.dat257.team1.LFG.view.notifications.JoinerNotificationCardAdapter;
+import com.dat257.team1.LFG.viewmodel.NotificationStatusViewModel;
 import com.dat257.team1.LFG.viewmodel.NotificationViewModel;
 
 import java.util.List;
 
-public class NotificationFragment extends Fragment {
-    private MutableLiveData<List<JoinNotification>> requests;
-    private NotificationViewModel viewModel;
+public class JoinerNotificationFragment extends Fragment {
+
+    private MutableLiveData<List<NotificationForJoiner>> status;
+    private NotificationStatusViewModel viewModel;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
 
-    public NotificationFragment() {
+
+    public JoinerNotificationFragment(){
+
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_notification, container, false);
+        final View rootView = inflater.inflate(R.layout.activity_joiner_notification, container, false);
         return rootView;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        viewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
+        viewModel = new ViewModelProvider(this).get(NotificationStatusViewModel.class);
         getViewLifecycleOwner().getLifecycle().addObserver(viewModel);
-        requests = viewModel.getRequests();
-        requests.observe(getViewLifecycleOwner(), new Observer<List<JoinNotification>>() {
+        status = viewModel.getStatus();
+        status.observe(getViewLifecycleOwner(), new Observer<List<NotificationForJoiner>>() {
             @Override
-            public void onChanged(List<JoinNotification> joinNotifications) {
+            public void onChanged(List<NotificationForJoiner> notificationForJoiners) {
+
                 reAdapter.notifyDataSetChanged();
             }
+
+
         });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.notification_feed);
+
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.notification_for_joiner_feed);
         reLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(reLayoutManager);
-        reAdapter = new NotificationCardAdapter(requests);
+        reAdapter = new JoinerNotificationCardAdapter(status);
         recyclerView.setAdapter(reAdapter);
+
     }
+
+    /*
+
+    private void updateNotifications(String uID) {
+        viewModel.loadStatus(uID);
+    }
+
+     */
+
 }
