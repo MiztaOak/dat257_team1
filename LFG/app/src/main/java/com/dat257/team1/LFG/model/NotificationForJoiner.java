@@ -5,21 +5,27 @@ public class NotificationForJoiner {
     private String activity;
     private String userName;
     private String status;
-    private String nId;
 
-    public NotificationForJoiner (String activity, String userName, String status, String nId){
+
+
+
+    public NotificationForJoiner (String activity, String userName, String status){
+
+
 
         this.activity = activity;
+
+
         this.userName = userName;
         this.status = status;
-        this.nId = nId;
-
 
     }
 
-    public String getActivityID() {
-        return activity;
-    }
+
+
+    public String getActivity(){return activity;}
+
+
 
     public String getUserName() {
         return userName;
@@ -27,6 +33,6 @@ public class NotificationForJoiner {
 
     public String getStatus(){ return status;}
 
-    public String getnId(){return nId;}
+
 
 }

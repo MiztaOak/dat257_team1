@@ -7,16 +7,13 @@ import java.util.List;
 
 public class NotificationForJoinerEvent {
 
-    private boolean success;
+    List<NotificationForJoiner> notifications;
 
-    public NotificationForJoinerEvent (boolean success) {
-        this.success = success;
+    public NotificationForJoinerEvent(List<NotificationForJoiner> notifications) {
+        this.notifications = notifications;
     }
 
-
-    public boolean isSuccess() {
-        return success;
+    public List<NotificationForJoiner> getNotifications() {
+        return notifications;
     }
-
-
 }

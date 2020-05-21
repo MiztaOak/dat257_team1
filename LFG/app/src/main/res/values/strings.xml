@@ -10,6 +10,8 @@
     <string name="tab_text_4">Map</string>
     <string name="tab_text_5">Current activities</string>
     <string name="tab_text_6">Previous activities</string>
+    <string name="tab_text_7">Request Notification</string>
+    <string name="tab_text_8">Status Notification</string>
     <string name="sign_in">Sign in</string>
     <string name="let_s_get_you_started">Let\'s get you started</string>
     <string name="login_page_view">Login page</string>

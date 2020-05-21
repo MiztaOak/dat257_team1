@@ -126,7 +126,7 @@ public class ActDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                     activityDescriptionViewModel.joinActivity();
-                    activityDescriptionViewModel.joinerStatus();
+                    //activityDescriptionViewModel.joinerStatus();
                 }else {
                     Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
                 }
