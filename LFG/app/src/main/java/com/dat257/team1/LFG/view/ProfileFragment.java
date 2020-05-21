@@ -77,7 +77,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onChanged(User user) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user.getName() + "s" + " profile");
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user.getName() + "'s" + " profile");
 
                 userName.setText(user.getName());
                 profileDescription.setText(user.getId()); //sätter profile desc som id nu, då vi inte har en user desc som kan hämtas
