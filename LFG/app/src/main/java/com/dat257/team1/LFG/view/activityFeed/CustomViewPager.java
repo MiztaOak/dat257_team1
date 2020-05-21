@@ -17,7 +17,9 @@ public class CustomViewPager extends ViewPager {
 
     public CustomViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+
     }
+
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event){
@@ -25,8 +27,8 @@ public class CustomViewPager extends ViewPager {
             // Always return false to disable user swipes
             return false;
         }
-        return false;
-        //return super.onTouchEvent(event);
+
+        return super.onInterceptTouchEvent(event);
     }
 
     @Override
@@ -35,8 +37,12 @@ public class CustomViewPager extends ViewPager {
             // Always return false to disable user swipes
             return false;
         }
-        return false;
-        //return super.onTouchEvent(event);
+        //return false;
+        return super.onTouchEvent(event);
     }
 
+    @Override
+    public boolean performClick() {
+        return super.performClick();
+    }
 }

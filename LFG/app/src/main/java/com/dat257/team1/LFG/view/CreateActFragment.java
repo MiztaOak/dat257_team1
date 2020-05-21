@@ -87,6 +87,9 @@ public class CreateActFragment extends Fragment {
     private Spinner categorySpinner;
     private CheckBox privateEvent;
     private CreateActivityViewModel createActivityViewModel;
+    private TextView locationTitle;
+    private TextView dateTitle;
+
     private LocationCallback locationCallback = new LocationCallback() {
         @Override
         public void onLocationResult(LocationResult locationResult) {
@@ -118,12 +121,19 @@ public class CreateActFragment extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                 Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
+                if(location == null){
+                    checkFields(getActTitle(), getActDesc(), timestamp, null, getCategory());
+                    Toast.makeText(getContext(),"One or more fields have incorrect information",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
                 if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
                     Log.d(LOG_TAG, "Activity created!");
                     Navigation.findNavController(view).navigate(R.id.action_nav_createActivityFragment_to_nav_act_feed);
+                } else{
+                    Toast.makeText(getContext(),"One or more fields have incorrect information",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -173,7 +183,7 @@ public class CreateActFragment extends Fragment {
                 if (titleTextView.getText().toString().length() <= 0) {
                     titleTextView.setError("Enter title", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
-                hideSoftKeyboard(getActivity());
+                //hideSoftKeyboard(getActivity());
                 titleTextView.clearFocus();
             }
         });
@@ -194,7 +204,7 @@ public class CreateActFragment extends Fragment {
                 if (descTextView.getText().toString().length() <= 0) {
                     descTextView.setError("Enter description", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
-                hideSoftKeyboard(getActivity());
+                //hideSoftKeyboard(getActivity());
                 descTextView.clearFocus();
             }
         });
@@ -223,7 +233,7 @@ public class CreateActFragment extends Fragment {
                     numAttendees.setText(String.valueOf(numOfAttendees));
 
                 }
-                hideSoftKeyboard(getActivity());
+                //hideSoftKeyboard(getActivity());
                 numAttendees.clearFocus();
             }
         });
@@ -266,10 +276,17 @@ public class CreateActFragment extends Fragment {
                 //TODO maybe
             }
         });
+
+        locationTitle = view.findViewById(R.id.textView3);
+        dateTitle = view.findViewById(R.id.datePickerText);
     }
 
     private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
         boolean status = true;
+        titleTextView.setError(null);
+        descTextView.setError(null);
+        dateTitle.setError(null);
+
         if (!(title.length() >= MIN_TITLE_LENGTH)) {
             status = false;
             titleTextView.setError("Your title must at least be " + MIN_TITLE_LENGTH + " characters long");
@@ -282,11 +299,11 @@ public class CreateActFragment extends Fragment {
         Date date = new Date(time.getSeconds());
         if (time.toDate().before(currentTime)) {
             status = false;
-            //time picker error
+            dateTitle.setError("Your activity can not happen in the past");
         }
         if (geoPoint == null) {
             status = false;
-            Toast.makeText(getContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
+            locationTitle.setError("You must specify a location for your activity");
         }
         if (category == null) {
             status = false;
