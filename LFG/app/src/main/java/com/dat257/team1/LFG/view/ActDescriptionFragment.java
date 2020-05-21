@@ -115,7 +115,7 @@ public class ActDescriptionFragment extends Fragment {
                         commentText.clearFocus();
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -126,8 +126,8 @@ public class ActDescriptionFragment extends Fragment {
                 if(FirebaseAuth.getInstance().getCurrentUser() != null) {
                     activityDescriptionViewModel.joinActivity();
                     activityDescriptionViewModel.joinerStatus();
-                }else {
-                    Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
                 }
 
             }

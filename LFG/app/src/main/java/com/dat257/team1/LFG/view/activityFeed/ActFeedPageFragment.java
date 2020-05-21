@@ -57,7 +57,7 @@ public class ActFeedPageFragment extends Fragment {
             if(FirebaseAuth.getInstance().getCurrentUser() != null)
                 launchCreateActivity(view);
             else
-                Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"You must be signed in to create an activity",Toast.LENGTH_SHORT).show();
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
     }
