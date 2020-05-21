@@ -1,5 +1,7 @@
 package com.dat257.team1.LFG.view;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +20,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static android.app.Activity.RESULT_OK;
+
 public class ProfileFragment extends Fragment {
 
+    private static final int PICK_IMAGE_REQUEST = 1;
     private ProfileViewModel profileViewModel;
     private MutableLiveData<User> user;
     private ImageView profileImage;
@@ -43,6 +47,7 @@ public class ProfileFragment extends Fragment {
     private LinearLayout addFriendLayout;
     private LinearLayout blockContactLayout;
     private String profileOwner;
+    private Uri imageUri;
 
     @Nullable
     @Override
@@ -89,13 +94,14 @@ public class ProfileFragment extends Fragment {
             blockContactLayout.setClickable(false);
             blockContactLayout.setVisibility(View.INVISIBLE);
         }
-
         addFriendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO: add functionality to addFriendButton
             }
         });
+        
+        profileImageListener();
 
         blockContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -103,8 +109,39 @@ public class ProfileFragment extends Fragment {
                 //TODO: add functionality to blockContactButton
             }
         });
-
         profileViewModel.updateUserData(profileOwner);
+    }
+
+    /**
+     * Method that has a listener for the profile picture
+     */
+    private void profileImageListener() {
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosePhoto();
+            }
+        });
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+            profileImage.setImageURI(imageUri);
+        }
+    }
+
+    /**
+     * A method to choose picture from user's phone gallery
+     */
+    private void choosePhoto() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
     private void initViews(View view) {

@@ -2,6 +2,7 @@ package com.dat257.team1.LFG.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -47,7 +48,10 @@ public class MenuActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        View headerView = navigationView.getHeaderView(0);
+
+        View headerView = LayoutInflater.from(this).inflate(R.layout.menu_nav_header,navigationView,false);
+        navigationView.addHeaderView(headerView);
+
         menuProfileRelativeLayout = headerView.findViewById(R.id.menu_profile_pic);
         menuProfilePic = headerView.findViewById(R.id.circleImage_profile);
         menuProfileText = headerView.findViewById(R.id.menu_icon_text);
