@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.CreateActivityView" >
+    tools:context=".view.CreateActFragment" >
 
 
     <LinearLayout
@@ -85,6 +85,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:layout_marginTop="50dp"
             android:orientation="vertical">
 
@@ -134,12 +135,11 @@
 
 
                 <ImageButton
-                    android:id="@+id/imageButton"
+                    android:id="@+id/image_btn_get_location"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
                     android:contentDescription="@string/description"
-                    android:onClick="getLocationOnClick"
                     android:scaleType="centerInside"
                     android:src="@drawable/ic_my_location_white_24dp"
                     android:theme="@style/my_location_button_style" />
@@ -190,10 +190,11 @@
                     android:autofillHints="no"
                     android:background="@drawable/black_stroke_bg"
                     android:drawablePadding="16dp"
+                    android:gravity="top"
                     android:ems="10"
                     android:fontFamily="@font/calibri_regular"
                     android:inputType="textMultiLine|textCapSentences|textAutoCorrect"
-                    android:lines="8"
+                    android:lines="5"
                     android:nestedScrollingEnabled="false"
                     android:scrollIndicators="right"
                     android:scrollbarStyle="outsideInset"

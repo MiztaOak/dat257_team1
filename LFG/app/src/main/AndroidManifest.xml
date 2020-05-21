@@ -20,6 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
+        <activity android:name=".view.loginPage.WelcomeActivity" />
+        <activity android:name=".view.loginPage.LoginActivity" />
+        <activity android:name=".view.loginPage.RegisterActivity" />
+
         <activity
             android:name=".view.MenuActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -32,12 +36,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".view.CreateActivityView"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name=".view.loginPage.LoginPageFragment"
-            android:label="@string/login_page_view"
+            android:name=".view.CreateActFragment"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".view.favouriteActivities.FavouriteActivityView" />

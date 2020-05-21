@@ -306,13 +306,13 @@ public class FireStoreHelper {
     /**
      * Method that creates uploads a new message to the Firestore database
      */
-    public void writeMessageInChat(String chatId, String msg) {
+    public void writeMessageInChat(String chatId, String msg, Date date) {
 
         Map<String, Object> data = new HashMap<>();
 
         data.put("messageText", msg);
         data.put("sender", db.document("/users/" + FirebaseAuth.getInstance().getCurrentUser().getUid()));
-        data.put("sent", ServerValue.TIMESTAMP);
+        data.put("sent", new Timestamp(date));
         db.collection("chats").document(chatId).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

@@ -4,9 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -14,12 +12,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.dat257.team1.LFG.MainActivity;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.view.CreateActivityView;
+import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.view.ForgetPasswordView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -40,33 +38,32 @@ import com.google.firebase.auth.GoogleAuthProvider;
  *
  * @author : Jakobew, Oussama Anadani, Johan Ek, gabjav
  */
-public class LoginFragment extends Fragment {
+public class LoginActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = CreateActivityView.class.getSimpleName();
+    private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 0;
     private Button loginButton;
     private EditText passwordField, emailField;
-    private SignInButton googleButton;
     private TextView forgetPassword;
     private FirebaseAuth mAuth;
     private FirebaseUser user;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_auth_login, container, false);
 
-        loginButton = rootView.findViewById(R.id.sign_in_button);
-        forgetPassword = rootView.findViewById(R.id.forgot_pwd_button);
-        googleButton = rootView.findViewById(R.id.quick_access_google);
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_auth_login);
+        loginButton = findViewById(R.id.sign_in_button);
+        forgetPassword = findViewById(R.id.lfForgotPass);
+        //  googleButton = rootView.findViewById(R.id.quick_access_google);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                emailField = rootView.findViewById(R.id.sign_in_email);
+                emailField = findViewById(R.id.sign_in_email);
                 String email = emailField.getText().toString().trim();
-                passwordField = rootView.findViewById(R.id.sign_in_pwd);
+                passwordField = findViewById(R.id.sign_in_pwd);
                 String password = passwordField.getText().toString().trim();
                 //checking if the user has entered a validate form of the email and password
                 if (validateForm(email, password))
@@ -81,30 +78,11 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        googleButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                googleSignIn();
-            }
-        });
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-
-        mGoogleSignInClient = GoogleSignIn.getClient(rootView.getContext(), gso);
         mAuth = FirebaseAuth.getInstance();
-        return rootView;
+
     }
 
-    /**
-     * Sign in with google
-     */
-    private void googleSignIn() {
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -137,16 +115,17 @@ public class LoginFragment extends Fragment {
      *
      * @param idToken
      */
+
     private void handleSignInResult(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(LOG_TAG, "signInWithCredential:success");
-                            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
@@ -222,18 +201,18 @@ public class LoginFragment extends Fragment {
     public void loginUser(final String email, final String password) {
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {  // Sign in success, update UI with the signed-in user's information
                             FireStoreHelper.getInstance();
-                            Toast.makeText(getActivity(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Logged in successfully! ", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             FireStoreHelper.getInstance().retrieveData(user);
                             //take the user to the main page after successfully retrieving the data
-                            startActivity(new Intent(getActivity().getApplicationContext(), MainActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         } else { // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Login failed! ", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Login failed! ", Toast.LENGTH_SHORT).show();
                             //   retrieveData(null);
                         }
 
@@ -243,7 +222,7 @@ public class LoginFragment extends Fragment {
 
     public void openForgotPassword() {
         Log.d(LOG_TAG, "Pwd forgotten");
-        startActivity(new Intent(getActivity().getApplicationContext(), ForgetPasswordView.class));
+        startActivity(new Intent(this.getApplicationContext(), ForgetPasswordView.class));
     }
 
 

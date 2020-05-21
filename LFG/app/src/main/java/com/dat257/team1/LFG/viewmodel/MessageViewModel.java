@@ -8,8 +8,6 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.MessageEvent;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.Message;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -18,6 +16,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -27,6 +28,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<String> mutableChatId;
     private MutableLiveData<List<Message>> messages;
+    private MutableLiveData<Boolean> isMessageSent;
     private ListenerRegistration listener;
 
 
@@ -35,7 +37,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        if(!EventBus.getDefault().isRegistered(this))
+        if (!EventBus.getDefault().isRegistered(this))
             EventBus.getDefault().register(this);
     }
 
@@ -51,8 +53,14 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
         return messages;
     }
 
-    public void sendMessage(String chatId,String msg) {
-        Main.getInstance().writeMessage(chatId, msg);
+    public MutableLiveData<Boolean> getMutableLiveDataIsMessageSent() {
+        if (isMessageSent == null)
+            isMessageSent = new MutableLiveData<>();
+        return isMessageSent;
+    }
+
+    public void sendMessage(String chatId, String msg) {
+        Main.getInstance().writeMessage(chatId, msg, Calendar.getInstance().getTime());
     }
 
     public void setMutableChatId(String chatId) {
@@ -66,13 +74,27 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
 
     @Subscribe
     public void handleChatEvent(com.dat257.team1.LFG.events.ChatEvent event) {
-        messages.postValue(event.getMessages());
+        List<Message> sortedMessageList = new ArrayList<>();
+        sortedMessageList.addAll(event.getMessages());
+        Collections.sort(sortedMessageList, new Comparator<Message>() {
+            @Override
+            public int compare(Message message, Message t1) {
+                if(message.getTime() == null || t1.getTime() == null) {
+                    return 0;
+                }
+                return t1.getTime().compareTo(message.getTime());
+            }
+        });
+        messages.postValue(sortedMessageList);
     }
 
     @Subscribe
     public void handleMessageEvent(MessageEvent messageEvent) {
-        if(messageEvent.isSuccess()) {
+        if (messageEvent.isSuccess()) {
+            isMessageSent.postValue(true);
             Main.getInstance().loadChat(mutableChatId.getValue());
+        } else {
+            isMessageSent.postValue(false);
         }
     }
 

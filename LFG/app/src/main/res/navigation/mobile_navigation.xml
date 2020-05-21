@@ -8,10 +8,17 @@
     <fragment
         android:id="@+id/nav_act_feed"
         android:name="com.dat257.team1.LFG.view.activityFeed.ActFeedPageFragment"
-        tools:layout="@layout/fragment_act_feed_page" >
+        tools:layout="@layout/fragment_act_feed_page">
         <action
             android:id="@+id/action_nav_act_feed_to_activityDescriptionView"
             app:destination="@id/activityDescriptionView"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_nav_act_feed_to_nav_createActivityFragment"
+            app:destination="@id/nav_createActivityFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
@@ -21,7 +28,7 @@
     <fragment
         android:id="@+id/nav_my_activities"
         android:name="com.dat257.team1.LFG.view.activityFeed.MyActPageFragment"
-        tools:layout="@layout/fragment_my_act_page" >
+        tools:layout="@layout/fragment_my_act_page">
         <action
             android:id="@+id/action_nav_my_activities_to_activityDescriptionView3"
             app:destination="@id/activityDescriptionView"
@@ -38,7 +45,7 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.dat257.team1.LFG.view.ProfileFragment"
-        tools:layout="@layout/activity_profile" />
+        tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/nav_notifications"
@@ -47,8 +54,7 @@
 
     <fragment
         android:id="@+id/nav_messages"
-        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment"
-        android:label="ChatListFragment">
+        android:name="com.dat257.team1.LFG.view.chatList.ChatListFragment">
         <action
             android:id="@+id/action_nav_messages_to_nav_messageFragment"
             app:destination="@id/nav_messageFragment"
@@ -61,16 +67,35 @@
     <fragment
         android:id="@+id/nav_messageFragment"
         android:name="com.dat257.team1.LFG.view.messageFeed.MessageFragment"
-        android:label="MessageFragment"
         tools:layout="@layout/fragment_message">
         <argument
             android:name="chatId"
             app:argType="string"
             android:defaultValue="null"/>
+        <action
+            android:id="@+id/action_nav_messageFragment_to_nav_profile"
+            app:destination="@id/nav_profile"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <fragment
         android:id="@+id/activityDescriptionView"
         android:name="com.dat257.team1.LFG.view.ActDescriptionFragment"
         android:label="ActivityDescriptionView" />
+    <fragment
+        android:id="@+id/nav_createActivityFragment"
+        android:name="com.dat257.team1.LFG.view.CreateActFragment"
+        android:label="fragment_create_act"
+        tools:layout="@layout/fragment_create_act" >
+        <action
+            android:id="@+id/action_nav_createActivityFragment_to_nav_act_feed"
+            app:destination="@id/nav_act_feed"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
 </navigation>
