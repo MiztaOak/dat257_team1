@@ -80,6 +80,8 @@ public class CreateActivityView extends AppCompatActivity {
     private Spinner categorySpinner;
     private CheckBox privateEvent;
     private CreateActivityViewModel createActivityViewModel;
+    private TextView locationTitle;
+    private TextView dateTitle;
 
     private final int MIN_TITLE_LENGTH = 4;
     private final long MAX_ATTENDEES = 999999999;
@@ -103,6 +105,8 @@ public class CreateActivityView extends AppCompatActivity {
                 if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
                     openActivityFeed();
+                } else{
+                    Toast.makeText(getApplicationContext(),"One or more fields have incorrect information",Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -236,10 +240,17 @@ public class CreateActivityView extends AppCompatActivity {
                 //TODO maybe
             }
         });
+
+        locationTitle = findViewById(R.id.textView3);
+        dateTitle = findViewById(R.id.datePickerText);
     }
 
     private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
         boolean status = true;
+        titleTextView.setError(null);
+        descTextView.setError(null);
+        dateTitle.setError(null);
+
         if (!(title.length() >= MIN_TITLE_LENGTH)) {
             status = false;
             titleTextView.setError("Your title must at least be " + MIN_TITLE_LENGTH + " characters long");
@@ -252,11 +263,11 @@ public class CreateActivityView extends AppCompatActivity {
         Date date = new Date(time.getSeconds());
         if (time.toDate().before(currentTime)) {
             status = false;
-            //time picker error
+            dateTitle.setError("Your activity can not happen in the past");
         }
         if (geoPoint == null) {
             status = false;
-            Toast.makeText(getApplicationContext(), "You must specify a location for your activity", Toast.LENGTH_SHORT).show();
+            locationTitle.setError("You must specify a location for your activity");
         }
         if (category == null) {
             status = false;
