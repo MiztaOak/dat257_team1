@@ -6,7 +6,7 @@
     android:layout_height="200dp"
     android:background="#FFFFFF"
     android:clickable="true"
-    app:cardCornerRadius="10dp">
+    app:cardCornerRadius="5dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
