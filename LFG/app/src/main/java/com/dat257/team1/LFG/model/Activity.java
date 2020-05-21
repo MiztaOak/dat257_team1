@@ -3,12 +3,15 @@ package com.dat257.team1.LFG.model;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Bundle;
+import android.view.contentcapture.ContentCaptureCondition;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.sql.Time;
@@ -61,6 +64,20 @@ public class Activity {
         this.numAttendees = numAttendees;
         this.category = category;
         this.joinRequestList = joinRequestList;
+    }
+
+    public String getAddressFromLocation(Context context) {
+        Geocoder geocoder;
+        List<Address> addresses = null;
+        geocoder = new Geocoder(context, Locale.getDefault());
+        // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        try {
+            addresses = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String address = addresses.get(0).getAddressLine(0);
+        return address;
     }
 
     public String getChatRef() {
@@ -123,7 +140,6 @@ public class Activity {
         return location;
     }
 
-
     public String getOwner() {
         return owner;
     }
@@ -159,5 +175,4 @@ public class Activity {
     public void setParticipants(List<String> participants) {
         this.participants = participants;
     }
-
 }

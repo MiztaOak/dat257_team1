@@ -66,6 +66,16 @@
             android:textSize="15sp">
         </TextView>
 
+        <TextView
+            android:id="@+id/AttendeesText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/LocationText"
+            android:layout_toEndOf="@id/activityImage"
+            android:text="Attendees"
+            android:textSize="15sp">
+        </TextView>
+
 
     </RelativeLayout>
 
