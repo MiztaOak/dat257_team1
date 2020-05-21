@@ -31,7 +31,7 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
     private RecyclerView.Adapter mAdapter;
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    private final int ITEM_MARGIN = 4;
+    private final int ITEM_MARGIN = 10;
     private final int NUM_COLUMNS = 1;
 
     @Nullable

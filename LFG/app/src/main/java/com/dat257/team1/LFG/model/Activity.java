@@ -82,7 +82,6 @@ public class Activity {
         } else{
             address = "no location found";
         }
-
         return address;
     }
 
