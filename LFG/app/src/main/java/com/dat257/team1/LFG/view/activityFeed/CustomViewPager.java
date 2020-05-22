@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.viewpager.widget.ViewPager;
 
 public class CustomViewPager extends ViewPager {
+
     public CustomViewPager(@NonNull Context context) {
         super(context);
     }
@@ -20,14 +21,12 @@ public class CustomViewPager extends ViewPager {
 
     }
 
-
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event){
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             // Always return false to disable user swipes
             return false;
         }
-
         return super.onInterceptTouchEvent(event);
     }
 

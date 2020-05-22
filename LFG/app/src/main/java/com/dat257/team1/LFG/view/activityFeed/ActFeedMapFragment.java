@@ -56,6 +56,8 @@ import java.util.Map;
 public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final String MAPVIEW_BUNDLE_KEY = "MapViewBundleKey";
+    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5445;
+    Map<Marker, Activity> markerClick;
     private GoogleMap gm;
     private MapView mMapView;
     private ActFeedViewModel actFeedViewModel;
@@ -63,10 +65,26 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Location currentLocation;
     private boolean firstTimeFlag = true;
-    private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 5445;
+    /**
+     * Location callback to get last location
+     */
+    private final LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+            super.onLocationResult(locationResult);
+            if (locationResult.getLastLocation() == null)
+                return;
+            currentLocation = locationResult.getLastLocation();
+            if (firstTimeFlag && gm != null) {
+                LatLng loc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+                markCurrentLocation(loc);
+                firstTimeFlag = false;
+                actFeedViewModel.setLocation(currentLocation);
+            }
+        }
+    };
     private Context context;
-    Map<Marker, Activity> markerClick;
-
+    private View rootView;
 
     public ActFeedMapFragment() {
     }
@@ -124,7 +142,9 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_act_feed_maps, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_act_feed_maps, container, false);
+        }
         mMapView = rootView.findViewById(R.id.mapView);
         initGoogleMap(savedInstanceState);
         actFeedLiveData();
@@ -137,7 +157,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
         super.onViewCreated(view, savedInstanceState);
         context = view.getContext();
     }
-
 
     /**
      * Requesting location permission
@@ -178,25 +197,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     /**
-     * Location callback to get last location
-     */
-    private final LocationCallback mLocationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            if (locationResult.getLastLocation() == null)
-                return;
-            currentLocation = locationResult.getLastLocation();
-            if (firstTimeFlag && gm != null) {
-                LatLng loc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                markCurrentLocation(loc);
-                firstTimeFlag = false;
-                actFeedViewModel.setLocation(currentLocation);
-            }
-        }
-    };
-
-    /**
      * Checking if google service is available
      *
      * @return true if it's available, false otherwise
@@ -219,7 +219,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
     private void actFeedLiveData() {
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
         getLifecycle().addObserver(actFeedViewModel); //TODO
-        actFeedViewModel.onCreate();
         mutableActivityList = actFeedViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
@@ -228,7 +227,6 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
                 // onMarkerClick();
             }
         });
-        actFeedViewModel.updateFeed(); //TODO
     }
 
     /**

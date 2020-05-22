@@ -1,7 +1,5 @@
 package com.dat257.team1.LFG.viewmodel;
 
-import android.location.Location;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -12,14 +10,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.GeoPoint;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-
 public class CreateActivityViewModel extends ViewModel {
-
-
 
     //Error codes
     private final int TITLE_MISSING = 1;

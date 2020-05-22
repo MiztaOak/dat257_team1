@@ -13,6 +13,7 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 
 public class PreviousActFragment extends Fragment implements ICardViewHolderClickListener {
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

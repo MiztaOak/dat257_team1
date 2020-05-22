@@ -27,44 +27,46 @@ import java.util.List;
 public class ActFeedListFragment extends Fragment implements ICardViewHolderClickListener, LifecycleObserver {
 
     private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
-
+    private final int ITEM_MARGIN = 2;
+    private final int NUM_COLUMNS = 1;
+    private ActCardRecyclerAdapter actCardRecyclerAdapter;
+    private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
+    private View rootView;
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    private final int ITEM_MARGIN = 10;
-    private final int NUM_COLUMNS = 1;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_act_feed_list, container, false);
+        if(rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_act_feed_list, container, false);
+        }
 
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
         getLifecycle().addObserver(actFeedViewModel);
-        actFeedViewModel.onCreate();
 
         mutableActivityList = actFeedViewModel.getMutableActivityList();
         mutableActivityList.observe(getViewLifecycleOwner(), new Observer<List<Activity>>() {
             @Override
             public void onChanged(List<Activity> activityList) {
-                mAdapter.notifyDataSetChanged(); //TODO maybe not change everything e.g. when scrolling.
+                actCardRecyclerAdapter.notifyDataSetChanged();
             }
         });
 
-        RecyclerView recyclerView = rootView.findViewById(R.id.activityFeed);
-        mAdapter = new ActCardRecyclerAdapter(getContext(), mutableActivityList, this);
-        recyclerView.setAdapter(mAdapter);
+        recyclerView = rootView.findViewById(R.id.activityFeed);
+        actCardRecyclerAdapter = new ActCardRecyclerAdapter(getContext(), mutableActivityList, this);
+        recyclerView.setAdapter(actCardRecyclerAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         ActCardRecyclerAdapter.RecyclerViewMargin decoration = new ActCardRecyclerAdapter.RecyclerViewMargin(ITEM_MARGIN, NUM_COLUMNS);
         recyclerView.addItemDecoration(decoration);
 
-        updateActFeed();
-
         return rootView;
     }
 
-    private void updateActFeed() {
-        actFeedViewModel.updateFeed();
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override

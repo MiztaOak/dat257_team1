@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.activityFeed;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.view.CreateActFragment;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +27,7 @@ public class ActFeedPageFragment extends Fragment {
 
     private ActFeedViewModel actFeedViewModel;
     private Button createActivity;
+    private View rootView;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -41,23 +40,23 @@ public class ActFeedPageFragment extends Fragment {
         tabs.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
 
-        LinearLayout tabStrip = ((LinearLayout)tabs.getChildAt(0));
+        LinearLayout tabStrip = ((LinearLayout) tabs.getChildAt(0));
         tabStrip.getChildAt(1).setOnTouchListener((view1, motionEvent) -> {
-            if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
 
                 view1.performClick();
-            }else{
-                Toast.makeText(getContext(),"You must be signed in to access the map",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "You must be signed in to access the map", Toast.LENGTH_SHORT).show();
             }
             return true;
         });
 
         createActivity = (Button) view.findViewById(R.id.createActivity);
         createActivity.setOnClickListener(v -> {
-            if(FirebaseAuth.getInstance().getCurrentUser() != null)
+            if (FirebaseAuth.getInstance().getCurrentUser() != null)
                 launchCreateActivity(view);
             else
-                Toast.makeText(getContext(),"You must be signed in to create an activity",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You must be signed in to create an activity", Toast.LENGTH_SHORT).show();
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
     }
@@ -65,7 +64,10 @@ public class ActFeedPageFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_act_feed_page, container, false);
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_act_feed_page, container, false);
+        }
+        return rootView;
     }
 
     public void launchCreateActivity(View view) {
