@@ -40,6 +40,11 @@ import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * A class that handles user's profile
+ * @auther Oussama Anadani, Jennie Zhou, Jakob Ew
+ */
+
 public class ProfileFragment extends Fragment {
 
     private static final int PICK_IMAGE_REQUEST = 1;
