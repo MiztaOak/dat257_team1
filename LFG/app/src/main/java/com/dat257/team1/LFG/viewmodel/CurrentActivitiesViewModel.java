@@ -26,8 +26,6 @@ public class CurrentActivitiesViewModel extends ViewModel implements LifecycleOb
     private ListenerRegistration listener;
 
     public CurrentActivitiesViewModel() {
-        mutableOwnedActivities = new MutableLiveData<>();
-        mutableParticipatingActivities = new MutableLiveData<>();
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -47,10 +45,16 @@ public class CurrentActivitiesViewModel extends ViewModel implements LifecycleOb
     }
 
     public MutableLiveData<List<Activity>> getMutableOwnedActivities() {
+        if (mutableOwnedActivities == null) {
+            mutableOwnedActivities = new MutableLiveData<List<Activity>>();
+        }
         return mutableOwnedActivities;
     }
 
     public MutableLiveData<List<Activity>> getMutableParticipatingActivities() {
+        if (mutableParticipatingActivities == null) {
+            mutableParticipatingActivities = new MutableLiveData<List<Activity>>();
+        }
         return mutableParticipatingActivities;
     }
 
@@ -79,13 +83,5 @@ public class CurrentActivitiesViewModel extends ViewModel implements LifecycleOb
         }
         mutableOwnedActivities.setValue(ownedActivities);
         mutableParticipatingActivities.setValue(participatingActivities);
-    }
-
-    private boolean test(List<String> users, String uID){
-        for(String user: users){
-            if(user.equals(uID))
-                return true;
-        }
-        return false;
     }
 }

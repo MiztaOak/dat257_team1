@@ -39,10 +39,14 @@ public class CurrentActFragment extends Fragment implements ICardViewHolderClick
     private RecyclerView.Adapter participatingReAdapter;
     private RecyclerView.LayoutManager participatingReLayoutManager;
 
+    private View rootView;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.activity_current_activities, container, false);
+        if(rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_current_activities, container, false);
+        }
         return rootView;
     }
 

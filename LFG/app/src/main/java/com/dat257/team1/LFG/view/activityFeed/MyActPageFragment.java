@@ -16,6 +16,8 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MyActPageFragment extends Fragment {
 
+    private View rootView;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -26,13 +28,14 @@ public class MyActPageFragment extends Fragment {
         TabLayout tabs = view.findViewById(R.id.my_activities_tab);
         tabs.setupWithViewPager(viewPager);
         viewPager.setOffscreenPageLimit(2);
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fragment_my_act_page, container, false);
+        if(rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_my_act_page, container, false);
+        }
         return rootView;
     }
 }

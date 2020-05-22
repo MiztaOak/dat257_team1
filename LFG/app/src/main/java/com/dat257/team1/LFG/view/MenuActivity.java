@@ -72,6 +72,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
+
         signOut = findViewById(R.id.btn_sign_out);
         if (FirebaseAuth.getInstance().getCurrentUser() == null)
             signOut.setText("Sign in");
@@ -100,9 +101,7 @@ public class MenuActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-
     private void openSignOutPage() {
         startActivity(new Intent(this, WelcomeActivity.class));
-
     }
 }

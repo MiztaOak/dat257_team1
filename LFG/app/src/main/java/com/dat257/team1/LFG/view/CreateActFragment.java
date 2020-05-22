@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -63,8 +64,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static com.dat257.team1.LFG.view.messageFeed.MessageFragment.hideSoftKeyboard;
 
 public class CreateActFragment extends Fragment {
 
@@ -110,11 +109,19 @@ public class CreateActFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
+            @Override
+            public void handleOnBackPressed() {
+                Navigation.findNavController(view).navigateUp();
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, callback);
+
         createActivityViewModel = new ViewModelProvider(this).get(CreateActivityViewModel.class);
         initViews(view);
 
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Create activity");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Create activity");
 
         Button createActivityButton = (Button) view.findViewById(R.id.createActivityButton);
         createActivityButton.setOnClickListener(new View.OnClickListener() {
@@ -122,9 +129,9 @@ public class CreateActFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
-                if(location == null){
+                if (location == null) {
                     checkFields(getActTitle(), getActDesc(), timestamp, null, getCategory());
-                    Toast.makeText(getContext(),"One or more fields have incorrect information",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "One or more fields have incorrect information", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
@@ -132,8 +139,8 @@ public class CreateActFragment extends Fragment {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
                     Log.d(LOG_TAG, "Activity created!");
                     Navigation.findNavController(view).navigate(R.id.action_nav_createActivityFragment_to_nav_act_feed);
-                } else{
-                    Toast.makeText(getContext(),"One or more fields have incorrect information",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "One or more fields have incorrect information", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -460,14 +467,13 @@ public class CreateActFragment extends Fragment {
 
     @Override
     public void onPause() {
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onPause();
     }
 
     @Override
     public void onStop() {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(false);
         super.onStop();
     }
 
