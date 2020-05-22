@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
@@ -287,8 +288,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             public void onInfoWindowClick(Marker marker) {
                 if (!marker.getTag().equals("currentLocation")) {
                     Main.getInstance().setFocusedActivity(markerClick.get(marker));
-                    Intent intent = new Intent(getContext(), ActDescriptionFragment.class);
-                    startActivity(intent);
+                    Navigation.findNavController(getView()).navigate(R.id.action_nav_act_feed_to_activityDescriptionView);
                 }
             }
         });
