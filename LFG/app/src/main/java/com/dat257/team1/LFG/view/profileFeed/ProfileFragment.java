@@ -1,15 +1,20 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.profileFeed;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +27,15 @@ import androidx.lifecycle.ViewModelProvider;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,10 +60,15 @@ public class ProfileFragment extends Fragment {
     private LinearLayout addFriendLayout;
     private LinearLayout blockContactLayout;
     private String profileOwner;
-    private Uri imageUri;
+    private Uri mImageUri;
+    private StorageReference mStorageRef;
+    private DatabaseReference mDataBaseRef;
+    private ProgressBar mProgressBar;
+    private Button savePhoto;
 
     @Nullable
     @Override
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
@@ -58,6 +76,8 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mStorageRef = FirebaseStorage.getInstance().getReference("uploads");//todo add current user
+        mDataBaseRef = FirebaseDatabase.getInstance().getReference("uploads");
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             profileOwner = bundle.getString("userId");
@@ -100,8 +120,19 @@ public class ProfileFragment extends Fragment {
                 //TODO: add functionality to addFriendButton
             }
         });
-        
-        profileImageListener();
+
+        savePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadFile();
+            }
+        });
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                choosePhoto();
+            }
+        });
 
         blockContactButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,27 +143,28 @@ public class ProfileFragment extends Fragment {
         profileViewModel.updateUserData(profileOwner);
     }
 
-    /**
-     * Method that has a listener for the profile picture
-     */
-    private void profileImageListener() {
-        profileImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                choosePhoto();
-            }
-        });
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-            profileImage.setImageURI(imageUri);
+            mImageUri = data.getData();
+            profileImage.setImageURI(mImageUri);
         }
     }
+
+    /**
+     * to get our file extension
+     *
+     * @param uri
+     * @return
+     */
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getContext().getContentResolver();
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
 
     /**
      * A method to choose picture from user's phone gallery
@@ -144,7 +176,52 @@ public class ProfileFragment extends Fragment {
         startActivityForResult(intent, PICK_IMAGE_REQUEST);
     }
 
+    /**
+     * To upload the photo to the database
+     */
+    private void uploadFile() {
+        if (mImageUri != null) {
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                    + "." + getFileExtension(mImageUri));
+            fileReference.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setProgress(0);
+                                }
+                            }, 5000);
+                            Toast.makeText(getContext(), "upload successful", Toast.LENGTH_SHORT).show();
+                            Upload upload = new Upload(userName.getText().toString().trim(),
+                                    taskSnapshot.getUploadSessionUri().toString());
+                            String uploadId = mDataBaseRef.push().getKey();
+                            mDataBaseRef.child(uploadId).setValue(upload);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int) progress);
+                        }
+                    });
+        } else {
+            Toast.makeText(getContext(), "no file selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
     private void initViews(View view) {
+        mProgressBar = view.findViewById(R.id.progressBar2);
+        savePhoto = view.findViewById(R.id.savePhoto);
         profileImage = view.findViewById(R.id.profile_photo);
         emailImage = view.findViewById(R.id.email_image_view);
         phoneImage = view.findViewById(R.id.phone_image_view);

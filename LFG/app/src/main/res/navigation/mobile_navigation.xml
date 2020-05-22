@@ -47,7 +47,7 @@
 
     <fragment
         android:id="@+id/nav_profile"
-        android:name="com.dat257.team1.LFG.view.ProfileFragment"
+        android:name="com.dat257.team1.LFG.view.profileFeed.ProfileFragment"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
