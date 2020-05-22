@@ -1,4 +1,5 @@
 package com.dat257.team1.LFG.viewmodel;
+
 import android.widget.Toast;
 
 import com.dat257.team1.LFG.events.BatchCommentEvent;
@@ -15,6 +16,8 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import androidx.lifecycle.Lifecycle;
@@ -30,7 +33,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     private MutableLiveData<Activity> mutableActivity;
     private ListenerRegistration listener;
 
-    public ActivityDescriptionViewModel(){
+    public ActivityDescriptionViewModel() {
         mutableActivity = new MutableLiveData<>();
         comments = new MutableLiveData<>();
         comments.setValue(new ArrayList<>());
@@ -38,7 +41,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
         mutableActivity.setValue(Main.getInstance().getFocusedActivity());
@@ -53,37 +56,45 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     }
 
     public MutableLiveData<Activity> getMutableActivity() {
-        if(mutableActivity == null) {
+        if (mutableActivity == null) {
             mutableActivity = new MutableLiveData<>();
         }
         return mutableActivity;
     }
 
-
-    private void populateMutableActivity(){
+    private void populateMutableActivity() {
         mutableActivity.postValue(Main.getInstance().getFocusedActivity());
     }
 
-    public void addComment(String commentText){
+    public void addComment(String commentText) {
         Comment comment = new Comment(commentText, Calendar.getInstance().getTime(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Main.getInstance().addComment(mutableActivity.getValue(),comment);
+        Main.getInstance().addComment(mutableActivity.getValue(), comment);
     }
 
     @Subscribe
-    public void handleBatchCommentEvent(BatchCommentEvent event){
-        comments.setValue(event.getComments());
+    public void handleBatchCommentEvent(BatchCommentEvent event) {
+        Collections.sort(event.getComments(), new Comparator<Comment>() {
+            @Override
+            public int compare(Comment comment, Comment t1) {
+                if (comment.getCommentDate() == null || t1.getCommentDate() == null) {
+                    return 0;
+                }
+                return t1.getCommentDate().compareTo(comment.getCommentDate());
+            }
+        });
+        comments.postValue(event.getComments());
     }
 
-    public void cleanup(){
+    public void cleanup() {
         listener.remove();
     }
 
     public void joinActivity() {
-        FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(),mutableActivity.getValue().getId());
+        FireStoreHelper.getInstance().createJoinRequest(FirebaseAuth.getInstance().getUid(), mutableActivity.getValue().getId());
     }
 
-    public void joinerStatus(){
+    public void joinerStatus() {
         FireStoreHelper.getInstance().addJoinStatus(FirebaseAuth.getInstance().getCurrentUser().getUid(),
                 Main.getInstance().getFocusedActivity(), "pending");
     }

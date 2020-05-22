@@ -19,8 +19,6 @@ import org.greenrobot.eventbus.Subscribe;
 public class ProfileViewModel extends ViewModel implements LifecycleObserver {
 
     private MutableLiveData<User> user = new MutableLiveData<>();
-    private ListenerRegistration listener;
-
 
     public ProfileViewModel() {
     }
@@ -33,21 +31,14 @@ public class ProfileViewModel extends ViewModel implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     public void onCreate() {
-        if(!EventBus.getDefault().isRegistered(this)) {
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        //listener = FireStoreHelper.getInstance().loadUserInformation(user.getValue().getId());
     }
 
     public void updateUserData(String userId) {
         FireStoreHelper.getInstance().loadUserInformation(userId);
     }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    public void onDestroy(){
-        listener.remove();
-    }
-
 
     public MutableLiveData<User> getUserId() {
         if (user == null)

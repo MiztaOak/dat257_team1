@@ -1,38 +1,32 @@
 package com.dat257.team1.LFG.view.notifications;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
-import com.dat257.team1.LFG.view.ProfileFragment;
-
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.MutableLiveData;
-import androidx.recyclerview.widget.RecyclerView;
-
-public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCardAdapter.AcceptReqViewHolder>{
+public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCardAdapter.AcceptReqViewHolder> {
 
     private MutableLiveData<List<JoinNotification>> requests;
     private MutableLiveData<NotificationForJoiner> mutableNotification;
 
-    public NotificationCardAdapter(MutableLiveData<List<JoinNotification>> requests){
+    public NotificationCardAdapter(MutableLiveData<List<JoinNotification>> requests) {
         this.requests = requests;
     }
 
-    public static class AcceptReqViewHolder extends RecyclerView.ViewHolder{
+    public static class AcceptReqViewHolder extends RecyclerView.ViewHolder {
         public TextView infoText;
         public Button accept;
         public Button decline;
@@ -50,14 +44,14 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
     public AcceptReqViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
 
-        View view = inflater.inflate(R.layout.card_notification_acceptreq,parent,false);
+        View view = inflater.inflate(R.layout.card_notification_acceptreq, parent, false);
         return new AcceptReqViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull NotificationCardAdapter.AcceptReqViewHolder holder, int position) {
         JoinNotification joinNotification = requests.getValue().get(position);
-        holder.infoText.setText(joinNotification.getUserName() + " wants to join your activity"+ joinNotification.getActivityTitle() + ".");
+        holder.infoText.setText(joinNotification.getUserName() + " wants to join your activity" + joinNotification.getActivityTitle() + ".");
         holder.infoText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,25 +61,24 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
-               //FireStoreHelper.getInstance().updateJoinStatus("Accepted", mutableNotification.getValue().getnId());
+                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(), joinNotification.getActivityID(), true);
+                //FireStoreHelper.getInstance().updateJoinStatus("Accepted", mutableNotification.getValue().getnId());
             }
         });
         holder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
-               // FireStoreHelper.getInstance().updateJoinStatus("Declined", mutableNotification.getValue().getnId());
+                FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(), joinNotification.getActivityID(), false);
+                // FireStoreHelper.getInstance().updateJoinStatus("Declined", mutableNotification.getValue().getnId());
             }
         });
 
     }
 
 
-
     @Override
     public int getItemCount() {
-        if(requests.getValue() == null)
+        if (requests.getValue() == null)
             return 0;
         return requests.getValue().size();
     }
