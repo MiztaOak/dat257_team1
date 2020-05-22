@@ -1,5 +1,6 @@
 package com.dat257.team1.LFG.firebase;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -23,8 +24,10 @@ import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.Message;
+import com.dat257.team1.LFG.model.NotificationForJoiner;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.view.chatList.ChatListItem;
+import com.dat257.team1.LFG.viewmodel.NotificationStatusViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -32,6 +35,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,6 +54,7 @@ import com.google.firebase.firestore.WriteBatch;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,6 +73,7 @@ public class FireStoreHelper {
     private FirebaseFirestore db;
     private List<Activity> activities;
     private Map<String, String> idToNameDictionary;
+    private String activityTitle;
 
     private FireStoreHelper() {
         db = FirebaseFirestore.getInstance();
@@ -124,6 +130,8 @@ public class FireStoreHelper {
      * @param status
      * @param nId
      */
+
+    /*
     public void updateJoinStatus(String status, String nId) {
 
         final DocumentReference docRef = db.collection("joinStatus").document(nId);
@@ -150,6 +158,8 @@ public class FireStoreHelper {
 
 
     }
+     */
+
 
     /**
      * Method that creates uploads a new activity to the Firestore database
@@ -225,6 +235,7 @@ public class FireStoreHelper {
                     activities.add(data.toActivity(doc.getId()));
                 }
             }
+
             Main.getInstance().setActivities(activities);
             EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
@@ -324,6 +335,7 @@ public class FireStoreHelper {
         });
     }
 
+
     public ListenerRegistration loadChat(String id) {
         return db.collection("chats").document(id).collection("messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -381,6 +393,67 @@ public class FireStoreHelper {
         });
     }
 
+    public ListenerRegistration loadNotificationStatus(String uID){
+
+        if (FirebaseAuth.getInstance().getCurrentUser() == null)
+            return null;
+        String uId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        DocumentReference currentUser = db.document("/users/" + uId);
+        return db.collection("joinStatus").whereEqualTo("joiner", currentUser).addSnapshotListener((value, e) -> {
+            if (e != null) {
+                Log.w(TAG, "Listen failed.", e);
+                return;
+            }
+            List<NotificationForJoiner> notification = new ArrayList<>();
+            for (QueryDocumentSnapshot doc : value) {
+                NotificationStatusDataHolder data = doc.toObject(NotificationStatusDataHolder.class);
+                if (data.hasValidData()) {
+                    notification.add(data.toNotificationForJoiner());
+                }
+
+
+            }
+            EventBus.getDefault().post(new NotificationForJoinerEvent(notification));
+        });
+
+
+
+
+
+
+        /*return db.collection("joinStatus").whereEqualTo("joiner",db.document("/users"+uID)).addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+
+                List<NotificationForJoiner> notifications = new ArrayList<>();
+
+                for (QueryDocumentSnapshot doc : value) {
+                    String activity = doc.getString("activity");
+                    String joiner = doc.getString("joiner");
+                    String status = doc.getString("status");
+
+                    notifications.add(new NotificationForJoiner(activity, joiner, status, null));
+
+
+
+                    }
+                EventBus.getDefault().post(new NotificationForJoinerEvent(notifications));
+
+
+
+
+            }
+        });
+
+
+         */
+
+    }
+
     /**
      * Method that either accepts a join request or declines it. This is handled in a atomic transaction
      * to avoid the possibility that the user is removed from the waiting list but not added to the
@@ -400,8 +473,55 @@ public class FireStoreHelper {
             public Void apply(Transaction transaction) throws FirebaseFirestoreException {
                 DocumentSnapshot snapshot = transaction.get(docRef);
                 transaction.update(docRef, "joinRequestList", FieldValue.arrayRemove(db.document("/users/" + uID)));
-                if (accept)
+                if (accept) {
                     transaction.update(docRef, "participants", FieldValue.arrayUnion(db.document("/users/" + uID)));
+
+                    WriteBatch batch = db.batch();
+
+                    DocumentReference activityRef = db.collection("activities").document(activityID);
+                    DocumentReference joiner = db.document("/users/" + uID);
+                    DocumentReference joinStatusRef = db.collection("joinStatus").document();
+
+                    Map<String, Object> joinStatus = new HashMap<>();
+
+                    joinStatus.put("joiner", joiner);
+                    joinStatus.put("activity", activityRef);
+                    joinStatus.put("status", "accepted");
+
+                    batch.set(joinStatusRef, joinStatus);
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+                }
+
+                else{
+
+                    WriteBatch batch = db.batch();
+
+                    DocumentReference activityRef = db.collection("activities").document(activityID);
+                    DocumentReference joiner = db.document("/users/" + uID);
+                    DocumentReference joinStatusRef = db.collection("joinStatus").document();
+
+                    Map<String, Object> joinStatus = new HashMap<>();
+
+                    joinStatus.put("joiner", joiner);
+                    joinStatus.put("activity", activityRef);
+                    joinStatus.put("status", "declined");
+
+                    batch.set(joinStatusRef, joinStatus);
+
+                    batch.commit().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+
+                }
                 return null;
             }
         }).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -490,6 +610,8 @@ public class FireStoreHelper {
         });
     }
 
+
+
     public Map<String, String> getIdToNameDictionary() {
         return idToNameDictionary;
     }
@@ -544,6 +666,8 @@ public class FireStoreHelper {
                 List<ChatListItem> chatInfoList = new ArrayList<>();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants");
+                    if(participants.size() <= 1)
+                        continue;
                     String chatName = buildChatName(participants, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String id = doc.getId();
                     int amountOfParticipants = participants.size();
@@ -570,7 +694,7 @@ public class FireStoreHelper {
         String currentUserName = idToNameDictionary.get(uID);
         for (DocumentReference ref : idList) {
             String userName = idToNameDictionary.get(ref.getId());
-            if (!userName.equals(currentUserName))
+            if (userName.equals(currentUserName))
                 continue;
             name.append(userName);
             if (name.length() >= 20) {
@@ -580,6 +704,20 @@ public class FireStoreHelper {
             name.append(", ");
         }
         return name.toString();
+    }
+
+    public String getActivityTitle(String aID){
+
+        DocumentReference documentReference = db.collection("activities").document(aID);
+        documentReference.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                activityTitle = documentSnapshot.getString("title");
+            }
+        });
+
+
+        return activityTitle;
     }
 
      /**

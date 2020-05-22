@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/nav_notifications"
-        android:name="com.dat257.team1.LFG.view.NotificationFragment"
+        android:name="com.dat257.team1.LFG.view.notifications.NotificationPageFragment"
         android:label="NotificationFragment" />
 
     <fragment
@@ -71,6 +71,8 @@
         android:id="@+id/nav_messageFragment"
         android:name="com.dat257.team1.LFG.view.messageFeed.MessageFragment"
         tools:layout="@layout/fragment_message">
+
+
         <action
             android:id="@+id/action_nav_messageFragment_to_nav_profile"
             app:destination="@id/nav_profile"
@@ -78,10 +80,12 @@
             app:exitAnim="@anim/nav_default_exit_anim"
             app:popEnterAnim="@anim/nav_default_pop_enter_anim"
             app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+
         <argument
             android:name="chatId"
             android:defaultValue="null"
             app:argType="string" />
+
 
     </fragment>
     <fragment

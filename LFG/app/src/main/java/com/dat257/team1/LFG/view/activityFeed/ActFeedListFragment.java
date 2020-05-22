@@ -31,7 +31,7 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
     private RecyclerView.Adapter mAdapter;
     private ActFeedViewModel actFeedViewModel;
     private MutableLiveData<List<Activity>> mutableActivityList;
-    private final int ITEM_MARGIN = 4;
+    private final int ITEM_MARGIN = 10;
     private final int NUM_COLUMNS = 1;
 
     @Nullable
@@ -69,12 +69,6 @@ public class ActFeedListFragment extends Fragment implements ICardViewHolderClic
 
     @Override
     public void onCardClicked(View view, int pos) {
-        /*Log.d(LOG_TAG, "Card Clicked!");
-        actFeedViewModel.onItemClick(pos);
-        Intent intent = new Intent(getContext(), ActivityDescriptionFragment.class); //TODO maybe not call directly here do from parent, not sure.
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        startActivity(intent);*/
-
         actFeedViewModel.onItemClick(pos);
         Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_activityDescriptionView);
     }

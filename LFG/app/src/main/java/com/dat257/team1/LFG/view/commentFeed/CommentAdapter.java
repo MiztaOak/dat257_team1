@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.view.commentFeed;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+
 
     ActDescriptionFragment actDescriptionFragment;
 
@@ -60,7 +60,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.commentProfileContainer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_activityDescriptionView_to_nav_profile, bundle));
         if (userName != null) {
             holder.iconText.setText(String.valueOf(userName.trim().charAt(0)));
-            if(colorMap.getValue().get(comment.getCommenterRef()) != null) {
+            if (colorMap.getValue().get(comment.getCommenterRef()) != null) {
                 holder.comment_profile_pic.setColorFilter(colorMap.getValue().get(comment.getCommenterRef()));
             }
         }
@@ -77,19 +77,23 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         public TextView commentText;
         public TextView timeStamp;
         public TextView commentUserName;
+
         public RelativeLayout commentProfileContainer;
         public TextView iconText;
         private ImageView comment_profile_pic;
+
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             commentText = (TextView) itemView.findViewById(R.id.comment_text);
             timeStamp = (TextView) itemView.findViewById(R.id.timeStamp);
             commentUserName = (TextView) itemView.findViewById(R.id.commentUserName);
+
             commentProfileContainer = itemView.findViewById(R.id.relayout_profile);
             comment_profile_pic = itemView.findViewById(R.id.comment_profile_pic);
             iconText = itemView.findViewById(R.id.icon_text);
         }
     }
+
 
 }

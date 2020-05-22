@@ -1,5 +1,6 @@
-package com.dat257.team1.LFG.view;
+package com.dat257.team1.LFG.view.notifications;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,15 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.JoinNotification;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
-import com.dat257.team1.LFG.viewmodel.NotificationViewModel;
+import com.dat257.team1.LFG.view.ProfileFragment;
+
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -53,21 +58,30 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
     public void onBindViewHolder(@NonNull NotificationCardAdapter.AcceptReqViewHolder holder, int position) {
         JoinNotification joinNotification = requests.getValue().get(position);
         holder.infoText.setText(joinNotification.getUserName() + " wants to join your activity"+ joinNotification.getActivityTitle() + ".");
+        holder.infoText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         holder.accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),true);
-                FireStoreHelper.getInstance().updateJoinStatus("Accepted", mutableNotification.getValue().getnId());
+               //FireStoreHelper.getInstance().updateJoinStatus("Accepted", mutableNotification.getValue().getnId());
             }
         });
         holder.decline.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FireStoreHelper.getInstance().handleJoinRequest(joinNotification.getuID(),joinNotification.getActivityID(),false);
-                FireStoreHelper.getInstance().updateJoinStatus("Declined", mutableNotification.getValue().getnId());
+               // FireStoreHelper.getInstance().updateJoinStatus("Declined", mutableNotification.getValue().getnId());
             }
         });
+
     }
+
+
 
     @Override
     public int getItemCount() {
@@ -75,4 +89,5 @@ public class NotificationCardAdapter extends RecyclerView.Adapter<NotificationCa
             return 0;
         return requests.getValue().size();
     }
+
 }

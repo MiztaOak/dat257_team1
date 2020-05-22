@@ -1,5 +1,6 @@
 package com.dat257.team1.LFG.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ public class ActDescriptionFragment extends Fragment {
     private Button addComment;
     private Button joinActivity;
     private EditText commentText;
+    private Context context;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter reAdapter;
@@ -80,7 +82,7 @@ public class ActDescriptionFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        context = view.getContext();
         initViews(view);
 
         activityDescriptionViewModel = new ViewModelProvider(this).get(ActivityDescriptionViewModel.class);
@@ -96,7 +98,8 @@ public class ActDescriptionFragment extends Fragment {
                 activityDescription.setText(activity.getDescription());
                 activityTitle.setText(activity.getTitle());
                 activitySchedule.setText(activity.getTimestamp().toDate().toString());
-                //activityImage.setImageResource(R.drawable.dog_image_activity); //TODO
+                String id = activity.getCategory().getName().trim().toLowerCase();
+                activityImage.setImageResource(getResources().getIdentifier(id, "drawable", context.getPackageName()));
                 userName.setText(FireStoreHelper.getInstance().getIdToNameDictionary().get(activity.getOwner()));
             }
         });
@@ -127,7 +130,7 @@ public class ActDescriptionFragment extends Fragment {
                         hideSoftKeyboard(getActivity());
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You must be signed in to leave a comment", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -137,8 +140,10 @@ public class ActDescriptionFragment extends Fragment {
             public void onClick(View v) {
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     activityDescriptionViewModel.joinActivity();
+
                     activityDescriptionViewModel.joinerStatus();
                 } else {
+
                     Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -57,7 +57,7 @@ public class ActFeedPageFragment extends Fragment {
             if(FirebaseAuth.getInstance().getCurrentUser() != null)
                 launchCreateActivity(view);
             else
-                Toast.makeText(getContext(),"You must be signed in to create a activity",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(),"You must be signed in to create an activity",Toast.LENGTH_SHORT).show();
         });
         actFeedViewModel = new ViewModelProvider(this).get(ActFeedViewModel.class);
     }
@@ -71,5 +71,11 @@ public class ActFeedPageFragment extends Fragment {
     public void launchCreateActivity(View view) {
         Log.d(LOG_TAG, "Create activity clicked!");
         Navigation.findNavController(view).navigate(R.id.action_nav_act_feed_to_nav_createActivityFragment);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        actFeedViewModel.updateFeed();
     }
 }

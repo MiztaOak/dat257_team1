@@ -191,6 +191,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
                 LatLng loc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 markCurrentLocation(loc);
                 firstTimeFlag = false;
+                actFeedViewModel.setLocation(currentLocation);
             }
         }
     };

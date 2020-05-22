@@ -17,6 +17,75 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent">
+
+                <ImageButton
+                    android:id="@+id/backButton"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="?attr/actionModeCloseDrawable" />
+
+                <TextView
+                    android:id="@string/create_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/gotham_regular"
+                    android:gravity="center_horizontal"
+                    android:text="@string/create_activity"
+                    android:textColor="#000000"
+                    android:textSize="25sp" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/gotham_regular"
+                android:text="@string/activity_title"
+                android:textColor="@color/textInputLayout"
+                android:textSize="16sp" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:hint="@string/activity_title"
+                android:textColorHint="@color/darkgray"
+                android:theme="@style/EditScreenTextInputLoginStyle">
+
+                <EditText
+                    android:id="@+id/editTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:drawablePadding="16dp"
+                    android:ems="10"
+                    android:fontFamily="@font/calibri_regular"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:textColor="@color/textInputLayout"
+                    android:textSize="20sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
             android:layout_marginTop="50dp"
             android:orientation="vertical">
 
@@ -93,44 +162,6 @@
 
         </LinearLayout>
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/gotham_regular"
-                android:text="@string/activity_title"
-                android:textColor="@color/textInputLayout"
-                android:textSize="16sp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:hint="@string/activity_title"
-                android:textColorHint="@color/darkgray"
-                android:theme="@style/EditScreenTextInputLoginStyle">
-
-                <EditText
-                    android:id="@+id/editTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:drawablePadding="16dp"
-                    android:ems="10"
-                    android:fontFamily="@font/calibri_regular"
-                    android:inputType="text"
-                    android:maxLines="1"
-                    android:textColor="@color/textInputLayout"
-                    android:textSize="20sp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -262,6 +293,7 @@
 
 
             <TextView
+                android:id="@+id/datePickerText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
