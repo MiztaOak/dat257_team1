@@ -35,6 +35,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
@@ -65,6 +66,7 @@ public class ProfileFragment extends Fragment {
     private DatabaseReference mDataBaseRef;
     private ProgressBar mProgressBar;
     private Button savePhoto;
+    private StorageTask mUploadTask;
 
     @Nullable
     @Override
@@ -124,7 +126,11 @@ public class ProfileFragment extends Fragment {
         savePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                uploadFile();
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
+                    Toast.makeText(getContext(), "this picture has been already uploaded", Toast.LENGTH_LONG).show();
+                } else {
+                    uploadFile();
+                }
             }
         });
         profileImage.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +189,7 @@ public class ProfileFragment extends Fragment {
         if (mImageUri != null) {
             StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
-            fileReference.putFile(mImageUri)
+            mUploadTask = fileReference.putFile(mImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
