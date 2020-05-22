@@ -4,6 +4,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.view.contentcapture.ContentCaptureCondition;
 
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 
 import java.sql.Time;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -68,12 +70,8 @@ public class Activity {
 
     public String getAddressFromLocation(Context context) {
         Geocoder geocoder;
-<<<<<<< Updated upstream
-        List<Address> addresses = new ArrayList<>();
-=======
         String address = "";
         List<Address> addresses = null;
->>>>>>> Stashed changes
         geocoder = new Geocoder(context, Locale.getDefault());
         // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         try {
@@ -81,18 +79,19 @@ public class Activity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-<<<<<<< Updated upstream
-        String address;
         if(!addresses.isEmpty()){
             address = addresses.get(0).getAddressLine(0);
         } else{
             address = "no location found";
-=======
-        if (addresses.size() != 0) {
-             address = addresses.get(0).getAddressLine(0);
->>>>>>> Stashed changes
         }
         return address;
+    }
+
+    public String getDateFromTimestamp () {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(timestamp.getSeconds()*1000);
+        String date = DateFormat.format("dd-MM-yyyy hh:mm:ss", cal).toString();
+        return date;
     }
 
     public String getChatRef() {

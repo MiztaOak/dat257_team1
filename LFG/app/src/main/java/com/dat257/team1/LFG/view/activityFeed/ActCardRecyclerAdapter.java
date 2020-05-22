@@ -59,14 +59,14 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         String id = activityList.getValue().get(position).getCategory().getName().trim().toLowerCase();
         ImageView imageView = ((CardViewHolder) cardViewHolder).mImageView;
         imageView.setImageResource(context.getResources().getIdentifier(id, "drawable", context.getPackageName()));
-        //imageView.setImageDrawable(context.getDrawable(R.drawable.ic_error_red_24dp));
         TextView mTitle = ((CardViewHolder) cardViewHolder).mTitle;
         TextView mDescription = ((CardViewHolder) cardViewHolder).mDescription;
         TextView mLocation = ((CardViewHolder) cardViewHolder).mLocation;
         TextView mCategory = ((CardViewHolder) cardViewHolder).mCategory;
         TextView mAttendees = ((CardViewHolder) cardViewHolder).mAttendees;
-        //cardViewHolder.itemView.setBackground(context.getDrawable(R.drawable.gradient_1));
+        TextView mDate = ((CardViewHolder) cardViewHolder).mDate;
         mTitle.setText(activityList.getValue().get(position).getTitle());
+        mDate.setText(activityList.getValue().get(position).getDateFromTimestamp());
         mDescription.setText(activityList.getValue().get(position).getDescription());
         mCategory.setText(activityList.getValue().get(position).getCategory().getName());
         if(activityList.getValue().get(position).getNumAttendees() != 0)
@@ -108,6 +108,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         TextView mLocation;
         TextView mCategory;
         TextView mAttendees;
+        TextView mDate;
 
         public CardViewHolder(@NonNull View itemView, ICardViewHolderClickListener iCardViewHolderClickListener) {
             super(itemView);
@@ -119,6 +120,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.mLocation = itemView.findViewById(R.id.LocationText);
             this.mCategory = itemView.findViewById(R.id.CategoryText);
             this.mAttendees = itemView.findViewById(R.id.AttendeesText);
+            this.mDate = itemView.findViewById(R.id.dateText);
 
         }
     }
