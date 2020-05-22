@@ -84,57 +84,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                Log.d(LOG_TAG, "firebaseAuthWithGoogle:" + account.getId());
-                handleSignInResult(account.getIdToken());
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(LOG_TAG, "Google sign in failed", e);
-                // ...
-            }
-        }
-
-    }
-
-    /**
-     * Handles the sign in results from the Google account sign in.
-     * Throws an ApiException if the sign in fails.
-     * If the sign in is successful, send the user to the ActivityFeedView.
-     *
-     * @param idToken
-     */
-
-    private void handleSignInResult(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(LOG_TAG, "signInWithCredential:success");
-                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
-                        }
-
-                        // ...
-                    }
-                });
-    }
 
     /**
      * Check for existing Google Sign In account, if the user is already signed in
@@ -150,20 +100,6 @@ public class LoginActivity extends AppCompatActivity {
 
     }*/
 
-    /**
-     * Fetches some information about the Google account that's logged in.
-     * Needs to be put into the database to register the account //TODO
-     */
-
-    /*GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-        if (acct != null) {
-    String personName = acct.getDisplayName();
-    String personGivenName = acct.getGivenName();
-    String personFamilyName = acct.getFamilyName();
-    String personEmail = acct.getEmail();
-    String personId = acct.getId();
-    Uri personPhoto = acct.getPhotoUrl();
-    }*/
 
     /**
      * A method to check the validation of the password and the email.
