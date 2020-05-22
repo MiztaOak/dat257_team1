@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:text="@string/create_activity"
         android:layout_gravity="bottom"
-        android:background="@drawable/buttonshapewhitebg"
+        android:background="@drawable/btn_blue_whitestroke"
         android:fontFamily="@font/calibri_regular"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
@@ -18,7 +19,9 @@ import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
+import com.google.firebase.auth.FirebaseAuth;
 
+import java.io.IOException;
 import java.util.List;
 
 
@@ -52,16 +55,37 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                 iCardViewHolderClickListener.onCardClicked(view, position);
             }
         });
+
+        String id = activityList.getValue().get(position).getCategory().getName().trim().toLowerCase();
         ImageView imageView = ((CardViewHolder) cardViewHolder).mImageView;
-        imageView.setImageDrawable(context.getDrawable(R.drawable.ic_error_red_24dp));
+        imageView.setImageResource(context.getResources().getIdentifier(id, "drawable", context.getPackageName()));
         TextView mTitle = ((CardViewHolder) cardViewHolder).mTitle;
         TextView mDescription = ((CardViewHolder) cardViewHolder).mDescription;
-        cardViewHolder.itemView.setBackground(context.getDrawable(R.drawable.gradient_1));
-
+        TextView mLocation = ((CardViewHolder) cardViewHolder).mLocation;
+        TextView mCategory = ((CardViewHolder) cardViewHolder).mCategory;
+        TextView mAttendees = ((CardViewHolder) cardViewHolder).mAttendees;
+        TextView mDate = ((CardViewHolder) cardViewHolder).mDate;
         mTitle.setText(activityList.getValue().get(position).getTitle());
+        mDate.setText(activityList.getValue().get(position).getDateFromTimestamp());
         mDescription.setText(activityList.getValue().get(position).getDescription());
-    }
+        mCategory.setText(activityList.getValue().get(position).getCategory().getName());
+        if(activityList.getValue().get(position).getNumAttendees() != 0)
+            mAttendees.setText("Participants: " + activityList.getValue().get(position).getParticipants().size()
+                            +" / " + activityList.getValue().get(position).getNumAttendees());
+        else
+            mAttendees.setText("Participants: " + activityList.getValue().get(position).getParticipants().size());
 
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+            mLocation.setText(activityList.getValue().get(position).getAddressFromLocation(context));
+        }
+        else
+            mLocation.setText("Sign in to see location!");
+    }
+    /*
+     * String id = activity.getCategory().getName().trim().toLowerCase();
+       activityImage.setImageResource(getResources().getIdentifier(id, "drawable", context.getPackageName()));
+     *
+     * */
 
     @Override
     public int getItemCount() {
@@ -81,6 +105,10 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         ImageView mImageView;
         TextView mTitle;
         TextView mDescription;
+        TextView mLocation;
+        TextView mCategory;
+        TextView mAttendees;
+        TextView mDate;
 
         public CardViewHolder(@NonNull View itemView, ICardViewHolderClickListener iCardViewHolderClickListener) {
             super(itemView);
@@ -89,6 +117,10 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             this.mImageView = itemView.findViewById(R.id.activityImage);
             this.mTitle = itemView.findViewById(R.id.titleText);
             this.mDescription = itemView.findViewById(R.id.DescriptionText);
+            this.mLocation = itemView.findViewById(R.id.LocationText);
+            this.mCategory = itemView.findViewById(R.id.CategoryText);
+            this.mAttendees = itemView.findViewById(R.id.AttendeesText);
+            this.mDate = itemView.findViewById(R.id.dateText);
 
         }
     }

@@ -130,13 +130,25 @@ public class CreateActFragment extends Fragment {
             public void onClick(View v) {
                 Timestamp timestamp = new Timestamp((getActTime() / 1000), 0);
                 if (location == null) {
-                    checkFields(getActTitle(), getActDesc(), timestamp, null, getCategory());
+                    checkFields(getActTitle(), getActDesc(), timestamp , getCategory());
                     Toast.makeText(getContext(), "One or more fields have incorrect information", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if (checkFields(getActTitle(), getActDesc(), timestamp, getCategory())) {
+                    createActivityViewModel.createActivity(
+                            getActTitle(),
+                            getActDesc(),
+                            timestamp,
+                            new GeoPoint(location.getLatitude(), location.getLongitude()),
+                            isPrivateEvent(),
+                            getNumOfAttendees(),
+                            getCategory());
+
+                }
                 GeoPoint geoPoint = new GeoPoint(location.getLatitude(), location.getLongitude());
-                if (checkFields(getActTitle(), getActDesc(), timestamp, geoPoint, getCategory())) {
+                if (checkFields(getActTitle(), getActDesc(), timestamp , getCategory())) {
                     createActivityViewModel.createActivity(getActTitle(), getActDesc(), timestamp, geoPoint, isPrivateEvent(), getNumOfAttendees(), getCategory());
+
                     Log.d(LOG_TAG, "Activity created!");
                     Navigation.findNavController(view).navigate(R.id.action_nav_createActivityFragment_to_nav_act_feed);
                 } else {
@@ -288,7 +300,7 @@ public class CreateActFragment extends Fragment {
         dateTitle = view.findViewById(R.id.datePickerText);
     }
 
-    private boolean checkFields(String title, String description, Timestamp time, GeoPoint geoPoint, Category category) { //TODO more checks
+    private boolean checkFields(String title, String description, Timestamp time, Category category) { //TODO more checks
         boolean status = true;
         titleTextView.setError(null);
         descTextView.setError(null);
@@ -308,7 +320,7 @@ public class CreateActFragment extends Fragment {
             status = false;
             dateTitle.setError("Your activity can not happen in the past");
         }
-        if (geoPoint == null) {
+        if (location == null) {
             status = false;
             locationTitle.setError("You must specify a location for your activity");
         }
