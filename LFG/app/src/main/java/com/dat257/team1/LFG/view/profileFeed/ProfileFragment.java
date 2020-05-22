@@ -44,7 +44,7 @@ import static android.app.Activity.RESULT_OK;
 
 /**
  * A class that handles user's profile
- * @auther Oussama Anadani, Jennie Zhou, Jakob Ew
+ * @auther Oussama Anadani, Jennie Zhou, Jakob Ew, Johan Ek
  */
 
 public class ProfileFragment extends Fragment {
