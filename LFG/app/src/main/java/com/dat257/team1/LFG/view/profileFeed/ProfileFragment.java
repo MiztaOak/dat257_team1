@@ -2,6 +2,7 @@ package com.dat257.team1.LFG.view.profileFeed;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,6 +25,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
@@ -152,27 +154,32 @@ public class ProfileFragment extends Fragment {
             }
         });
         profileViewModel.updateUserData(profileOwner);
-        downloadPhoto();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+            downloadPhoto(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+
     }
 
     /**
      * A method to download currentUser's photo
      */
-    private void downloadPhoto() {
-        StorageReference islandRef = mStorageRef.child("images/*");
+    private void downloadPhoto(String uID) {
+        StorageReference islandRef = mStorageRef.child(uID + ".jpg");
 
-        final long ONE_MEGABYTE = 1024 * 1024;
-        islandRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        islandRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
-            public void onSuccess(byte[] bytes) {
-                // Data for "images/island.jpg" is returns, use this as needed
+            public void onSuccess(Uri uri) {
+                Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(profileImage);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
+            public void onFailure(@NonNull Exception e) {
+
             }
         });
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+       // Glide.with(this).load(islandRef).into(profileImage);
     }
 
     @Override
