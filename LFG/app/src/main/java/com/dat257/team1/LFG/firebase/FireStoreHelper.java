@@ -321,7 +321,7 @@ public class FireStoreHelper {
 
         data.put("messageText", msg);
         data.put("sender", db.document("/users/" + FirebaseAuth.getInstance().getCurrentUser().getUid()));
-        data.put("sent", new Timestamp(date));
+        data.put("sent", new Timestamp(new Date()));
         db.collection("chats").document(chatId).collection("messages").add(data).
                 addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

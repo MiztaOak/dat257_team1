@@ -76,13 +76,11 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     public void handleChatEvent(com.dat257.team1.LFG.events.ChatEvent event) {
         List<Message> sortedMessageList = new ArrayList<>();
         sortedMessageList.addAll(event.getMessages());
-        Collections.sort(sortedMessageList, new Comparator<Message>() {
+        sortedMessageList.sort(new Comparator<Message>() {
             @Override
             public int compare(Message message, Message t1) {
-                if(message.getTime() == null || t1.getTime() == null) {
-                    return 0;
-                }
-                return t1.getTime().compareTo(message.getTime());
+
+                return message.getTime().compareTo(t1.getTime());
             }
         });
         messages.postValue(sortedMessageList);
