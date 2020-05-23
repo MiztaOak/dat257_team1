@@ -474,7 +474,10 @@ public class FireStoreHelper {
                 DocumentSnapshot snapshot = transaction.get(docRef);
                 transaction.update(docRef, "joinRequestList", FieldValue.arrayRemove(db.document("/users/" + uID)));
                 if (accept) {
+                    DocumentReference chatRef  = (DocumentReference) snapshot.get("chat");
                     transaction.update(docRef, "participants", FieldValue.arrayUnion(db.document("/users/" + uID)));
+
+                    transaction.update(chatRef,"participants",FieldValue.arrayUnion(db.document("/users/" + uID)));
 
                     WriteBatch batch = db.batch();
 
