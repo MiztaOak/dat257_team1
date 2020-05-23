@@ -188,6 +188,7 @@ public class FireStoreHelper {
 
         chatData.put("participants", participants);
         chatData.put("messages", messages);
+        chatData.put("name","Chat for " + title);
 
         activity.put("title", title);
         activity.put("desc", desc);
@@ -671,7 +672,9 @@ public class FireStoreHelper {
                     List<DocumentReference> participants = (List<DocumentReference>) doc.get("participants");
                     if(participants.size() <= 1)
                         continue;
-                    String chatName = buildChatName(participants, FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    String chatName = (String) doc.get("name");
+                    if(chatName == null)
+                            chatName = buildChatName(participants, FirebaseAuth.getInstance().getCurrentUser().getUid());
                     String id = doc.getId();
                     int amountOfParticipants = participants.size();
                     chatInfoList.add(new ChatListItem(chatName, id, amountOfParticipants));
