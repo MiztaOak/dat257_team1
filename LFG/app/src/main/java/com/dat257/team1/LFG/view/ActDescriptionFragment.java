@@ -154,7 +154,7 @@ public class ActDescriptionFragment extends Fragment {
                     activityDescriptionViewModel.joinerStatus();
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "You must be signed in to join an activity", Toast.LENGTH_SHORT).show();
                 }
             }
         });
