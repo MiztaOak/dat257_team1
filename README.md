@@ -45,7 +45,7 @@ width="200"
 The applicaion has JavaDoc that can be found at <a href="https://miztaoak.github.io/dat257_team1/">this</a> website.
 
 ## License
-This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE file</a> for details
+This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details
 
 ## Trivia
 Join M3! was made as a course project in Agile Software Project Management on Chalmers University of Technology in 2020
