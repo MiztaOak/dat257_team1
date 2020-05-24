@@ -2,7 +2,6 @@ package com.dat257.team1.LFG.view.activityFeed;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -24,8 +23,7 @@ import androidx.navigation.Navigation;
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
-import com.dat257.team1.LFG.model.Main;
-import com.dat257.team1.LFG.view.ActDescriptionFragment;
+import com.dat257.team1.LFG.repository.Repository;
 import com.dat257.team1.LFG.viewmodel.ActFeedViewModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -287,7 +285,7 @@ public class ActFeedMapFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onInfoWindowClick(Marker marker) {
                 if (!marker.getTag().equals("currentLocation")) {
-                    Main.getInstance().setFocusedActivity(markerClick.get(marker));
+                    Repository.getInstance().setFocusedActivity(markerClick.get(marker));
                     Navigation.findNavController(getView()).navigate(R.id.action_nav_act_feed_to_activityDescriptionView);
                 }
             }

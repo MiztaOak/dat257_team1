@@ -48,7 +48,16 @@
     <fragment
         android:id="@+id/nav_profile"
         android:name="com.dat257.team1.LFG.view.profileFeed.ProfileFragment"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_nav_profile_to_activityDescriptionView"
+            app:destination="@id/activityDescriptionView"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
+            app:popUpTo="@id/activityDescriptionView" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_notifications"

@@ -1,6 +1,5 @@
 package com.dat257.team1.LFG.firebase;
 
-import android.location.Location;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -19,15 +18,13 @@ import com.dat257.team1.LFG.events.NotificationForJoinerEvent;
 import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
-import com.dat257.team1.LFG.model.Chat;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 import com.dat257.team1.LFG.model.Message;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.view.chatList.ChatListItem;
-import com.dat257.team1.LFG.viewmodel.NotificationStatusViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -35,15 +32,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.Query;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -54,12 +48,10 @@ import com.google.firebase.firestore.WriteBatch;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executor;
 
 /**
  * A helper class that handles the connection to the Firestore database, containing methods that
@@ -81,7 +73,6 @@ public class FireStoreHelper {
         idToNameDictionary = new HashMap<>();
         loadUserNames();
         loadActivities();
-
     }
 
 
@@ -237,7 +228,7 @@ public class FireStoreHelper {
                 }
             }
 
-            Main.getInstance().setActivities(activities);
+            Repository.getInstance().setActivities(activities);
             EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
     }

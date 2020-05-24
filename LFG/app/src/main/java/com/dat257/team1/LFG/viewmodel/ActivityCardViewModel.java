@@ -1,10 +1,9 @@
 package com.dat257.team1.LFG.viewmodel;
 
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 
 public class ActivityCardViewModel extends ViewModel {
 
@@ -18,6 +17,6 @@ public class ActivityCardViewModel extends ViewModel {
     }
 
     public void onClick() {
-        Main.getInstance().setFocusedActivity(activity);
+        Repository.getInstance().setFocusedActivity(activity);
     }
 }

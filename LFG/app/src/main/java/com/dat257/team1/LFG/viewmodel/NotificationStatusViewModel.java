@@ -6,11 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
-import com.dat257.team1.LFG.events.JoinNotificationEvent;
 import com.dat257.team1.LFG.events.NotificationForJoinerEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.model.JoinNotification;
-import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.ListenerRegistration;

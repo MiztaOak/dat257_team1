@@ -29,6 +29,7 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -55,15 +56,12 @@ public class ProfileFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private MutableLiveData<User> user;
     private ImageView profileImage;
-    private ImageView emailImage;
-    private ImageView phoneImage;
     private ImageView addContactImage;
     private ImageView blockContactImage;
-
-    private TextView userName;
     private TextView profileDescription;
     private TextView emailTextView;
     private TextView phoneTextView;
+    private TextView profileLetter;
 
     private Button addFriendButton;
     private Button blockContactButton;
@@ -118,8 +116,8 @@ public class ProfileFragment extends Fragment {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayShowTitleEnabled(true);
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(user.getName() + "'s" + " profile");
 
-                userName.setText(user.getName());
-                profileDescription.setText(user.getId()); //sätter profile desc som id nu, då vi inte har en user desc som kan hämtas
+                profileLetter.setText(String.valueOf(Character.toUpperCase(user.getName().trim().charAt(0))));
+                profileDescription.setText("This is my profile"); //sätter profile desc som id nu, då vi inte har en user desc som kan hämtas
                 emailTextView.setText(user.getEmail());
                 phoneTextView.setText(user.getPhoneNumber());
             }
@@ -153,7 +151,9 @@ public class ProfileFragment extends Fragment {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                choosePhoto();
+                if(profileOwner == FirebaseAuth.getInstance().getCurrentUser().getUid()) {
+                    choosePhoto();
+                }
             }
         });
 
@@ -163,11 +163,11 @@ public class ProfileFragment extends Fragment {
                 //TODO: add functionality to blockContactButton
             }
         });
+
         profileViewModel.updateUserData(profileOwner);
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             downloadPhoto(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
-
     }
 
     /**
@@ -180,6 +180,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(profileImage);
+
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -198,6 +199,7 @@ public class ProfileFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
             profileImage.setImageURI(mImageUri);
+            profileLetter.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -243,7 +245,7 @@ public class ProfileFragment extends Fragment {
                                 }
                             }, 5000);
                             Toast.makeText(getContext(), "upload successful", Toast.LENGTH_SHORT).show();
-                            Upload upload = new Upload(userName.getText().toString().trim(),
+                            Upload upload = new Upload(user.getValue().getName(),
                                     taskSnapshot.getUploadSessionUri().toString());
                             String uploadId = mDataBaseRef.push().getKey();
                             mDataBaseRef.child(uploadId).setValue(upload);
@@ -268,15 +270,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initViews(View view) {
+        profileLetter = view.findViewById(R.id.profile_icon_text);
         mProgressBar = view.findViewById(R.id.progressBar2);
         savePhoto = view.findViewById(R.id.savePhoto);
         profileImage = view.findViewById(R.id.profile_photo);
-        emailImage = view.findViewById(R.id.email_image_view);
-        phoneImage = view.findViewById(R.id.phone_image_view);
         addContactImage = view.findViewById(R.id.add_friend_image);
         blockContactImage = view.findViewById(R.id.block_contact);
         profileDescription = view.findViewById(R.id.profile_desc);
-        userName = view.findViewById(R.id.user_name_profile);
         emailTextView = view.findViewById(R.id.email_text_view);
         phoneTextView = view.findViewById(R.id.phone_text_view);
         addFriendLayout = view.findViewById(R.id.linearLayout3);

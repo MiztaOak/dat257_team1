@@ -1,14 +1,10 @@
 package com.dat257.team1.LFG.viewmodel;
 
-import android.widget.Toast;
-
 import com.dat257.team1.LFG.events.BatchCommentEvent;
-import com.dat257.team1.LFG.events.CommentEvent;
-import com.dat257.team1.LFG.events.JoinActivityEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Comment;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
@@ -44,7 +40,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
-        mutableActivity.setValue(Main.getInstance().getFocusedActivity());
+        mutableActivity.setValue(Repository.getInstance().getFocusedActivity());
         listener = FireStoreHelper.getInstance().loadComments(mutableActivity.getValue().getId());
     }
 
@@ -63,13 +59,13 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
     }
 
     private void populateMutableActivity() {
-        mutableActivity.postValue(Main.getInstance().getFocusedActivity());
+        mutableActivity.postValue(Repository.getInstance().getFocusedActivity());
     }
 
     public void addComment(String commentText) {
         Comment comment = new Comment(commentText, Calendar.getInstance().getTime(),
                 FirebaseAuth.getInstance().getCurrentUser().getUid());
-        Main.getInstance().addComment(mutableActivity.getValue(), comment);
+        Repository.getInstance().addComment(mutableActivity.getValue(), comment);
     }
 
     @Subscribe
@@ -96,7 +92,7 @@ public class ActivityDescriptionViewModel extends ViewModel implements Lifecycle
 
     public void joinerStatus() {
         FireStoreHelper.getInstance().addJoinStatus(FirebaseAuth.getInstance().getCurrentUser().getUid(),
-                Main.getInstance().getFocusedActivity(), "pending");
+                Repository.getInstance().getFocusedActivity(), "pending");
     }
 
 }

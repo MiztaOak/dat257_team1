@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -39,7 +39,7 @@ public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
     }
 
     public void updateFeed() {
-        Main.getInstance().updateActivityFeed();
+        Repository.getInstance().updateActivityFeed();
     }
 
     @Subscribe
@@ -85,7 +85,7 @@ public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
 
     public void onItemClick(int pos) {
         if (mutableActivityList.getValue() != null)
-            Main.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
+            Repository.getInstance().setFocusedActivity(mutableActivityList.getValue().get(pos));
     }
 
     public void setLocation(Location currentLocation) {

@@ -84,4 +84,8 @@
     <string name="todo">TODO</string>
     <string name="write_a_message">Write a message ...</string>
     <string name="search">Search</string>
+    <string name="save">Save</string>
+    <string name="profile_description">Profile description</string>
+    <string name="user_information">User information</string>
+    <string name="j">J</string>
 </resources>
