@@ -52,8 +52,8 @@ Join M3! was made as a course project in Agile Software Project Management on Ch
 
 ## Authors
 
-- Namn                -  CID    
-----------------------------------------
+- Name                -  CID    
+--------------------------------
  Oussama Anadani      -  anadani  
  Jakob Ewerstrand     -  jakobew 
  Johan Ek             -  ekjoh    
