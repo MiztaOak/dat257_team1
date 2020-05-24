@@ -59,7 +59,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     }
 
     public void sendMessage(String chatId, String msg) {
-        Repository.getInstance().writeMessage(chatId, msg, Calendar.getInstance().getTime());
+        Repository.getInstance().writeMessage(chatId, msg);
     }
 
     public void setMutableChatId(String chatId) {

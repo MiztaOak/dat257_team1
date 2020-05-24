@@ -26,7 +26,6 @@ public class Repository {
     private static Repository repository;
     private List<Activity> activities;
     private FireStoreHelper fireBaseObject;
-    private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
 
@@ -78,8 +77,8 @@ public class Repository {
         FireStoreHelper.getInstance().addCommentToActivity(activity, comment);
     }
 
-    public void writeMessage(String chatId, String msg, Date date) {
-        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg, date);
+    public void writeMessage(String chatId, String msg) {
+        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg);
     }
 
     public ListenerRegistration loadChat(String chatId) {
