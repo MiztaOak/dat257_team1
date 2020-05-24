@@ -165,7 +165,9 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.updateUserData(profileOwner);
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+        if(profileOwner != null){
+            downloadPhoto(profileOwner);
+        } else if(FirebaseAuth.getInstance().getCurrentUser() != null){
             downloadPhoto(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
     }
