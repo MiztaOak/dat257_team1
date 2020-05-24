@@ -2,7 +2,6 @@ package com.dat257.team1.LFG.view.profileFeed;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,7 +28,6 @@ import androidx.navigation.Navigation;
 
 import com.bumptech.glide.Glide;
 import com.dat257.team1.LFG.R;
-import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.model.User;
 import com.dat257.team1.LFG.viewmodel.ProfileViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +45,7 @@ import static android.app.Activity.RESULT_OK;
 
 /**
  * A class that handles user's profile
+ *
  * @auther Oussama Anadani, Jennie Zhou, Jakob Ew, Johan Ek
  */
 
@@ -151,7 +150,7 @@ public class ProfileFragment extends Fragment {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(profileOwner == FirebaseAuth.getInstance().getCurrentUser().getUid()) {
+                if (profileOwner == FirebaseAuth.getInstance().getCurrentUser().getUid()) {
                     choosePhoto();
                 }
             }
@@ -165,7 +164,7 @@ public class ProfileFragment extends Fragment {
         });
 
         profileViewModel.updateUserData(profileOwner);
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             downloadPhoto(FirebaseAuth.getInstance().getCurrentUser().getUid());
         }
     }
@@ -180,6 +179,7 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onSuccess(Uri uri) {
                 Glide.with(getActivity().getApplicationContext()).load(uri.toString()).into(profileImage);
+                profileLetter.setVisibility(View.INVISIBLE);
 
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -190,7 +190,7 @@ public class ProfileFragment extends Fragment {
         });
 
         final long ONE_MEGABYTE = 1024 * 1024;
-       // Glide.with(this).load(islandRef).into(profileImage);
+        // Glide.with(this).load(islandRef).into(profileImage);
     }
 
     @Override
@@ -199,7 +199,6 @@ public class ProfileFragment extends Fragment {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
             mImageUri = data.getData();
             profileImage.setImageURI(mImageUri);
-            profileLetter.setVisibility(View.INVISIBLE);
         }
     }
 
