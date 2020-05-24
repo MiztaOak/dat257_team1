@@ -1,11 +1,14 @@
 package com.dat257.team1.LFG.view.profileFeed;
 
+/**
+ * A class for uploading the image
+ * @author Oussama Anadani
+ */
 public class Upload {
     private String mName;
     private String mImageUrl;
 
     public Upload() {
-
     }
 
     public Upload(String mName, String mImageUrl) {

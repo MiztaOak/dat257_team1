@@ -1,8 +1,8 @@
 # Join M3! - Android App
 
-<p align="center">
-	<img src=https://travis-ci.org/MiztaOak/dat257_team1.svg?branch=master/>
-</p>
+[<img src="/readme/join-me-logo.png" align="center"
+width="200"
+    hspace="10" vspace="10">](/readme/join-me-logo.png)
 
 A smooth platform for users to create activities for others to join, and join others' activities.
 
