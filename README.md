@@ -7,7 +7,7 @@
 A smooth platform for users to create activities for others to join, and join others' activities.
 
 ## About
-Join M3 has been made for you to easily create activities for other users to see and join. You can also join others' activities by sending join requests that can only be accepted by the owner of the activity.
+Join M3! has been made for you to easily create activities for other users to see and join. You can also join others' activities by sending join requests that can only be accepted by the owner of the activity.
 
 ## Installation
 The app can at the moment only be opened in Android Studio.
@@ -48,4 +48,4 @@ The applicaion has JavaDoc that can be found at <a href="https://miztaoak.github
 This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE file</a> for details
 
 ## Trivia
-Join M3 was made as a course project in Agile Software Project Management on Chalmers University of Technology in 2020
+Join M3! was made as a course project in Agile Software Project Management on Chalmers University of Technology in 2020
