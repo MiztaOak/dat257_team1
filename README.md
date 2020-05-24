@@ -31,7 +31,7 @@ The Android app lets you:
 ## Screenshots
 
 ## Documentation
-The applicaion has JavaDoc that can be found a <a href="https://miztaoak.github.io/dat257_team1/">this</a> website.
+The applicaion has JavaDoc that can be found at <a href="https://miztaoak.github.io/dat257_team1/">this</a> website.
 
 ## License
 This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE file</a> for details
