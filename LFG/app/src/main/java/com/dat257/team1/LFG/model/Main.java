@@ -24,7 +24,6 @@ public class Main {
     private static Main main;
     private List<Activity> activities;
     private FireStoreHelper fireBaseObject;
-    private String activityID = "NhoBgAgfQlWGrafLlGn9";
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
 
@@ -47,9 +46,6 @@ public class Main {
      * @param geoPoint
      */
     public void createActivity(String title, String description, Timestamp timestamp, GeoPoint geoPoint, Boolean privateEvent, int numAttendees, Category category, String uID) {
-        //activities.add(activity);
-        //ActivityEvent activityEvent = new ActivityEvent(activity);
-        //EventBus.getDefault().post(activityEvent);
         fireBaseObject.addActivity(uID, timestamp, title, description, geoPoint, privateEvent, category, numAttendees);
     }
 
@@ -79,8 +75,8 @@ public class Main {
         FireStoreHelper.getInstance().addCommentToActivity(activity, comment);
     }
 
-    public void writeMessage(String chatId, String msg, Date date) {
-        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg, date);
+    public void writeMessage(String chatId, String msg) {
+        FireStoreHelper.getInstance().writeMessageInChat(chatId, msg);
     }
 
     public ListenerRegistration loadChat(String chatId) {
