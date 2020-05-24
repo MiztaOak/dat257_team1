@@ -32,7 +32,7 @@ The Android app lets you:
 
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE file</a> for details
 
 
 ## Trivia
