@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-
+                Toast.makeText(getContext(), "Download failed", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -203,10 +203,10 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * to get our file extension
+     * to get user's file extension
      *
-     * @param uri
-     * @return
+     * @param uri uri that wanted to get extension of
+     * @return the extension as a string
      */
     private String getFileExtension(Uri uri) {
         ContentResolver cR = getContext().getContentResolver();
