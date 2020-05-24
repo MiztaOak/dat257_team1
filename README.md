@@ -24,10 +24,12 @@ The Android app lets you:
 - See others' activities in a feed
 - See where the activities are located in a map
 - Read the description of an activity
-- Read and write comments on the activity
+- Read and write comments on an activity
 - Join an activity
+- Chat with others that have joined the same activity
 - Get notifications if other users' want to join your activity
 - See your own and others' profile
+- Edit your profile picture
 - Log out from your account
 
 ## Screenshots
