@@ -1,0 +1,16 @@
+com.dat257.team1.LFG
+com.dat257.team1.LFG.events
+com.dat257.team1.LFG.firebase
+com.dat257.team1.LFG.model
+com.dat257.team1.LFG.service
+com.dat257.team1.LFG.util
+com.dat257.team1.LFG.view
+com.dat257.team1.LFG.view.activityFeed
+com.dat257.team1.LFG.view.chatList
+com.dat257.team1.LFG.view.commentFeed
+com.dat257.team1.LFG.view.favouriteActivities
+com.dat257.team1.LFG.view.loginPage
+com.dat257.team1.LFG.view.messageFeed
+com.dat257.team1.LFG.view.notifications
+com.dat257.team1.LFG.view.profileFeed
+com.dat257.team1.LFG.viewmodel
