@@ -1,5 +1,9 @@
 # Join M3! - Android App
 
+[<img src="/readme/join-me-logo.png" align="center"
+width="200"
+    hspace="10" vspace="10">](/readme/join-me-logo.png)
+
 A smooth platform for users to create activities for others to join, and join others' activities.
 
 ## About
