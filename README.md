@@ -1,6 +1,8 @@
 # Join M3! - Android App
-
+<img src="/readme/join-me-logo.png" align="left"
+width="200" hspace="10" vspace="10">
 A smooth platform for users to create activities for others to join, and join others' activities.
+
 
 ## About
 Join M3! has been made for you to easily create activities for other users to see and join. You can also join others' activities by sending join requests that can only be accepted by the owner of the activity.
