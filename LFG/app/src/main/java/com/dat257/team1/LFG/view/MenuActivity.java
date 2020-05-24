@@ -110,15 +110,19 @@ public class MenuActivity extends AppCompatActivity {
         menuProfileRelativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                navController.navigate(R.id.nav_profile);
-                drawer.closeDrawers();
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    Toast.makeText(getApplicationContext(), "You must be signed in", Toast.LENGTH_SHORT).show();
+                } else {
+                    navController.navigate(R.id.nav_profile);
+                    drawer.closeDrawers();
+                }
             }
         });
     }
 
     @Subscribe
     public void handleUserEvent(UserEvent userEvent) {
-        if(userEvent.getUser().getName() != null) {
+        if (userEvent.getUser().getName() != null) {
             char name = Character.toUpperCase(userEvent.getUser().getName().trim().charAt(0));
             menuProfileText.setText(String.valueOf(name));
         }

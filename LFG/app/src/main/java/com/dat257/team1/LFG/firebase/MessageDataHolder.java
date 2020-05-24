@@ -17,6 +17,10 @@ public class MessageDataHolder {
         this.sender = sender;
     }
 
+    public MessageDataHolder(){
+
+    }
+
     public String getCommentText() { return messageText; }
 
     public Timestamp getPostDate() {
