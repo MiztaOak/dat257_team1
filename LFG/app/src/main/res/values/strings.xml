@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LFG</string>
+    <string name="app_name">Join M3!</string>
     <string name="title_activity_register_user">register_user</string>
     <string name="reg_name">Name</string>
     <string name="reg_password">Enter password</string>
