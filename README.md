@@ -10,7 +10,10 @@ A smooth platform for users to create activities for others to join, and join ot
 Join M3 has been made for you to easily create activities for other users to see and join. You can also join others' activities by sending join requests that can only be accepted by the owner of the activity.
 
 ## Installation
-
+The app can at the moment only be opened in Android Studio.
+- Clone the repo
+- Open the project in Android Studio
+- Hit "Run"
 
 ## Features
 The Android app lets you:
