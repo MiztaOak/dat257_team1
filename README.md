@@ -49,3 +49,14 @@ This project is licensed under the MIT License - see the <a href="LICENSE">LICEN
 
 ## Trivia
 Join M3! was made as a course project in Agile Software Project Management on Chalmers University of Technology in 2020
+
+## Authors
+ Namn                 -  CID    
+----------------------------------------
+ Oussama Anadani      -  anadani  
+ Jakob Ewerstrand     -  jakobew 
+ Johan Ek             -  ekjoh    
+ Arsenije Zinga       -  arsenije        
+ Alex Tang            -  alexta      
+ Gabriel Javebrink    -  gabjavl       
+ Jennie Zhou          -  jenzho        
