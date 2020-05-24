@@ -11,9 +11,6 @@ public class MessageDataHolder {
     public Timestamp sent;
     public DocumentReference sender;
 
-    public MessageDataHolder() {
-    }
-
     public MessageDataHolder(String messageText, Timestamp sent, DocumentReference sender) {
         this.messageText = messageText;
         this.sent = sent;

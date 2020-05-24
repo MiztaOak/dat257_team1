@@ -8,10 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.UserEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
-import com.dat257.team1.LFG.model.Main;
 import com.dat257.team1.LFG.model.User;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

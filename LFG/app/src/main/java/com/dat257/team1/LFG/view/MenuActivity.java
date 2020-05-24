@@ -24,10 +24,14 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.dat257.team1.LFG.R;
+import com.dat257.team1.LFG.events.UserEvent;
+import com.dat257.team1.LFG.firebase.FireStoreHelper;
 import com.dat257.team1.LFG.view.loginPage.WelcomeActivity;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -42,20 +46,24 @@ public class MenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        EventBus.getDefault().register(this);
         Toolbar toolbar = findViewById(R.id.menu_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-
-        View headerView = LayoutInflater.from(this).inflate(R.layout.menu_nav_header,navigationView,false);
+        View headerView = LayoutInflater.from(this).inflate(R.layout.menu_nav_header, navigationView, false);
         navigationView.addHeaderView(headerView);
 
         menuProfileRelativeLayout = headerView.findViewById(R.id.menu_profile_pic);
         menuProfilePic = headerView.findViewById(R.id.circleImage_profile);
         menuProfileText = headerView.findViewById(R.id.menu_icon_text);
-
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FireStoreHelper.getInstance().loadUserInformation(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        } else {
+            menuProfileText.setText("#");
+        }
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -86,7 +94,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-
         signOut = findViewById(R.id.btn_sign_out);
         if (FirebaseAuth.getInstance().getCurrentUser() == null)
             signOut.setText("Sign in");
@@ -109,6 +116,14 @@ public class MenuActivity extends AppCompatActivity {
         });
     }
 
+    @Subscribe
+    public void handleUserEvent(UserEvent userEvent) {
+        if(userEvent.getUser().getName() != null) {
+            char name = Character.toUpperCase(userEvent.getUser().getName().trim().charAt(0));
+            menuProfileText.setText(String.valueOf(name));
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -127,14 +142,4 @@ public class MenuActivity extends AppCompatActivity {
         startActivity(new Intent(this, WelcomeActivity.class));
 
     }
-
-/*
-    private void openProfile() {
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container,YOUR_FRAGMENT_NAME,YOUR_FRAGMENT_STRING_TAG);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-     */
 }

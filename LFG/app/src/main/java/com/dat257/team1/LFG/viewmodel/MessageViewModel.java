@@ -8,7 +8,7 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModel;
 
 import com.dat257.team1.LFG.events.MessageEvent;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 import com.dat257.team1.LFG.model.Message;
 import com.google.firebase.firestore.ListenerRegistration;
 
@@ -17,7 +17,6 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     }
 
     public void sendMessage(String chatId, String msg) {
-        Main.getInstance().writeMessage(chatId, msg);
+        Repository.getInstance().writeMessage(chatId, msg);
     }
 
     public void setMutableChatId(String chatId) {
@@ -69,7 +68,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     }
 
     public void loadChat(String chatId) {
-        listener = Main.getInstance().loadChat(chatId);
+        listener = Repository.getInstance().loadChat(chatId);
     }
 
     @Subscribe
@@ -90,7 +89,7 @@ public class MessageViewModel extends ViewModel implements LifecycleObserver {
     public void handleMessageEvent(MessageEvent messageEvent) {
         if (messageEvent.isSuccess()) {
             isMessageSent.postValue(true);
-            Main.getInstance().loadChat(mutableChatId.getValue());
+            Repository.getInstance().loadChat(mutableChatId.getValue());
         } else {
             isMessageSent.postValue(false);
         }

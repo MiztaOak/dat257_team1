@@ -1,14 +1,16 @@
-package com.dat257.team1.LFG.model;
+package com.dat257.team1.LFG.repository;
 
 import com.dat257.team1.LFG.events.ActivityFeedEvent;
 import com.dat257.team1.LFG.firebase.FireStoreHelper;
+import com.dat257.team1.LFG.model.Activity;
+import com.dat257.team1.LFG.model.Category;
+import com.dat257.team1.LFG.model.Comment;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.ListenerRegistration;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,24 +21,24 @@ import java.util.List;
  *
  * @author Jakobew
  */
-public class Main {
+public class Repository {
 
-    private static Main main;
+    private static Repository repository;
     private List<Activity> activities;
     private FireStoreHelper fireBaseObject;
     //just a temp var should prob be changed to something else
     private Activity focusedActivity;
 
-    private Main() {
+    private Repository() {
         activities = new ArrayList<>();
         fireBaseObject = FireStoreHelper.getInstance();
     }
 
-    public static Main getInstance() {
-        if (main == null) {
-            main = new Main();
+    public static Repository getInstance() {
+        if (repository == null) {
+            repository = new Repository();
         }
-        return main;
+        return repository;
     }
 
     /**

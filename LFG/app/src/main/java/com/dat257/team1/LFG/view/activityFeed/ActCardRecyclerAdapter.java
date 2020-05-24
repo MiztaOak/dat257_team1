@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
@@ -17,11 +16,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dat257.team1.LFG.R;
 import com.dat257.team1.LFG.model.Activity;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 import com.dat257.team1.LFG.view.ICardViewHolderClickListener;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.io.IOException;
 import java.util.List;
 
 
@@ -51,7 +49,7 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         cardViewHolder.itemView.setOnClickListener(new View.OnClickListener() { //TODO Bad performance should be in constructor
             @Override
             public void onClick(View view) {
-                Main.getInstance().setFocusedActivity(activityList.getValue().get(position)); //moved this here to function with the current activities
+                Repository.getInstance().setFocusedActivity(activityList.getValue().get(position)); //moved this here to function with the current activities
                 iCardViewHolderClickListener.onCardClicked(view, position);
             }
         });

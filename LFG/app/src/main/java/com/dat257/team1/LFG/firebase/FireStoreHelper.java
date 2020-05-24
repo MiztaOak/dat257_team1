@@ -17,7 +17,7 @@ import com.dat257.team1.LFG.model.Activity;
 import com.dat257.team1.LFG.model.Category;
 import com.dat257.team1.LFG.model.Comment;
 import com.dat257.team1.LFG.model.JoinNotification;
-import com.dat257.team1.LFG.model.Main;
+import com.dat257.team1.LFG.repository.Repository;
 import com.dat257.team1.LFG.model.Message;
 import com.dat257.team1.LFG.model.NotificationForJoiner;
 import com.dat257.team1.LFG.model.User;
@@ -49,7 +49,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -73,7 +72,6 @@ public class FireStoreHelper {
         idToNameDictionary = new HashMap<>();
         loadUserNames();
         loadActivities();
-
     }
 
 
@@ -190,7 +188,7 @@ public class FireStoreHelper {
                 }
             }
 
-            Main.getInstance().setActivities(activities);
+            Repository.getInstance().setActivities(activities);
             EventBus.getDefault().post(new ActivityFeedEvent(activities));
         });
     }
