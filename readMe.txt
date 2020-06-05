@@ -1,4 +1,11 @@
 dat257_team1 - Git alias
+Oussama Anadani 	anadani
+Jakob Ewerstrand 	jakobew
+Johan Ek 		ekjoh
+Arsenije Zinga 		arsenije
+Alex Tang 		alexta
+Gabriel Javebrink 	gabjavl
+Jennie Zhou 		jenzho
 
 Documents - Contains all the documentation about the project such as reflections.
 FirebaseFunctionCode - Contains all the firebase relevant code.
