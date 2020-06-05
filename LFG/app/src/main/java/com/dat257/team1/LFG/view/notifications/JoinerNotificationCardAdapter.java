@@ -20,19 +20,17 @@ public class JoinerNotificationCardAdapter extends RecyclerView.Adapter <JoinerN
 
 
     private MutableLiveData<List<NotificationForJoiner>> status;
-    private String actId;
-    private String actName;
 
     public JoinerNotificationCardAdapter(MutableLiveData<List<NotificationForJoiner>> status){
         this.status = status;
     }
 
-    public static class StatusViewHolder extends RecyclerView.ViewHolder{
-        public TextView infoText;
-        public TextView statusText;
+    static class StatusViewHolder extends RecyclerView.ViewHolder{
+        TextView infoText;
+        TextView statusText;
 
 
-        public StatusViewHolder(@NonNull View itemView) {
+        StatusViewHolder(@NonNull View itemView) {
             super(itemView);
             infoText = (TextView) itemView.findViewById(R.id.joinstatusInfoText);
             statusText = (TextView) itemView.findViewById(R.id.statusOfRequest);

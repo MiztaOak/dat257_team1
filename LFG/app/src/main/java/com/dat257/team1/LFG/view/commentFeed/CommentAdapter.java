@@ -25,9 +25,6 @@ import java.util.Map;
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
-
-    ActDescriptionFragment actDescriptionFragment;
-
     private MutableLiveData<List<Comment>> comments;
     private MutableLiveData<Map<String, Integer>> colorMap;
 
@@ -73,17 +70,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return comments.getValue().size();
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
-        public TextView commentText;
-        public TextView timeStamp;
-        public TextView commentUserName;
+    static class CommentViewHolder extends RecyclerView.ViewHolder {
+        TextView commentText;
+        TextView timeStamp;
+        TextView commentUserName;
 
-        public RelativeLayout commentProfileContainer;
-        public TextView iconText;
+        RelativeLayout commentProfileContainer;
+        TextView iconText;
         private ImageView comment_profile_pic;
 
 
-        public CommentViewHolder(@NonNull View itemView) {
+         CommentViewHolder(@NonNull View itemView) {
             super(itemView);
             commentText = (TextView) itemView.findViewById(R.id.comment_text);
             timeStamp = (TextView) itemView.findViewById(R.id.timeStamp);

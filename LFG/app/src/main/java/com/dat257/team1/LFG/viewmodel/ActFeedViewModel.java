@@ -44,7 +44,9 @@ public class ActFeedViewModel extends ViewModel implements LifecycleObserver {
 
     @Subscribe
     public void onUpdateActivityFeedEvent(ActivityFeedEvent event) {
-        getMutableActivityList(); //TODO Ugly
+        if (mutableActivityList == null) {
+            mutableActivityList = new MutableLiveData<>();
+        }
         List<Activity> activities = event.getActivityList();
         sortActivities(activities);
     }

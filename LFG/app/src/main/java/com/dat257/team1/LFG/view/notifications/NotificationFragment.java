@@ -44,12 +44,7 @@ public class NotificationFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(NotificationViewModel.class);
         getViewLifecycleOwner().getLifecycle().addObserver(viewModel);
         requests = viewModel.getRequests();
-        requests.observe(getViewLifecycleOwner(), new Observer<List<JoinNotification>>() {
-            @Override
-            public void onChanged(List<JoinNotification> joinNotifications) {
-                reAdapter.notifyDataSetChanged();
-            }
-        });
+        requests.observe(getViewLifecycleOwner(), joinNotifications -> reAdapter.notifyDataSetChanged());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.notification_feed);
         reLayoutManager = new LinearLayoutManager(getContext());

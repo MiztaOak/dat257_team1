@@ -22,7 +22,7 @@ public class ProfileViewModel extends ViewModel implements LifecycleObserver {
 
     @Subscribe
     public void handleUserEvent(UserEvent userEvent) {
-        getUserId(); //TODO
+        getUserId();
         user.postValue(userEvent.getUser());
     }
 

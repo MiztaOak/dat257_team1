@@ -45,17 +45,11 @@ public class NotificationStatusViewModel extends ViewModel implements LifecycleO
         listener = FireStoreHelper.getInstance().loadNotificationStatus(FirebaseAuth.getInstance().getUid());
     }
 
-    /*public void loadStatus(String uID){
-        listener = FireStoreHelper.getInstance().loadNotificationStatus(uID);
-    }
-
-     */
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
     public void cleanup(){
         listener.remove();
     }
-
 
 
 }

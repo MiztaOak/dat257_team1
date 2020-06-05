@@ -79,11 +79,6 @@ public class ActCardRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         else
             mLocation.setText("Sign in to see location!");
     }
-    /*
-     * String id = activity.getCategory().getName().trim().toLowerCase();
-       activityImage.setImageResource(getResources().getIdentifier(id, "drawable", context.getPackageName()));
-     *
-     * */
 
     @Override
     public int getItemCount() {

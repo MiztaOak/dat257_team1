@@ -47,7 +47,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private CheckBox termsBox;
 
     @Override
-
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -106,9 +105,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         mFunctions.getHttpsCallable("addUserData").call(data).addOnCompleteListener(new OnCompleteListener<HttpsCallableResult>() {
             @Override
             public void onComplete(@NonNull Task<HttpsCallableResult> task) {
-                if (!task.isSuccessful()) {
-                    //do shit
-                }
             }
         });
     }

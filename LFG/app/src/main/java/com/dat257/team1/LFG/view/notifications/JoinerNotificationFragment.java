@@ -30,11 +30,6 @@ public class JoinerNotificationFragment extends Fragment {
     private RecyclerView.Adapter reAdapter;
     private RecyclerView.LayoutManager reLayoutManager;
 
-
-    public JoinerNotificationFragment(){
-
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,10 +50,7 @@ public class JoinerNotificationFragment extends Fragment {
                 reAdapter.notifyDataSetChanged();
             }
 
-
         });
-
-
 
         recyclerView = (RecyclerView) view.findViewById(R.id.notification_for_joiner_feed);
         reLayoutManager = new LinearLayoutManager(getContext());
@@ -67,13 +59,5 @@ public class JoinerNotificationFragment extends Fragment {
         recyclerView.setAdapter(reAdapter);
 
     }
-
-    /*
-
-    private void updateNotifications(String uID) {
-        viewModel.loadStatus(uID);
-    }
-
-     */
 
 }

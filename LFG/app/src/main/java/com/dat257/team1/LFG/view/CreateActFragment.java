@@ -107,7 +107,6 @@ public class CreateActFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         OnBackPressedCallback callback = new OnBackPressedCallback(true /* enabled by default */) {
             @Override
@@ -202,7 +201,6 @@ public class CreateActFragment extends Fragment {
                 if (titleTextView.getText().toString().length() <= 0) {
                     titleTextView.setError("Enter title", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
-                //hideSoftKeyboard(getActivity());
                 titleTextView.clearFocus();
             }
         });
@@ -223,7 +221,6 @@ public class CreateActFragment extends Fragment {
                 if (descTextView.getText().toString().length() <= 0) {
                     descTextView.setError("Enter description", getResources().getDrawable(R.drawable.ic_error_red_24dp));
                 }
-                //hideSoftKeyboard(getActivity());
                 descTextView.clearFocus();
             }
         });
@@ -231,10 +228,6 @@ public class CreateActFragment extends Fragment {
         numAttendees.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //if(!charSequence.toString().equals("")) {
-                //    numOfAttendees = Integer.parseInt(charSequence.toString().trim());
-                // }
-
             }
 
             @Override
@@ -252,7 +245,6 @@ public class CreateActFragment extends Fragment {
                     numAttendees.setText(String.valueOf(numOfAttendees));
 
                 }
-                //hideSoftKeyboard(getActivity());
                 numAttendees.clearFocus();
             }
         });
@@ -271,28 +263,10 @@ public class CreateActFragment extends Fragment {
                 if (place != null) {
                     location = new Location(place.getAddress());
                 }
-
-                // TODO
-                //editAddress.setText(place.getAddress());
             }
 
             @Override
             public void onError(Status status) {
-                // TODO
-            }
-        });
-
-        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            @Override
-            public void onTimeChanged(TimePicker timePicker, int i, int i1) {
-                //TODO maybe
-            }
-        });
-
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                //TODO maybe
             }
         });
 
@@ -441,7 +415,7 @@ public class CreateActFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return "null"; //TODO
+        return "null";
     }
 
     private void addCategoriesToSpinner() {

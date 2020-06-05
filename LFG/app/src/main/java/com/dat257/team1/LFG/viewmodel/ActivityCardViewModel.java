@@ -9,9 +9,6 @@ public class ActivityCardViewModel extends ViewModel {
 
    Activity activity;
 
-    public ActivityCardViewModel() {
-    }
-
     public void setMutableActivity(Activity activity) {
         this.activity = activity;
     }

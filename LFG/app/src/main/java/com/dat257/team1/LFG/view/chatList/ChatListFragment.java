@@ -54,7 +54,6 @@ public class ChatListFragment extends Fragment implements ICardViewHolderClickLi
             }
         });
         recyclerView = (RecyclerView) view.findViewById(R.id.chatListRecycler);
-        //recyclerView.setNestedScrollingEnabled(false);
         recyclerView.setHasFixedSize(false);
         reLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(reLayoutManager);

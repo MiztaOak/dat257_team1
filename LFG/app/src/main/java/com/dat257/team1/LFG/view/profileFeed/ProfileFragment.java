@@ -191,9 +191,6 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Download failed", Toast.LENGTH_SHORT).show();
             }
         });
-
-        final long ONE_MEGABYTE = 1024 * 1024;
-        // Glide.with(this).load(islandRef).into(profileImage);
     }
 
     @Override

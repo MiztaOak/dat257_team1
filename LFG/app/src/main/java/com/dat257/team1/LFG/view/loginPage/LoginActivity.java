@@ -41,13 +41,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class LoginActivity extends AppCompatActivity {
 
     private static final String LOG_TAG = CreateActFragment.class.getSimpleName();
-    GoogleSignInClient mGoogleSignInClient;
-    int RC_SIGN_IN = 0;
     private Button loginButton;
     private EditText passwordField, emailField;
     private TextView forgetPassword;
-    private FirebaseAuth mAuth;
-    private FirebaseUser user;
 
 
     @Override
@@ -56,7 +52,6 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_auth_login);
         loginButton = findViewById(R.id.sign_in_button);
         forgetPassword = findViewById(R.id.lfForgotPass);
-        //  googleButton = rootView.findViewById(R.id.quick_access_google);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,28 +73,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        mAuth = FirebaseAuth.getInstance();
-
     }
-
-
-
-
-
-    /**
-     * Check for existing Google Sign In account, if the user is already signed in
-     * the GoogleSignInAccount will be non-null.
-     */
-
-    /*public void onStart() {
-        super.onStart();
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        updateUI(account);
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        String uid = currentUser.getUid();
-
-    }*/
-
 
     /**
      * A method to check the validation of the password and the email.
@@ -160,6 +134,5 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(LOG_TAG, "Pwd forgotten");
         startActivity(new Intent(this.getApplicationContext(), ForgetPasswordView.class));
     }
-
 
 }
